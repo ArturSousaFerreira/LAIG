@@ -1,0 +1,403 @@
+<SCENE>
+
+	<INITIALS>
+		<frustum near="1.5" far="500" />
+		<translation x="0" y="0" z="0" />
+		<rotation axis="x" angle="0" />
+		<rotation axis="y" angle="0" />
+		<rotation axis="z" angle="0" />
+		<scale sx="1" sy="1" sz="1" />
+		<reference length="6" />
+	</INITIALS>
+
+	<ILLUMINATION>
+        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+        <background r="0.1" g="0.1" b="0.1" a="1" />
+    </ILLUMINATION>
+
+	<LIGHTS>
+        <LIGHT id="light_default">
+            <enable value="1" />
+            <position x="5" y="60" z="5" w="1" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </LIGHT>
+
+        <LIGHT id="light_lamp">
+            <enable value="1" />
+            <position x="0.5" y="3.05" z="0.5" w="1" />
+            <specular r="1.0" g="0.92" b="0" a="1.0" />
+            <diffuse r="0.3" g="0.25" b="0" a="1.0" />
+            <ambient r="0.1" g="0.08" b="0" a="1.0" />
+        </LIGHT>
+    </LIGHTS>
+
+	<TEXTURES>
+		<TEXTURE id="wall_pattern">
+            <file path="textures/wall_paper.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="floor_pattern">
+            <file path="textures/floor.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="chair_pattern">
+            <file path="textures/bordeaux.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="lamp_top_pattern">
+            <file path="textures/beje.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="lamp_support_pattern">
+            <file path="textures/brown.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="painting1">
+            <file path="textures/ogrito.jpeg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="painting2">
+            <file path="textures/mona_lisa.jpeg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="painting3">
+            <file path="textures/salvadordali.jpeg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>        
+    </TEXTURES>
+
+   	<MATERIALS>
+        <MATERIAL id="default">
+            <shininess value="100" />
+            <specular r="1.0" g="1.0" b="1.0" a="0.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <emission r="0" g="0" b="0" a="0" />
+        </MATERIAL>
+    </MATERIALS>
+
+	<LEAVES>
+		<LEAF id="rectangle" type="rectangle" args="0 0 1 1" />
+		<LEAF id="lamp_default_top" type="cylinder" args="0.7 0.6 0.4 16 16" />
+		<LEAF id="lamp_default_middle" type="cylinder" args="3 0.025 0.025 16 16" />
+		<LEAF id="lamp_default_bottom" type="cylinder" args="0.05 0.25 0.25 16 16" />
+	</LEAVES>
+
+	<NODES>
+		<ROOT id="scene" />
+
+	    <NODE id="scene">
+			<MATERIAL id="default" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="environment" />
+				<DESCENDANT id="lamp" />
+				<DESCENDANT id="chair" />
+				<DESCENDANT id="paintings" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="environment">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="walls" />
+				<DESCENDANT id="floor" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="walls">
+			<MATERIAL id="null" />
+			<TEXTURE id="wall_pattern" />
+			<DESCENDANTS>
+				<DESCENDANT id="wall_front" />
+				<DESCENDANT id="wall_side" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_side">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="6" z="0" />
+			<SCALE sx="1" sy="6" sz="10"/>
+			<ROTATION axis="z" angle="-90" />
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_front">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="10" y="6" z="0" />
+			<SCALE sx="10" sy="6" sz="0"/>
+			<ROTATION axis="y" angle="-90" />
+			<ROTATION axis="z" angle="-90" />
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="floor">
+			<MATERIAL id="null" />
+			<TEXTURE id="floor_pattern" />
+			<SCALE sx="10" sy="0" sz="10"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />												
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="lamp">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0.5" y="0" z="0.5" />
+			<DESCENDANTS>
+				<DESCENDANT id="lamp_support" />
+				<DESCENDANT id="lamp_top" />			
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="lamp_top">
+			<MATERIAL id="null" />
+			<TEXTURE id="lamp_top_pattern" />
+			<TRANSLATION x="0" y="3.4" z="0" />
+			<DESCENDANTS>
+				<DESCENDANT id="lamp_default_top" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="lamp_support">
+			<MATERIAL id="null" />
+			<TEXTURE id="lamp_support_pattern" />
+			<DESCENDANTS>
+				<DESCENDANT id="lamp_middle" />
+				<DESCENDANT id="lamp_bottom" />	
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="lamp_middle">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="1.55" z="0" />
+			<DESCENDANTS>
+				<DESCENDANT id="lamp_default_middle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="lamp_bottom">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="0.025" z="0" />
+			<DESCENDANTS>
+				<DESCENDANT id="lamp_default_bottom" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair">
+			<MATERIAL id="null" />
+			<TEXTURE id="chair_pattern" />
+			<TRANSLATION x="4.5" y="0" z="4.5" />
+			<DESCENDANTS>
+				<DESCENDANT id="chair_seat" />
+				<DESCENDANT id="chair_back" />
+				<DESCENDANT id="chair_legs" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_seat">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="0.8" z="0" />
+			<SCALE sx="1" sy="0.05" sz="1"/>
+			<DESCENDANTS>
+				<DESCENDANT id="cube" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_back">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="0.85" z="0.90" />
+			<SCALE sx="1" sy="1.25" sz="0.1"/>
+			<DESCENDANTS>
+				<DESCENDANT id="cube" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_legs">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<SCALE sx="0.1" sy="0.8" sz="0.1"/>
+			<DESCENDANTS>
+				<DESCENDANT id="chair_leg_1" />
+				<DESCENDANT id="chair_leg_2" />
+				<DESCENDANT id="chair_leg_3" />
+				<DESCENDANT id="chair_leg_4" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_leg_1">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="cube" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_leg_2">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="9" y="0" z="0" />
+			<DESCENDANTS>
+				<DESCENDANT id="cube" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_leg_3">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="0" z="9" />
+			<DESCENDANTS>
+				<DESCENDANT id="cube" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="chair_leg_4">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="9" y="0" z="9" />
+			<DESCENDANTS>
+				<DESCENDANT id="cube" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cube">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+	           	<DESCENDANT id="face_top" />
+	           	<DESCENDANT id="face_bot" />
+	           	<DESCENDANT id="face_left" />
+	           	<DESCENDANT id="face_right" />
+	           	<DESCENDANT id="face_back" />
+	           	<DESCENDANT id="face_front" />
+	       	</DESCENDANTS>
+		</NODE>
+
+  		<NODE id="face_top">
+      		<MATERIAL id="null" />
+      		<TEXTURE id="null" />
+      		<TRANSLATION x="0" y="1" z="0" />
+      		<DESCENDANTS>
+      		    <DESCENDANT id="rectangle" />
+      		</DESCENDANTS>
+  		</NODE>
+
+	  	<NODE id="face_bot">
+	      	<MATERIAL id="null" />
+	      	<TEXTURE id="null" />
+	      	<TRANSLATION x="0" y="0" z="1" />
+	      	<ROTATION axis="x" angle="180"/>
+	      	<DESCENDANTS>
+	          	<DESCENDANT id="rectangle" />
+	      	</DESCENDANTS>
+	  	</NODE>
+
+	  	<NODE id="face_left">
+	      	<MATERIAL id="null" />
+	      	<TEXTURE id="null" />
+	      	<TRANSLATION x="0" y="0" z="0" />
+	      	<ROTATION axis="z" angle="90"/>
+	      	<DESCENDANTS>
+	          	<DESCENDANT id="rectangle" />
+	      	</DESCENDANTS>
+	  	</NODE>
+
+	  	<NODE id="face_right">
+	     	<MATERIAL id="null" />
+	    	<TEXTURE id="null" />
+	      	<TRANSLATION x="1" y="1" z="0" />
+	      	<ROTATION axis="z" angle="-90"/>
+	      	<DESCENDANTS>
+	          	<DESCENDANT id="rectangle" />
+	      	</DESCENDANTS>
+	  	</NODE>
+
+	  	<NODE id="face_back">
+	      	<MATERIAL id="null" />
+	      	<TEXTURE id="null" />
+	      	<TRANSLATION x="0" y="0" z="0" />
+	      	<ROTATION axis="x" angle="-90"/>
+	      	<DESCENDANTS>
+	          	<DESCENDANT id="rectangle" />
+	      	</DESCENDANTS>
+	  	</NODE>
+
+	  	<NODE id="face_front">
+	      	<MATERIAL id="null" />
+	      	<TEXTURE id="null" />
+	      	<TRANSLATION x="0" y="1" z="1" />
+	      	<ROTATION axis="x" angle="90"/>
+	      	<DESCENDANTS>
+	          	<DESCENDANT id="rectangle" />
+	      	</DESCENDANTS>
+	  	</NODE>
+
+	  	<NODE id="paintings">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="paintings_side" />
+				<DESCENDANT id="persistencia_da_memoria" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="paintings_side">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="o_grito" />
+				<DESCENDANT id="mona_lisa" />				
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="o_grito">
+			<MATERIAL id="null" />
+			<TEXTURE id="painting1" />
+			<TRANSLATION x="0.001" y="4.5" z="8.2" />
+			<SCALE sx="0" sy="3" sz="2.5"/>
+			<ROTATION axis="y" angle="90"/>
+			<ROTATION axis="x" angle="90"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />				
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="mona_lisa">
+			<MATERIAL id="null" />
+			<TEXTURE id="painting2" />
+			<TRANSLATION x="0.001" y="4.5" z="4.3" />
+			<SCALE sx="0" sy="3" sz="2.5"/>
+			<ROTATION axis="y" angle="90"/>
+			<ROTATION axis="x" angle="90"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />				
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="persistencia_da_memoria">
+			<MATERIAL id="null" />
+			<TEXTURE id="painting3" />
+			<TRANSLATION x="2.5" y="4.5" z="0.001" />
+			<SCALE sx="5" sy="3" sz="0"/>
+			<ROTATION axis="x" angle="90"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />				
+			</DESCENDANTS>
+		</NODE>
+
+	</NODES>
+
+</SCENE>
