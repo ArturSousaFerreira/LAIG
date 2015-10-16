@@ -672,6 +672,7 @@ MySceneGraph.prototype.parseNode = function(element) {
 	if(element.children[i].tagName === 'TRANSLATION'){
 			var translation = this.parseTranslate(element.children[i]);
 			mat4.translate(node["matrix"],node["matrix"],[translation["x"],translation["y"],translation["z"]]);
+
         }
 		else if(element.children[i].tagName === 'ROTATION'){
             var rotation = this.parseRotation(element.children[i]);
@@ -687,17 +688,19 @@ MySceneGraph.prototype.parseNode = function(element) {
 				axis = [0,0,1];
 			}
 
-			mat4.translate(node["matrix"],node["matrix"],rotation["angle"]*Math.PI/180.0, axis);
+			mat4.rotate(node["matrix"],node["matrix"],rotation["angle"]*Math.PI/180.0, axis);
+			
 		}	
 		else if(element.children[i].tagName === 'SCALE'){
             var scale = this.parseScale(element.children[i])
-            var scalem= [scale["x"],scale["y"],scale["z"]];
+            var scalem= [scale["sx"],scale["sy"],scale["sz"]];
 			mat4.scale(node["matrix"],node["matrix"],scalem);
+		
         } else
             break;
        
     }
-
+	
    node['descendants'] = this.parseDescendants(element.children[i]);
 
     return node;
