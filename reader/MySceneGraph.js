@@ -72,7 +72,7 @@ MySceneGraph.prototype.onXMLReady=function()
 		return;
 	}	
 	
-		var error = this.parseNodes(rootElement);
+	var error = this.parseNodes(rootElement);
 	
 		if (error != null) {
 		this.onXMLError(error);
