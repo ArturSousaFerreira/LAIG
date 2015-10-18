@@ -9,8 +9,6 @@ XMLscene.prototype.init = function (application) {
 
     CGFscene.prototype.init.call(this, application);
 
-    // this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
     this.gl.clearDepth(100.0);
@@ -23,18 +21,16 @@ XMLscene.prototype.init = function (application) {
 	this.interface = null;
 
 	this.nodes = [];
-	this.numero = 0;
 };
 
 XMLscene.prototype.setInterface = function (interface) {
 	this.interface = interface;
 }
 
-
 XMLscene.prototype.init_Cameras = function () {
 	var near =this.graph.initials.frustum["near"];
 	var far = this.graph.initials.frustum["far"];
-    this.camera = new CGFcamera(0.4, near,far, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, near, far, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
     this.interface.setActiveCamera(this.camera);
 };
 
@@ -45,28 +41,22 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);
 };
 
-XMLscene.prototype.initObjects = function() {
-
-}
-
-
 XMLscene.prototype.init_Initials = function () {
     //-> reference, build new axis
-    if(this.graph.reference!=0){
-		this.axis = new CGFaxis(this,this.graph.initials.reference);
-	}
+    console.log("freckles");
+    console.log(this);
 
     this.translate(this.graph.initials.translate.x, this.graph.initials.translate.y, this.graph.initials.translate.z);
 
-       if(this.graph.initials.rotation.x != 0){
-			this.rotate((this.graph.initials.rotation.x *Math.PI/180.0), 1, 0, 0);
-       }
-       if(this.graph.initials.rotation.y != 0){
-			this.rotate((this.graph.initials.rotation.y *Math.PI/180.0), 1, 0, 0);
-       }
-       if(this.graph.initials.rotation.z != 0){
-			this.rotate((this.graph.initials.rotation.z *Math.PI/180.0), 1, 0, 0);
-       }
+    if(this.graph.initials.rotation.x != 0){
+		this.rotate((this.graph.initials.rotation.x *Math.PI/180.0), 1, 0, 0);
+    }
+    if(this.graph.initials.rotation.y != 0){
+		this.rotate((this.graph.initials.rotation.y *Math.PI/180.0), 1, 0, 0);
+    }
+    if(this.graph.initials.rotation.z != 0){
+		this.rotate((this.graph.initials.rotation.z *Math.PI/180.0), 1, 0, 0);
+    }
 
     this.scale(this.graph.initials.scale.sx, this.graph.initials.scale.sy, this.graph.initials.scale.sz);
 };
@@ -88,16 +78,19 @@ XMLscene.prototype.init_Illumination = function () {
 XMLscene.prototype.init_Lights = function () {
 
     this.shader.bind();
-    var lights_id = [];
+	this.lights_enable = [];
+
+    this.lights_id = [];
     var num_lights = 0;
 
     for( var k in this.graph.lights ) {
-    	lights_id.push(k);
+    	this.lights_id.push(k);
     	num_lights++;
+    	console.log(this.graph.lights[k].enable);
     }
 
 	for( var i = 0; i < num_lights; i++){
-		var current_id = lights_id[i];
+		var current_id = this.lights_id[i];
 
 		var pos_x = this.graph.lights[current_id]["position"]["x"];
     	var pos_y = this.graph.lights[current_id]["position"]["y"];
@@ -125,13 +118,35 @@ XMLscene.prototype.init_Lights = function () {
 
     	var ena = this.graph.lights[current_id]["enable"];
     	if(ena) this.lights[i].enable();
-
+		
 		this.lights[i].setVisible(true);
     	this.lights[i].update();
+    	//console.log(this.graph.lights[current_id].enable);
+    	this.lights_enable[current_id] = this.graph.lights[current_id].enable;
 
 	}
     this.shader.unbind();
+	
+	console.log(this.graph.lights);
+    this.interface.create_gui_checkboxes();
 };
+
+XMLscene.prototype.init_Textures = function () {
+	var num_textures_id = 0;
+	this.textures = [];
+
+    for( var id in this.graph.textures ) {
+		this.textures[id] = new CGFtexture(this, this.graph.textures[id].file);
+		this.textures[id].amplif_factor = this.graph.textures[id].amplif_factor;//
+		this.textures[id].file = this.graph.textures[id].file;//
+		num_textures_id++;
+    }
+
+    if( num_textures_id > 0 )
+    	this.enableTextures(true);
+
+};
+
 XMLscene.prototype.init_Materials = function () {
 
     this.materials=[];
@@ -153,24 +168,7 @@ XMLscene.prototype.init_Materials = function () {
         currAppearance.id=id;
 
         this.materials[i]=currAppearance;
-    };
-}
-
-XMLscene.prototype.init_Textures = function () {
-	var num_textures_id = 0;
-	this.textures = [];
-
-    for( var id in this.graph.textures ) {
-		this.textures[id] = new CGFtexture(this, this.graph.textures[id].file);
-		this.textures[id].amplif_factor = this.graph.textures[id].amplif_factor;//
-		this.textures[id].file = this.graph.textures[id].file;//
-		console.log(this.textures[id]);
-		num_textures_id++;
     }
-
-    if( num_textures_id > 0 )
-    	this.enableTextures(true);
-
 };
 
 XMLscene.prototype.init_Leaves = function () {
@@ -193,10 +191,11 @@ XMLscene.prototype.init_Leaves = function () {
 };
 
 XMLscene.prototype.init_Nodes = function() {
-
-    var root_node = this.graph.nodes['root'];
+	var main_id = this.graph.root_id;
+	console.log(this.graph.root_id);
+	//console.log(root_id);
+    var root_node = this.graph.nodes[main_id];
 	// this.applyViewMatrix();
-	console.log(this.graph.nodes['root']);
 	this.pushMatrix();
     this.itDescend(root_node, root_node["texture"], root_node["material"], root_node["matrix"]);
     this.popMatrix();
@@ -204,11 +203,9 @@ XMLscene.prototype.init_Nodes = function() {
 
 XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, curr_Matrix) {
 
-	if (node == undefined) return;
-
 	// TEXTURE
 	var nextTexture_ID = node["texture"];
-	if (node["texture"] == null)
+	if (node["texture"] == "null")
 		nextTexture_ID = currTexture_ID;
 	else if (node["texture"] == "clear")
 		nextTexture_ID == null;
@@ -218,14 +215,16 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 	if (node["material"] == null)
 		nextMaterial_ID = currMaterial_ID;
 
-	console.log(node.matrix);
+	console.log(this.graph.nodes["scene"]);
 	var nextMatrix = mat4.create();
+	console.log(curr_Matrix);
     mat4.multiply(nextMatrix, curr_Matrix, node.matrix);
 
     for (var i = 0; i < node.descendants.length; i++) {
     	var num_nodes = 0;
     	var index_no = 0;
 		var nextNode_id = node.descendants[i];
+		var nextNode;
 
 		//console.log(this.graph.nodes);
 
@@ -241,36 +240,31 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         if( nextNode == null ) {
         	console.log("como");
         	var primitive = new Primitive(nextNode_id);
+        	console.log(primitive);
 
         	for( var id_tex in this.textures ) {
         		if (id_tex == nextTexture_ID) {
         			primitive.texture = this.textures[id_tex];
-        			console.log("o");
         			break;
         		}
         	}
         	for( var id_mat in this.materials ) {
         		if (id_mat == nextMaterial_ID) {
         			primitive.material = this.materials[id_mat];
-        			console.log("l");
         			break;
         		}
         	}
         	for( var id_leaf in this.leaves ) {
         		if (id_leaf == primitive.id) {
-        			primitive.leaf = this.leaves[id_leaf];
-        			console.log("a");
+        			primitive.leaf = this.leaves[id_leaf];        			
         			break;
         		}
         	}
         	primitive.matrix = nextMatrix;
 
-			console.log(this.nodes);
+			console.log(primitive);
         	this.nodes.push(primitive);
-        	console.log(this.nodes[1]);
-        	console.log(this.numero);
-        	this.numero++;
-        	break;
+        	console.log(this.nodes);
 
         	//this.nodes[index_no].id = nextNode_id;
         	//this.nodes[index_no].id = nextNode_id;
@@ -294,6 +288,22 @@ function Primitive(id) {
     this.leaf = null;
 }
 
+// Esta função é chamada na Interface.js
+XMLscene.prototype.Toggle_Light = function(id, turned_on) {
+
+    for ( var i = 0; i < this.lights_id.length; i++ ) {
+    	light_id = this.lights_id[i];
+        if (light_id == id) {
+            if(turned_on)
+            	this.lights[i].enable();
+            else
+            	this.lights[i].disable();
+
+            break;
+        }
+    }
+};
+
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () {
@@ -305,9 +315,8 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.init_Materials();
 	this.init_Leaves();
 	this.init_Nodes();
-	console.log(this.nodes);
 
-	this.loadedOk =true;
+	this.loadedOk = true;
 };
 
 XMLscene.prototype.display = function () {
@@ -324,13 +333,16 @@ XMLscene.prototype.display = function () {
 	this.updateProjectionMatrix();
     this.loadIdentity();
 
+	
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
-
 	// Draw axis
 	this.axis.display();
+	//this.init_Initials();
 	//this.rectangle.display();
 	this.setDefaultAppearance();
+
+
 	/*
 	for(var i in this.graph.leaves){
 		this.leaves[i].display();
@@ -348,15 +360,19 @@ XMLscene.prototype.display = function () {
 		}
 
 		// Nodes
-
-		console.log(this.nodes[2]);
-        for (i = 1; i < this.nodes.length; i++) {
+		//console.log(this.nodes);
+        for (i = 0; i < this.nodes.length; i++) {
 			var node = this.nodes[i];
 			if( node.id == "sphere1") continue;
 			this.pushMatrix();
-
-			//node.material.apply();
+			//if (node.texture != null) {
+              //  node.leaf.updateTex(node.texture.amplif_factor.s, node.texture.amplif_factor.t);
+            //}
+			//
 			this.multMatrix(node.matrix);
+			//console.log(node.material);
+			if(node.material != null) 
+				node.material.apply();
 			node.leaf.display();
 			this.popMatrix();
         }

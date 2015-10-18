@@ -614,26 +614,25 @@ MySceneGraph.prototype.parseScale = function(element) {
  */
  
 MySceneGraph.prototype.parseNodes= function(rootElement) {
-	
-	console.log("\nNODES: ");
 
-    var elems = rootElement.getElementsByTagName('NODES');
+    var elems = rootElement.getElementsByTagName('NODES')[0];
 
     if (elems == null) {
         return "NODES element is missing.";
-    }
+    }    
 
-    if (elems.length != 1) {
-        return "either zero or more than one 'NODES' element found.";
-    }
+    var root_node = elems.getElementsByTagName('ROOT')[0];
+    this.root_id = this.reader.getString(root_node, 'id');
 
-   this.nodes = {};
+    console.log("\nNODES: ");
 
-    this.nodes['root'] = elems[0].children[0].id;
-    var nModes = elems[0].children.length;
+   	this.nodes = {};
+
+    this.nodes['root'] = elems.children[0].id;
+    var nModes = elems.children.length;
     for (var i = 1; i < nModes; i++)
     {
-        var e = elems[0].children[i];
+        var e = elems.children[i];
 
         this.nodes[e.id] = this.parseNode(e);
     }
