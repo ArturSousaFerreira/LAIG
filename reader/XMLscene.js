@@ -45,20 +45,64 @@ XMLscene.prototype.init_Initials = function () {
     //-> reference, build new axis
     console.log("freckles");
     console.log(this);
+	this.initials = this.graph.initials;
 
-    this.translate(this.graph.initials.translate.x, this.graph.initials.translate.y, this.graph.initials.translate.z);
+	this.initialMatrix = mat4.create();
+    mat4.identity(this.initialMatrix);
+    mat4.translate(
+        this.initialMatrix,
+        this.initialMatrix,
+        [
+            this.initials.translation.x,
+            this.initials.translation.y,
+            this.initials.translation.z
+        ]
+    );
 
-    if(this.graph.initials.rotation.x != 0){
-		this.rotate((this.graph.initials.rotation.x *Math.PI/180.0), 1, 0, 0);
-    }
-    if(this.graph.initials.rotation.y != 0){
-		this.rotate((this.graph.initials.rotation.y *Math.PI/180.0), 1, 0, 0);
-    }
-    if(this.graph.initials.rotation.z != 0){
-		this.rotate((this.graph.initials.rotation.z *Math.PI/180.0), 1, 0, 0);
-    }
+    mat4.rotate(
+        this.initialMatrix,
+        this.initialMatrix,
+        this.initials.rotate1.angle * Math.PI / 180,
+        [
+            this.initials.rotate1.axis == "x" ? 1 : 0,
+            this.initials.rotate1.axis == "y" ? 1 : 0,
+            this.initials.rotate1.axis == "z" ? 1 : 0
+        ]
+    );
 
-    this.scale(this.graph.initials.scale.sx, this.graph.initials.scale.sy, this.graph.initials.scale.sz);
+    mat4.rotate(
+        this.initialMatrix,
+        this.initialMatrix,
+        this.initials.rotate2.angle * Math.PI / 180,
+        [
+            this.initials.rotate2.axis == "x" ? 1 : 0,
+            this.initials.rotate2.axis == "y" ? 1 : 0,
+            this.initials.rotate2.axis == "z" ? 1 : 0
+        ]
+    );
+
+    mat4.rotate(
+        this.initialMatrix,
+        this.initialMatrix,
+        this.initials.rotate3.angle * Math.PI / 180,
+        [
+            this.initials.rotate3.axis == "x" ? 1 : 0,
+            this.initials.rotate3.axis == "y" ? 1 : 0,
+            this.initials.rotate3.axis == "z" ? 1 : 0
+        ]
+    );
+
+    mat4.scale(
+        this.initialMatrix,
+        this.initialMatrix,
+        [
+            this.initials.scale.sx,
+            this.initials.scale.sy,
+            this.initials.scale.sz
+        ]
+    );
+
+
 };
 
 XMLscene.prototype.init_Illumination = function () {
@@ -118,7 +162,7 @@ XMLscene.prototype.init_Lights = function () {
 
     	var ena = this.graph.lights[current_id]["enable"];
     	if(ena) this.lights[i].enable();
-		
+
 		this.lights[i].setVisible(true);
     	this.lights[i].update();
     	//console.log(this.graph.lights[current_id].enable);
@@ -126,7 +170,7 @@ XMLscene.prototype.init_Lights = function () {
 
 	}
     this.shader.unbind();
-	
+
 	console.log(this.graph.lights);
     this.interface.create_gui_checkboxes();
 };
@@ -192,9 +236,14 @@ XMLscene.prototype.init_Leaves = function () {
 
 XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
-	console.log(this.graph.root_id);
+	console.log(main_id);
 	//console.log(root_id);
-    var root_node = this.graph.nodes[main_id];
+
+
+    var root_node = this.graph.nodes[main_id]; //node.js
+    console.log(root_node);
+	root_node["matrix"]=this.initialMatrix;
+	console.log(root_node);
 	// this.applyViewMatrix();
 	this.pushMatrix();
     this.itDescend(root_node, root_node["texture"], root_node["material"], root_node["matrix"]);
@@ -204,20 +253,18 @@ XMLscene.prototype.init_Nodes = function() {
 XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, curr_Matrix) {
 
 	// TEXTURE
-	var nextTexture_ID = node["texture"];
-	if (node["texture"] == "null")
+	var nextTexture_ID = node.texture;
+	if (node.texture == "null")
 		nextTexture_ID = currTexture_ID;
-	else if (node["texture"] == "clear")
+	else if (node.texture == "clear")
 		nextTexture_ID == null;
 
    	// MATERIAL
-   	var nextMaterial_ID = node["material"];
-	if (node["material"] == null)
+   	var nextMaterial_ID = node.material;
+	if (node.material == "null")
 		nextMaterial_ID = currMaterial_ID;
 
-	console.log(this.graph.nodes["scene"]);
 	var nextMatrix = mat4.create();
-	console.log(curr_Matrix);
     mat4.multiply(nextMatrix, curr_Matrix, node.matrix);
 
     for (var i = 0; i < node.descendants.length; i++) {
@@ -225,8 +272,6 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
     	var index_no = 0;
 		var nextNode_id = node.descendants[i];
 		var nextNode;
-
-		//console.log(this.graph.nodes);
 
 		for ( var no in this.graph.nodes ) {
 			if( no == nextNode_id ){
@@ -238,9 +283,7 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 		}
 
         if( nextNode == null ) {
-        	console.log("como");
         	var primitive = new Primitive(nextNode_id);
-        	console.log(primitive);
 
         	for( var id_tex in this.textures ) {
         		if (id_tex == nextTexture_ID) {
@@ -256,15 +299,13 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         	}
         	for( var id_leaf in this.leaves ) {
         		if (id_leaf == primitive.id) {
-        			primitive.leaf = this.leaves[id_leaf];        			
+        			primitive.leaf = this.leaves[id_leaf];
         			break;
         		}
         	}
         	primitive.matrix = nextMatrix;
 
-			console.log(primitive);
         	this.nodes.push(primitive);
-        	console.log(this.nodes);
 
         	//this.nodes[index_no].id = nextNode_id;
         	//this.nodes[index_no].id = nextNode_id;
@@ -333,7 +374,7 @@ XMLscene.prototype.display = function () {
 	this.updateProjectionMatrix();
     this.loadIdentity();
 
-	
+
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 	// Draw axis
@@ -355,6 +396,7 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk) {
+
 		for(var i in this.lights){
 			this.lights[i].update();
 		}
@@ -371,7 +413,11 @@ XMLscene.prototype.display = function () {
 			//
 			this.multMatrix(node.matrix);
 			//console.log(node.material);
-			if(node.material != null) 
+
+			if(node.material!=null) node.material.setTexture(node.texture);
+			//if(node.primitive.texture!=null)
+				//node.material.setTexture(node.primitive.texture);
+			if(node.material != null)
 				node.material.apply();
 			node.leaf.display();
 			this.popMatrix();

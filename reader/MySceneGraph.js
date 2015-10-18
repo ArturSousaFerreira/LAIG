@@ -104,87 +104,29 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	if(elems.length != 1) return "More than one 'initials' elements found. Expected only one!";
 	
 	var init = elems[0];
-
 	
 	//Frustum
-	
-	var elems = init.getElementsByTagName('frustum');
-	if(elems == null) return "Frustum element is missing!";
-	if(elems.length != 1) return "More than one 'frustum' elements found. Expected only one!";
-
-	var frustum = elems[0];
-
-	this.initials.frustum={};
-	
-	this.initials.frustum['near']=this.reader.getFloat(frustum,'near',true);
-	this.initials.frustum['far']=this.reader.getFloat(frustum,'far',true);
-	
-	if(isNaN(this.initials.frustum['near'])) return "ERROR! Frustum near invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.frustum['far'])) return "ERROR! Frustum far invalid! Expected float, found a element different than a number!";
-	
+	if(rootElement.getElementsByTagName('frustum').length != 1)return "More than one 'frustum' elements found. Expected only one!";
+		
+	this.initials['frustum'] = this.parseFrustum(elems[0].children[0]);
 	
 	//Translate
+	if(rootElement.getElementsByTagName('translation').length != 1)return "More than one 'translation' elements found. Expected only one!";
 	
-	var elems = init.getElementsByTagName('translation');
-	if (elems == null)  return "Translate element is missing!";
-	//if (elems.length != 1) return "More than one 'translate' elements found. Expected only one!";
+	 this.initials['translation'] = this.parseTranslate(elems[0].children[1]);
+    
 
-	var translate = elems[0];
-
-	this.initials.translate={};
-	this.initials.translate['x']=this.reader.getFloat(translate,'x',true);
-	this.initials.translate['y']=this.reader.getFloat(translate,'y',true);
-	this.initials.translate['z']=this.reader.getFloat(translate,'z',true);
-	
-	if(isNaN(this.initials.translate['x'])) return "ERROR! Value of translate in x axis invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.translate['y'])) return "ERROR! Value of translate in y axis invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.translate['z'])) return "ERROR! Value of translate in z axis invalid! Expected float, found a element different than a number!";
-
-	
 	//Rotation
-	
-	var elems = init.getElementsByTagName('rotation');
-	if (elems == null)  return "rotation element is missing.";
-	if (elems.length != 3) return "Invalid number of 'rotation' elements found. Expected exactly three!";
+	if(rootElement.getElementsByTagName('rotation').length != 3)return "Wrong number of 'rotation' elements found. Expected exactly 3!";
 
-	this.initials.rotation={};
-	for (var i=0; i<3; i++)
-	{
-		
-		this.initials.rotation[this.reader.getString(elems[i],'axis',true)] = this.reader.getFloat(elems[i],'angle',true);
-		
-	
-	
-	}
-	
-	if(isNaN(this.initials.rotation[this.reader.getString(elems[0],'axis',true)])) return "ERROR! Value of angle rotation in x axis invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.rotation[this.reader.getString(elems[1],'axis',true)])) return "ERROR! Value of angle rotation in y axis invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.rotation[this.reader.getString(elems[2],'axis',true)])) return "ERROR! Value of angle rotation in z axis invalid! Expected float, found a element different than a number!";
-
-	
-	if(this.reader.getString(elems[0],'axis',true) != "x") return "ERROR! Value of the first axis invalid! Expected  'x'!"
-	if(this.reader.getString(elems[1],'axis',true) != "y")	return "ERROR! Value of the first axis invalid! Expected  'y'!"
-	if(this.reader.getString(elems[2],'axis',true) != "z")	return "ERROR! Value of the first axis invalid! Expected  'z'!"
-
+	this.initials['rotate3'] = this.parseRotation(elems[0].children[2]);
+    this.initials['rotate2'] = this.parseRotation(elems[0].children[3]);
+    this.initials['rotate1'] = this.parseRotation(elems[0].children[4]);
 	
 	//Scale
-	
-	var elems = init.getElementsByTagName('scale');
-	if (elems == null)  return "Scale element is missing!";
-	if (elems.length != 1) return "More than one 'scale' elements found. Expected only one!";
+		if(rootElement.getElementsByTagName('scale').length != 1)return "More than one 'scale' elements found. Expected only one!";
 
-	var scale = elems[0];
-
-	this.initials.scale={};
-	this.initials.scale['sx']=this.reader.getFloat(scale,'sx',true);
-	this.initials.scale['sy']=this.reader.getFloat(scale,'sy',true);
-	this.initials.scale['sz']=this.reader.getFloat(scale,'sz',true);
-	
-	if(isNaN(this.initials.scale['sx'])) return "ERROR! Value of scale in x axis invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.scale['sy'])) return "ERROR! Value of scale in y axis invalid! Expected float, found a element different than a number!";
-	if(isNaN(this.initials.scale['sz'])) return "ERROR! Value of scale in z axis invalid! Expected float, found a element different than a number!";
-
-	
+	    this.initials['scale'] = this.parseScale(elems[0].children[5]);
 
 	//Reference
 
@@ -607,7 +549,18 @@ MySceneGraph.prototype.parseScale = function(element) {
 
 };
 
-
+MySceneGraph.prototype.parseFrustum = function(element) {
+    var arr = [];
+    arr['near'] = this.reader.getFloat(element, 'near', true);
+    arr['far'] = this.reader.getFloat(element, 'far', true);
+    for(var e in arr){
+        if(arr.hasOwnProperty(e)){
+            if(typeof(arr[e]) != "number" || arr[e] < 0 )
+                console.error('Error parsing ' + e + ' in parseFrustum');
+        }
+    }
+    return arr;
+};
 
 /*
  * Method that parses nodes elements of Materials block and stores information in a specific data structure

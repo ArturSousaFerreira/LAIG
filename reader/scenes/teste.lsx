@@ -1,0 +1,109 @@
+<SCENE>
+
+	<INITIALS>
+		<frustum near="1.5" far="500" />
+		<translation x="0" y="0" z="0" />
+		<rotation axis="x" angle="0" />
+		<rotation axis="y" angle="0" />
+		<rotation axis="z" angle="0" />
+		<scale sx="1" sy="1" sz="1" />
+		<reference length="6" />
+	</INITIALS>
+
+	<ILLUMINATION>
+        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+        <background r="0.1" g="0.1" b="0.1" a="1" />
+    </ILLUMINATION>
+
+	<LIGHTS>
+        <LIGHT id="light_default">
+            <enable value="1" />
+            <position x="5" y="60" z="5" w="1" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </LIGHT>
+
+        <LIGHT id="light_lamp">
+            <enable value="1" />
+            <position x="0.5" y="3.05" z="0.5" w="1" />
+            <specular r="1.0" g="0.92" b="0" a="1.0" />
+            <diffuse r="0.3" g="0.25" b="0" a="1.0" />
+            <ambient r="0.1" g="0.08" b="0" a="1.0" />
+        </LIGHT>
+    </LIGHTS>
+
+	<TEXTURES>
+		<TEXTURE id="wall_pattern">
+            <file path="textures/wall_paper.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="floor_pattern">
+            <file path="textures/floor.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="chair_pattern">
+            <file path="textures/bordeaux.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="lamp_top_pattern">
+            <file path="textures/beje.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="lamp_support_pattern">
+            <file path="textures/brown.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="painting1">
+            <file path="textures/ogrito.jpeg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="painting2">
+            <file path="textures/mona_lisa.jpeg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="painting3">
+            <file path="textures/salvadordali.jpeg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>        
+    </TEXTURES>
+
+   	<MATERIALS>
+        <MATERIAL id="default">
+            <shininess value="100" />
+            <specular r="1.0" g="1.0" b="1.0" a="0.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <emission r="0" g="0" b="0" a="0" />
+        </MATERIAL>
+    </MATERIALS>
+
+	<LEAVES>
+		<LEAF id="rectangle" type="rectangle" args="0 0 1 1" />
+		<LEAF id="lamp_default_top" type="cylinder" args="0.7 0.6 0.4 16 16" />
+		<LEAF id="lamp_default_middle" type="cylinder" args="3 0.025 0.025 16 16" />
+		<LEAF id="lamp_default_bottom" type="cylinder" args="0.05 0.25 0.25 16 16" />
+	</LEAVES>
+
+	<NODES>
+		<ROOT id="scene" />
+
+	    <NODE id="scene">
+			<MATERIAL id="default" />
+			<TEXTURE id="painting1" />
+			<DESCENDANTS>
+				<DESCENDANT id="caca" />
+			</DESCENDANTS>
+		</NODE>
+		
+		<NODE id="caca">
+			<MATERIAL id="default" />
+			<TEXTURE id="painting1" />
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+	</NODES>
+
+</SCENE>
