@@ -228,8 +228,8 @@ XMLscene.prototype.init_Leaves = function () {
 			this.leaves[i] = new MyRectangle(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3]);
 		else if(graph_leaf.type == 'triangle')
 			this.leaves[i] = new MyTriangle(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4], graph_leaf.args[5], graph_leaf.args[6], graph_leaf.args[7], graph_leaf.args[8]);
-		/*else if(graph_leaf.type == 'sphere'){
-			this.leaves[i] = new MySphere(this, slices, stacks);*/
+		else if(graph_leaf.type == 'sphere')
+			this.leaves[i] = new MySphere(this, graph_leaf.args[0], graph_leaf.args[1],graph_leaf.args[2]);
 	}
 
 };
@@ -243,8 +243,6 @@ XMLscene.prototype.init_Nodes = function() {
     var root_node = this.graph.nodes[main_id]; //node.js
     console.log(root_node);
 	root_node["matrix"]=this.initialMatrix;
-	console.log(root_node);
-	// this.applyViewMatrix();
 	this.pushMatrix();
     this.itDescend(root_node, root_node["texture"], root_node["material"], root_node["matrix"]);
     this.popMatrix();
@@ -306,7 +304,6 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         	primitive.matrix = nextMatrix;
 
         	this.nodes.push(primitive);
-
         	//this.nodes[index_no].id = nextNode_id;
         	//this.nodes[index_no].id = nextNode_id;
         	continue;
@@ -383,13 +380,14 @@ XMLscene.prototype.display = function () {
 	//this.rectangle.display();
 	this.setDefaultAppearance();
 
-
-	/*
+/*
+	
 	for(var i in this.graph.leaves){
 		this.leaves[i].display();
 	}
-	*/
 
+	
+*/
 	// ---- END Background, camera and axis setup
 
 	// it is important that things depending on the proper loading of the graph
@@ -405,7 +403,6 @@ XMLscene.prototype.display = function () {
 		//console.log(this.nodes);
         for (i = 0; i < this.nodes.length; i++) {
 			var node = this.nodes[i];
-			if( node.id == "sphere1") continue;
 			this.pushMatrix();
 			//if (node.texture != null) {
               //  node.leaf.updateTex(node.texture.amplif_factor.s, node.texture.amplif_factor.t);

@@ -22,7 +22,6 @@ serialInclude([
     'primitives/MySphere.js',
     'primitives/MyTriangle.js',
 	'primitives/MyCircle.js',
-	'primitives/MyCylinderBody.js',
 main=function()
 {
 	// Standard application, scene and interface setup

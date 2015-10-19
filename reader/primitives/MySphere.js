@@ -1,67 +1,60 @@
-/**
- * MySphere
- * @constructor
- */
- function MySphere(scene, slices, stacks) {
- 	CGFobject.call(this,scene);
-	
-	this.slices=slices;
-	this.stacks=stacks;
+function MySphere(scene, radius, rings, sections) {
+    CGFobject.call(this, scene);
 
- 	this.initBuffers();
- };
+    this.radius = radius;
+    this.rings = sections;
+    this.parts = rings;
 
- MySphere.prototype = Object.create(CGFobject.prototype);
- MySphere.prototype.constructor = MySphere;
+    this.initBuffers();
+}
 
- MySphere.prototype.initBuffers = function() {
+MySphere.prototype = Object.create(CGFobject.prototype);
+MySphere.prototype.constructor = MySphere;
 
-	this.indices = [];
- 	this.vertices = [];
- 	this.normals = [];
- 	this.texCoords = [];
+MySphere.prototype.initBuffers = function () {
+    var alpha = (2 * Math.PI) / this.rings,
+        beta = (2 * Math.PI) / this.parts;
 
-	var angle = 2*Math.PI / this.slices;
-	var angle_height = (Math.PI / 2)/this.stacks;
-	var stepS = 0;
-	var stepT = 0;
-	// topo
-	for (var stack = 0; stack <= this.stacks; stack++){
-		for (var slice = 0; slice <= this.slices; slice++){
-			this.vertices.push(Math.cos(slice * angle) * Math.cos(stack * angle_height), Math.sin(slice * angle) * Math.cos(stack * angle_height), Math.sin(stack * angle_height));
-			this.normals.push(Math.cos(slice * angle) * Math.cos(stack * angle_height), Math.sin(slice * angle) * Math.cos(stack * angle_height), Math.sin(stack * angle_height));
-			this.texCoords.push(stepS, stepT);
-			stepS+=1/this.slices;
-		}
-		stepS = 0;
-		stepT+= 1/this.stacks;
-	}
+    this.vertices = [];
+    this.indices = [];
+    this.normals = [];
+    this.texCoords = [];
 
-	this.vertices.push(0, 0, 1);
-	this.normals.push(0, 0, 1);
-	
-	var n = this.slices + 1;
-	for (var stack = 0; stack < this.stacks - 1; stack++){
-		for (var slice = 0; slice < this.slices; slice++){
-			this.indices.push(stack * n + slice, stack * n + ((slice + 1) % n), (stack + 1) * n + ((slice + 1) % n));
-			this.indices.push(stack * n + slice, (stack + 1) * n + ((slice + 1) % n), (stack + 1) * n + slice);
-		}
-	}
-	
-	this.vertices.push(0, 0, 0);
-	// base
-	for (var slice = -1; slice < this.slices; slice++){
-		this.vertices.push(Math.cos(slice * angle), Math.sin(slice * angle), 0);
-		this.normals.push(0, 0, -1);
-	}
 
-	for (var slice = 0; slice < this.slices; slice++){
-		if (slice + 1 >= this.slices){
-			this.indices.push(this.stacks * this.slices + 2 + slice, this.stacks * this.slices + 1, this.stacks * this.slices + 2);
-		}
-		else this.indices.push(this.stacks * this.slices + 2 + slice, this.stacks * this.slices + 1, this.stacks * this.slices + 3 + slice);
-	}
+    for (var part = 0; part < this.parts + 1; part++) {
+        for (var ring = 0; ring < this.rings + 1; ring++) {
+            this.vertices.push(
+                this.radius * Math.cos(alpha * part) * Math.sin(beta * ring),
+                this.radius * Math.sin(alpha * part) * Math.sin(beta * ring),
+                this.radius * Math.cos(beta * ring)
+            );
 
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
- };
+            this.texCoords.push(
+                part / this.rings,
+                2 * ring / this.parts
+            );
+        }
+    }
+
+    this.normals = this.vertices.slice(0);
+
+    var nVertices = this.vertices.length / 3;
+    for (part = 0; part < this.rings; part++) {
+        for (ring = 0; ring < this.parts; ring++) {
+            var partN = (this.rings + 1) * part;
+            this.indices.push(
+                ring + partN,
+                ring + partN + 1,
+                ring + partN + this.rings + 2
+            );
+            this.indices.push(
+                (ring + partN + this.rings + 3) % nVertices,
+                (ring + partN + this.rings + 2) % nVertices,
+                (ring + partN + 1) % nVertices
+            );
+        }
+    }
+
+    this.primitiveType = this.scene.gl.TRIANGLES;
+    this.initGLBuffers();
+};
