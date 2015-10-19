@@ -30,6 +30,8 @@ XMLscene.prototype.setInterface = function (interface) {
 XMLscene.prototype.init_Cameras = function () {
 	var near =this.graph.initials.frustum["near"];
 	var far = this.graph.initials.frustum["far"];
+	if(near == 0)
+		near = 0.1;
     this.camera = new CGFcamera(0.4, near, far, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
     this.interface.setActiveCamera(this.camera);
 };
@@ -43,8 +45,6 @@ XMLscene.prototype.setDefaultAppearance = function () {
 
 XMLscene.prototype.init_Initials = function () {
     //-> reference, build new axis
-    console.log("freckles");
-    console.log(this);
 	this.initials = this.graph.initials;
 
 	this.initialMatrix = mat4.create();

@@ -106,15 +106,28 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	var init = elems[0];
 	
 	//Frustum
+	if(rootElement.getElementsByTagName('frustum') == null) return "Frustum element is missing!";
 	if(rootElement.getElementsByTagName('frustum').length != 1)return "More than one 'frustum' elements found. Expected only one!";
 		
 	this.initials['frustum'] = this.parseFrustum(elems[0].children[0]);
+
+	if(isNaN(this.initials.frustum["near"])) return "Invalid frustum near!";
+	if(isNaN(this.initials.frustum["far"])) return "Invalid frustum far!";
 	
 	//Translate
+	if(rootElement.getElementsByTagName('translation') == null) return "Translation element is missing!";
 	if(rootElement.getElementsByTagName('translation').length != 1)return "More than one 'translation' elements found. Expected only one!";
-	
-	 this.initials['translation'] = this.parseTranslate(elems[0].children[1]);
-    
+
+	 this.initials['translation'] = this.parseTranslate(elems[0].children[1]);    
+	console.log(this.initials.translation);
+
+	if(this.initials.translation["x"] == undefined) return "Invalid translation x!";
+	if(this.initials.translation["y"] == undefined) return "Invalid translation y!";
+	if(this.initials.translation["z"] == undefined) return "Invalid translation z!";
+
+	if(isNaN(this.initials.translation["x"])) return "Invalid translation x!";
+	if(isNaN(this.initials.translation["y"])) return "Invalid translation y!";
+	if(isNaN(this.initials.translation["z"])) return "Invalid translation z!";
 
 	//Rotation
 	if(rootElement.getElementsByTagName('rotation').length != 3)return "Wrong number of 'rotation' elements found. Expected exactly 3!";
