@@ -11,8 +11,8 @@
 	</INITIALS>
 
 	<ILLUMINATION>
-        <ambient r="0.1" g="0.1" b="0.1" a="1" />
-        <background r="0.1" g="0.1" b="0.1" a="1" />
+        <ambient r="0" g="0" b="0" a="1" />
+        <background r="0.6" g="0.6" b="0.6" a="1" />
     </ILLUMINATION>
 
 	<LIGHTS>
@@ -23,14 +23,13 @@
             <diffuse r="0.5" g="0.5" b="0.5" a="1" />
             <specular r="0.5" g="0.5" b="0.5" a="1" />
         </LIGHT>
-
-        <LIGHT id="light_lamp">
+		<LIGHT id="light_lamp">
             <enable value="1" />
-            <position x="0.5" y="3.05" z="0.5" w="1" />
+            <position x="0.7" y="3.4" z="0.7" w="1" />
             <specular r="1.0" g="0.92" b="0" a="1.0" />
             <diffuse r="0.3" g="0.25" b="0" a="1.0" />
             <ambient r="0.1" g="0.08" b="0" a="1.0" />
-        </LIGHT>
+        </LIGHT>        
     </LIGHTS>
 
 	<TEXTURES>
@@ -119,10 +118,9 @@
 
 		<NODE id="wall_side">
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="6" z="0" />
-			<SCALE sx="1" sy="6" sz="10"/>
-			<ROTATION axis="z" angle="-90" />
+			<TEXTURE id="null" />			
+			<ROTATION axis="y" angle="-90"/>
+			<SCALE sx="10" sy="6" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -131,10 +129,9 @@
 		<NODE id="wall_front">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="10" y="6" z="0" />
+			<TRANSLATION x="10" y="0" z="0" />
+			<ROTATION axis="y" angle="180"/>
 			<SCALE sx="10" sy="6" sz="0"/>
-			<ROTATION axis="y" angle="-90" />
-			<ROTATION axis="z" angle="-90" />
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -143,7 +140,8 @@
 		<NODE id="floor">
 			<MATERIAL id="null" />
 			<TEXTURE id="floor_pattern" />
-			<SCALE sx="10" sy="0" sz="10"/>
+			<ROTATION axis="x" angle="90"/>
+			<SCALE sx="10" sy="10" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />												
 			</DESCENDANTS>
@@ -152,7 +150,7 @@
 		<NODE id="lamp">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0.5" y="0" z="0.5" />
+			<TRANSLATION x="0.7" y="0" z="0.7" />
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_support" />
 				<DESCENDANT id="lamp_top" />			
@@ -162,7 +160,8 @@
 		<NODE id="lamp_top">
 			<MATERIAL id="null" />
 			<TEXTURE id="lamp_top_pattern" />
-			<TRANSLATION x="0" y="3.4" z="0" />
+			<TRANSLATION x="0" y="3.05" z="0" />
+			<ROTATION axis="x" angle="-90"/>
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_default_top" />
 			</DESCENDANTS>
@@ -180,7 +179,8 @@
 		<NODE id="lamp_middle">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="1.55" z="0" />
+			<TRANSLATION x="0" y="0.05" z="0" />
+			<ROTATION axis="x" angle="-90"/>
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_default_middle" />
 			</DESCENDANTS>
@@ -189,7 +189,8 @@
 		<NODE id="lamp_bottom">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="0.025" z="0" />
+			<TRANSLATION x="0" y="0.05" z="0" />
+			<ROTATION axis="x" angle="90"/>
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_default_bottom" />
 			</DESCENDANTS>
@@ -290,6 +291,7 @@
       		<MATERIAL id="null" />
       		<TEXTURE id="null" />
       		<TRANSLATION x="0" y="1" z="0" />
+      		<ROTATION axis="x" angle="90"/>
       		<DESCENDANTS>
       		    <DESCENDANT id="rectangle" />
       		</DESCENDANTS>
@@ -299,7 +301,7 @@
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
 	      	<TRANSLATION x="0" y="0" z="1" />
-	      	<ROTATION axis="x" angle="180"/>
+	      	<ROTATION axis="x" angle="-90"/>
 	      	<DESCENDANTS>
 	          	<DESCENDANT id="rectangle" />
 	      	</DESCENDANTS>
@@ -308,8 +310,8 @@
 	  	<NODE id="face_left">
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
-	      	<TRANSLATION x="0" y="0" z="0" />
-	      	<ROTATION axis="z" angle="90"/>
+	      	<TRANSLATION x="0" y="0" z="1" />
+	      	<ROTATION axis="y" angle="90"/>
 	      	<DESCENDANTS>
 	          	<DESCENDANT id="rectangle" />
 	      	</DESCENDANTS>
@@ -318,8 +320,8 @@
 	  	<NODE id="face_right">
 	     	<MATERIAL id="null" />
 	    	<TEXTURE id="null" />
-	      	<TRANSLATION x="1" y="1" z="0" />
-	      	<ROTATION axis="z" angle="-90"/>
+	      	<TRANSLATION x="1" y="0" z="0" />
+	      	<ROTATION axis="y" angle="-90"/>
 	      	<DESCENDANTS>
 	          	<DESCENDANT id="rectangle" />
 	      	</DESCENDANTS>
@@ -329,7 +331,6 @@
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
 	      	<TRANSLATION x="0" y="0" z="0" />
-	      	<ROTATION axis="x" angle="-90"/>
 	      	<DESCENDANTS>
 	          	<DESCENDANT id="rectangle" />
 	      	</DESCENDANTS>
@@ -339,7 +340,7 @@
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
 	      	<TRANSLATION x="0" y="1" z="1" />
-	      	<ROTATION axis="x" angle="90"/>
+	      	<ROTATION axis="x" angle="180"/>
 	      	<DESCENDANTS>
 	          	<DESCENDANT id="rectangle" />
 	      	</DESCENDANTS>
@@ -349,27 +350,18 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="paintings_side" />
-				<DESCENDANT id="persistencia_da_memoria" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="paintings_side">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
 				<DESCENDANT id="o_grito" />
-				<DESCENDANT id="mona_lisa" />				
+				<DESCENDANT id="mona_lisa" />
+				<DESCENDANT id="persistencia_da_memoria" />
 			</DESCENDANTS>
 		</NODE>
 
 		<NODE id="o_grito">
 			<MATERIAL id="null" />
 			<TEXTURE id="painting1" />
-			<TRANSLATION x="0.001" y="4.5" z="8.2" />
+			<TRANSLATION x="0.001" y="1.5" z="5.9" />
 			<SCALE sx="0" sy="3" sz="2.5"/>
-			<ROTATION axis="y" angle="90"/>
-			<ROTATION axis="x" angle="90"/>
+			<ROTATION axis="y" angle="-90"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />				
 			</DESCENDANTS>
@@ -378,10 +370,9 @@
 		<NODE id="mona_lisa">
 			<MATERIAL id="null" />
 			<TEXTURE id="painting2" />
-			<TRANSLATION x="0.001" y="4.5" z="4.3" />
+			<TRANSLATION x="0.001" y="1.5" z="1.6" />
 			<SCALE sx="0" sy="3" sz="2.5"/>
-			<ROTATION axis="y" angle="90"/>
-			<ROTATION axis="x" angle="90"/>
+			<ROTATION axis="y" angle="-90"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />				
 			</DESCENDANTS>
@@ -390,9 +381,9 @@
 		<NODE id="persistencia_da_memoria">
 			<MATERIAL id="null" />
 			<TEXTURE id="painting3" />
-			<TRANSLATION x="2.5" y="4.5" z="0.001" />
+			<TRANSLATION x="7.5" y="1.5" z="0.001" />
 			<SCALE sx="5" sy="3" sz="0"/>
-			<ROTATION axis="x" angle="90"/>
+			<ROTATION axis="y" angle="180"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />				
 			</DESCENDANTS>

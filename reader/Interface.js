@@ -19,7 +19,7 @@ Interface.prototype.setScene = function(scene) {
     scene.interface = this;
 };
 
-Interface.prototype.create_gui_checkboxes = function() {
+Interface.prototype.create_interface = function() {
     var lights_group = this.gui.addFolder("Lights");
     lights_group.open();
     console.log(this.scene.lights_enable);

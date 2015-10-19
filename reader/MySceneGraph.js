@@ -618,42 +618,35 @@ MySceneGraph.prototype.parseNode = function(element) {
 
 	*/
 
-	var i = 2;
-    for(; i < element.children.length; i++){
+    for(var i = 2; i < element.children.length; i++){
 
-	if(element.children[i].tagName === 'TRANSLATION'){
+		if(element.children[i].tagName === 'TRANSLATION'){
 			var translation = this.parseTranslate(element.children[i]);
 			mat4.translate(node["matrix"],node["matrix"],[translation["x"],translation["y"],translation["z"]]);
-
-        }
+		}
 		else if(element.children[i].tagName === 'ROTATION'){
-            var rotation = this.parseRotation(element.children[i]);
-			
+			var rotation = this.parseRotation(element.children[i]);			
 			var axis;
-			if(rotation["axis"] == 'x') {
+
+			if(rotation["axis"] == 'x')
 				axis = [1,0,0];
-			}
-			if(rotation["axis"] == 'y') {
+			else if(rotation["axis"] == 'y')
 				axis = [0,1,0];
-			}
-			if(rotation["axis"] == 'z') {
+			else if(rotation["axis"] == 'z')
 				axis = [0,0,1];
-			}
 
 			mat4.rotate(node["matrix"],node["matrix"],rotation["angle"]*Math.PI/180.0, axis);
-			
 		}	
 		else if(element.children[i].tagName === 'SCALE'){
-            var scale = this.parseScale(element.children[i])
-            var scalem= [scale["sx"],scale["sy"],scale["sz"]];
+			var scale = this.parseScale(element.children[i])
+			var scalem= [scale["sx"],scale["sy"],scale["sz"]];
 			mat4.scale(node["matrix"],node["matrix"],scalem);
-		
-        } else
-            break;
-       
+		} 
+		else
+			break;       
     }
 	
-   node['descendants'] = this.parseDescendants(element.children[i]);
+	node['descendants'] = this.parseDescendants(element.children[i]);
 
     return node;
 

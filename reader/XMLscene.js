@@ -172,7 +172,7 @@ XMLscene.prototype.init_Lights = function () {
     this.shader.unbind();
 
 	console.log(this.graph.lights);
-    this.interface.create_gui_checkboxes();
+    this.interface.create_interface();
 };
 
 XMLscene.prototype.init_Textures = function () {

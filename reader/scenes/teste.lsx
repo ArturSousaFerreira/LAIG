@@ -38,34 +38,10 @@
             <file path="textures/wall_paper.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
-        <TEXTURE id="floor_pattern">
-            <file path="textures/floor.jpg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
-        <TEXTURE id="chair_pattern">
-            <file path="textures/bordeaux.jpg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
-        <TEXTURE id="lamp_top_pattern">
-            <file path="textures/beje.jpg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
-        <TEXTURE id="lamp_support_pattern">
-            <file path="textures/brown.jpg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
         <TEXTURE id="painting1">
             <file path="textures/ogrito.jpeg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
-        <TEXTURE id="painting2">
-            <file path="textures/mona_lisa.jpeg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
-        <TEXTURE id="painting3">
-            <file path="textures/salvadordali.jpeg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>        
     </TEXTURES>
 
    	<MATERIALS>
@@ -89,14 +65,6 @@
 		<ROOT id="scene" />
 
 	    <NODE id="scene">
-			<MATERIAL id="default" />
-			<TEXTURE id="painting1" />
-			<DESCENDANTS>
-				<DESCENDANT id="caca" />
-			</DESCENDANTS>
-		</NODE>
-		
-		<NODE id="caca">
 			<MATERIAL id="default" />
 			<TEXTURE id="painting1" />
 			<DESCENDANTS>
