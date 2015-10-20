@@ -17,12 +17,13 @@ serialInclude([
 	'MySceneGraph.js',
 	'Node.js',
 	'Interface.js',
+	'primitives/MyCircle.js',
 	'primitives/MyCylinder.js',
 	'primitives/MyCylinderBody.js',
+	'primitives/MyDiamond.js',
     'primitives/MyRectangle.js',
     'primitives/MySphere.js',
     'primitives/MyTriangle.js',
-	'primitives/MyCircle.js',
 main=function()
 {
 	// Standard application, scene and interface setup
@@ -40,7 +41,7 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 	
-	var filename=getUrlVars()['file'] || "la_cena.lsx";
+	var filename=getUrlVars()['file'] || "teste_losango.lsx";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors

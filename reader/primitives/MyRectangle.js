@@ -17,10 +17,10 @@ MyRectangle.prototype.constructor = MyRectangle;
 MyRectangle.prototype.initBuffers = function() {
 
     this.vertices = [
-    	this.x1, this.y2, 0,
-    	this.x2, this.y2, 0,
-    	this.x2, this.y1, 0,
-    	this.x1, this.y1, 0
+    	this.x1, this.y2, 1,
+    	this.x2, this.y2, 1,
+    	this.x2, this.y1, 1,
+    	this.x1, this.y1, 1
     ];
 
     this.indices = [
@@ -29,10 +29,10 @@ MyRectangle.prototype.initBuffers = function() {
     ];
 
 	this.normals = [
-			0,0,1,
-			0,0,1,
-			0,0,1,
-			0,0,1
+		0,0,1,
+		0,0,1,
+		0,0,1,
+		0,0,1
     ];
 
 	this.texCoords = [

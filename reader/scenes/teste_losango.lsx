@@ -78,7 +78,7 @@
     </MATERIALS>
 
 	<LEAVES>
-		<LEAF id="losango" type="losango" args="0 0 1 1" />
+		<LEAF id="diamond" type="diamond" args="5 3" />
 	</LEAVES>
 
 	<NODES>
@@ -88,7 +88,16 @@
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="losango" />
+				<DESCENDANT id="dada" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="dada">
+			<MATERIAL id="default" />
+			<TEXTURE id="chair_pattern" />
+			<ROTATION axis="x" angle="180"/>
+			<DESCENDANTS>
+				<DESCENDANT id="diamond" />
 			</DESCENDANTS>
 		</NODE>
 

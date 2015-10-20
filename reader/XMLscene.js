@@ -227,7 +227,9 @@ XMLscene.prototype.init_Leaves = function () {
 		else if(graph_leaf.type == 'triangle')
 			this.leaves[i] = new MyTriangle(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4], graph_leaf.args[5], graph_leaf.args[6], graph_leaf.args[7], graph_leaf.args[8]);
 		else if(graph_leaf.type == 'sphere')
-			this.leaves[i] = new MySphere(this, graph_leaf.args[0], graph_leaf.args[1],graph_leaf.args[2]);
+			this.leaves[i] = new MySphere(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
+		else if(graph_leaf.type == 'diamond')
+			this.leaves[i] = new MyDiamond(this, graph_leaf.args[0], graph_leaf.args[1]);
 	}
 
 };
@@ -297,13 +299,14 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         		}
         	}
         	primitive.matrix = nextMatrix;
-
+console.log(primitive);
         	this.nodes.push(primitive);
         	continue;
         }
 
         index_no++;
 
+		
 		this.pushMatrix();
         this.itDescend(nextNode, nextTexture_ID, nextMaterial_ID, nextMatrix);
         this.popMatrix();
