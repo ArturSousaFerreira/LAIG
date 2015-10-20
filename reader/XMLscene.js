@@ -230,6 +230,8 @@ XMLscene.prototype.init_Leaves = function () {
 			this.leaves[i] = new MySphere(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'diamond')
 			this.leaves[i] = new MyDiamond(this, graph_leaf.args[0], graph_leaf.args[1]);
+		else if(graph_leaf.type == 'sims')
+			this.leaves[i] = new MySims(this, graph_leaf.args[0]);
 	}
 
 };

@@ -22,6 +22,7 @@ serialInclude([
 	'primitives/MyCylinderBody.js',
 	'primitives/MyDiamond.js',
     'primitives/MyRectangle.js',
+    'primitives/MySims.js',
     'primitives/MySphere.js',
     'primitives/MyTriangle.js',
 main=function()
