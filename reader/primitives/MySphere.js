@@ -2,8 +2,8 @@ function MySphere(scene, radius, rings, sections) {
     CGFobject.call(this, scene);
 
     this.radius = radius;
-    this.rings = sections;
-    this.parts = rings;
+    this.sections = sections;
+    this.rings = rings;
 
     this.initBuffers();
 }
@@ -12,45 +12,31 @@ MySphere.prototype = Object.create(CGFobject.prototype);
 MySphere.prototype.constructor = MySphere;
 
 MySphere.prototype.initBuffers = function () {
-    var alpha = (2 * Math.PI) / this.rings,
-        beta = (2 * Math.PI) / this.parts;
+    var alpha = (2 * Math.PI) / this.sections;
+    var beta = (2 * Math.PI) / this.rings;
 
     this.vertices = [];
     this.indices = [];
     this.normals = [];
     this.texCoords = [];
 
-
-    for (var part = 0; part < this.parts + 1; part++) {
-        for (var ring = 0; ring < this.rings + 1; ring++) {
-            this.vertices.push(
-                this.radius * Math.cos(alpha * part) * Math.sin(beta * ring),
-                this.radius * Math.sin(alpha * part) * Math.sin(beta * ring),
-                this.radius * Math.cos(beta * ring)
-            );
-
-            this.texCoords.push(
-                part / this.rings,
-                2 * ring / this.parts
-            );
+    for (var i = 0; i < this.rings + 1; i++) {
+        for (var j = 0; j < this.sections + 1; j++) {
+            this.vertices.push(this.radius * Math.cos(alpha * i) * Math.sin(beta * j), this.radius * Math.sin(alpha * i) * Math.sin(beta * j), this.radius * Math.cos(beta * j));
+            this.texCoords.push(i / this.sections, 2 * j / this.rings);
         }
     }
 
     this.normals = this.vertices.slice(0);
 
     var nVertices = this.vertices.length / 3;
-    for (part = 0; part < this.rings; part++) {
-        for (ring = 0; ring < this.parts; ring++) {
-            var partN = (this.rings + 1) * part;
+    for (var i = 0; i < this.sections; i++) {
+        for (j = 0; j < this.rings; j++) {
+            this.indices.push(j + (this.sections + 1) * i, j + (this.sections + 1) * i + 1, j + (this.sections + 1) * i + this.sections + 2);
             this.indices.push(
-                ring + partN,
-                ring + partN + 1,
-                ring + partN + this.rings + 2
-            );
-            this.indices.push(
-                (ring + partN + this.rings + 3) % nVertices,
-                (ring + partN + this.rings + 2) % nVertices,
-                (ring + partN + 1) % nVertices
+                (j + (this.sections + 1) * i + this.sections + 3) % nVertices,
+                (j + (this.sections + 1) * i + this.sections + 2) % nVertices,
+                (j + (this.sections + 1) * i + 1) % nVertices
             );
         }
     }

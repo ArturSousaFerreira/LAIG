@@ -18,6 +18,7 @@ serialInclude([
 	'Node.js',
 	'Interface.js',
 	'primitives/MyCylinder.js',
+	'primitives/MyCylinderBody.js',
     'primitives/MyRectangle.js',
     'primitives/MySphere.js',
     'primitives/MyTriangle.js',
@@ -39,7 +40,7 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 	
-	var filename=getUrlVars()['file'] || "sasa.lsx";
+	var filename=getUrlVars()['file'] || "la_cena.lsx";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors

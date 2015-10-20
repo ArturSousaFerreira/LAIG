@@ -82,6 +82,7 @@
 		<LEAF id="lamp_default_top" type="cylinder" args="0.7 0.6 0.4 16 16" />
 		<LEAF id="lamp_default_middle" type="cylinder" args="3 0.025 0.025 16 16" />
 		<LEAF id="lamp_default_bottom" type="cylinder" args="0.05 0.25 0.25 16 16" />
+		<LEAF id="sphere" type="sphere" args="1 16 16" />
 	</LEAVES>
 
 	<NODES>

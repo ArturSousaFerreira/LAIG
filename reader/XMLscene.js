@@ -47,7 +47,9 @@ XMLscene.prototype.init_Initials = function () {
     //-> reference, build new axis
 	this.initials = this.graph.initials;
 
+	//-> initial matrix
 	this.initialMatrix = mat4.create();
+	
     mat4.identity(this.initialMatrix);
     mat4.translate(
         this.initialMatrix,
@@ -102,7 +104,6 @@ XMLscene.prototype.init_Initials = function () {
         ]
     );
 
-
 };
 
 XMLscene.prototype.init_Illumination = function () {
@@ -130,7 +131,6 @@ XMLscene.prototype.init_Lights = function () {
     for( var k in this.graph.lights ) {
     	this.lights_id.push(k);
     	num_lights++;
-    	console.log(this.graph.lights[k].enable);
     }
 
 	for( var i = 0; i < num_lights; i++){
@@ -165,13 +165,10 @@ XMLscene.prototype.init_Lights = function () {
 
 		this.lights[i].setVisible(true);
     	this.lights[i].update();
-    	//console.log(this.graph.lights[current_id].enable);
     	this.lights_enable[current_id] = this.graph.lights[current_id].enable;
 
 	}
     this.shader.unbind();
-
-	console.log(this.graph.lights);
     this.interface.create_interface();
 };
 
@@ -179,6 +176,7 @@ XMLscene.prototype.init_Textures = function () {
 	var num_textures_id = 0;
 	this.textures = [];
 
+	console.log("\nLOADED TEXTURES:");
     for( var id in this.graph.textures ) {
 		this.textures[id] = new CGFtexture(this, this.graph.textures[id].file);
 		this.textures[id].amplif_factor = this.graph.textures[id].amplif_factor;//
@@ -236,12 +234,9 @@ XMLscene.prototype.init_Leaves = function () {
 
 XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
-	console.log(main_id);
-	//console.log(root_id);
 
 
     var root_node = this.graph.nodes[main_id]; //node.js
-    console.log(root_node);
 	root_node["matrix"]=this.initialMatrix;
 	this.pushMatrix();
     this.itDescend(root_node, root_node["texture"], root_node["material"], root_node["matrix"]);
@@ -304,8 +299,6 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         	primitive.matrix = nextMatrix;
 
         	this.nodes.push(primitive);
-        	//this.nodes[index_no].id = nextNode_id;
-        	//this.nodes[index_no].id = nextNode_id;
         	continue;
         }
 
@@ -376,19 +369,13 @@ XMLscene.prototype.display = function () {
 	this.applyViewMatrix();
 	// Draw axis
 	this.axis.display();
-	//this.init_Initials();
-	//this.rectangle.display();
 	this.setDefaultAppearance();
 
 /*
-	
 	for(var i in this.graph.leaves){
 		this.leaves[i].display();
 	}
-
-	
 */
-	// ---- END Background, camera and axis setup
 
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
@@ -400,20 +387,14 @@ XMLscene.prototype.display = function () {
 		}
 
 		// Nodes
-		//console.log(this.nodes);
         for (i = 0; i < this.nodes.length; i++) {
 			var node = this.nodes[i];
 			this.pushMatrix();
-			//if (node.texture != null) {
-              //  node.leaf.updateTex(node.texture.amplif_factor.s, node.texture.amplif_factor.t);
-            //}
-			//
+			
 			this.multMatrix(node.matrix);
-			//console.log(node.material);
 
 			if(node.material!=null) node.material.setTexture(node.texture);
-			//if(node.primitive.texture!=null)
-				//node.material.setTexture(node.primitive.texture);
+			
 			if(node.material != null)
 				node.material.apply();
 			node.leaf.display();

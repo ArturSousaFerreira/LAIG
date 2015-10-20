@@ -1,7 +1,3 @@
-/**
-* My Triangle
-*/
-
 function MyRectangle(scene,x1,y1,x2,y2){
     CGFobject.call(this,scene);
 

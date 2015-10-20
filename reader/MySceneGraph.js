@@ -17,6 +17,7 @@ function MySceneGraph(filename, scene) {
 	this.reader.open('scenes/'+filename, this);  
 }
 
+
 /*
  * Callback to be executed after successful reading
  */
@@ -31,60 +32,149 @@ MySceneGraph.prototype.onXMLReady=function()
 	// Calls for different functions to parse the various blocks
 	
 	var error = this.parseInitials(rootElement);
-
 	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 
 	var error = this.parseIllumination(rootElement);
-
 	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 
 	var error = this.parseLights(rootElement);
-
 	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 	
 	var error = this.parseTextures(rootElement);
-	
 		if (error != null) {
 		this.onXMLError(error);
 		return;
 	}
 
 	var error = this.parseMaterials(rootElement);
-	
 		if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 
 	var error = this.parseLeaves(rootElement);
-	
 		if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 	
 	var error = this.parseNodes(rootElement);
-	
 		if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 
-	
 	this.loadedOk=true;
 	
 	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
 	this.scene.onGraphLoaded();
+};
+
+
+/*
+ * Method that parses translate
+ */
+
+MySceneGraph.prototype.parseTranslate = function(element) {
 	
+    var arr = [];
+    
+	arr['x'] = this.reader.getFloat(element, 'x', true);
+    arr['y'] = this.reader.getFloat(element, 'y', true);
+    arr['z'] = this.reader.getFloat(element, 'z', true);
+    
+	for(var e in arr){
+		if(arr.hasOwnProperty(e)){
+			if(typeof(arr[e]) != "number")
+				console.error('Error parsing ' + e + ' in parseTranslate');
+        }
+    }
+    
+	arr['type'] = 'translation';
+
+    return arr;
+};
+
+
+/*
+ * Method that parses rotation 
+ */
+ 
+MySceneGraph.prototype.parseRotation = function(element) {
+  
+	var arr = [];
+    
+	arr['axis'] = this.reader.getString(element, 'axis', true);
+    
+	if(arr['axis'] != 'x' && arr['axis'] != 'y' && arr['axis'] != 'z'){    
+    console.error('Error parsing axis in parseRotation');
+    }
+    
+	arr['angle'] = this.reader.getFloat(element, 'angle', true);
+    
+	if(typeof(arr['angle']) != "number"){
+        console.error('Error parsing angle in parseRotation');
+    }
+    
+	arr['type'] = 'rotation';
+  
+	return arr;
+};
+
+
+/*
+ * Method that parses scale
+ */
+ 
+MySceneGraph.prototype.parseScale = function(element) {
+
+    var arr = [];
+
+    arr['sx'] = this.reader.getFloat(element, 'sx', true);
+    arr['sy'] = this.reader.getFloat(element, 'sy', true);
+    arr['sz'] = this.reader.getFloat(element, 'sz', true);
+    
+	for(var e in arr){
+		if(arr.hasOwnProperty(e)){
+			if(typeof(arr[e]) != "number")
+                console.error('Error parsing ' + e + ' in parseScale');
+        }
+    }    
+	
+	arr['type'] = 'scale';
+    
+	return arr;
+};
+
+
+/*
+ * Method that parses frustum element
+ */
+ 
+MySceneGraph.prototype.parseFrustum = function(element) {
+
+    var arr = [];
+
+    arr['near'] = this.reader.getFloat(element, 'near', true);
+    arr['far'] = this.reader.getFloat(element, 'far', true);
+
+    for(var e in arr){
+        if(arr.hasOwnProperty(e)){
+            if(typeof(arr[e]) != "number" || arr[e] < 0 )
+                console.error('Error parsing ' + e + ' in parseFrustum');
+        }
+    }
+
+    return arr;
 };
 
 
@@ -119,8 +209,7 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	if(rootElement.getElementsByTagName('translation').length != 1)return "More than one 'translation' elements found. Expected only one!";
 
 	 this.initials['translation'] = this.parseTranslate(elems[0].children[1]);    
-	console.log(this.initials.translation);
-
+	
 	if(this.initials.translation["x"] == undefined) return "Invalid translation x!";
 	if(this.initials.translation["y"] == undefined) return "Invalid translation y!";
 	if(this.initials.translation["z"] == undefined) return "Invalid translation z!";
@@ -136,14 +225,22 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
     this.initials['rotate2'] = this.parseRotation(elems[0].children[3]);
     this.initials['rotate1'] = this.parseRotation(elems[0].children[4]);
 	
+	if(isNaN(this.initials['rotate3'].angle)) return "Invalid rotation value!";
+	if(isNaN(this.initials['rotate2'].angle)) return "Invalid rotation value!";
+	if(isNaN(this.initials['rotate1'].angle)) return "Invalid rotation value!";
+
 	//Scale
-		if(rootElement.getElementsByTagName('scale').length != 1)return "More than one 'scale' elements found. Expected only one!";
+	if(rootElement.getElementsByTagName('scale').length != 1)return "More than one 'scale' elements found. Expected only one!";
 
-	    this.initials['scale'] = this.parseScale(elems[0].children[5]);
-
+	this.initials['scale'] = this.parseScale(elems[0].children[5]);
+	
+	if(isNaN(this.initials['scale'].sx)) return "Invalid scale value!";
+	if(isNaN(this.initials['scale'].sy)) return "Invalid scale value!";
+	if(isNaN(this.initials['scale'].sz)) return "Invalid scale value!";
+	
 	//Reference
-
 	var elems = init.getElementsByTagName('reference');
+	
 	if (elems == null)  return "Reference element is missing!";
 	if (elems.length != 1) return "More than one 'reference' elements found. Expected only one!";
 
@@ -164,23 +261,20 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	
-	console.log("\n");	
-	console.log("ILLUMINATION:");
+	console.log("\nILLUMINATION:");
 
-	
 	this.illu = {};
 	
-	
 	var illuminations = rootElement.getElementsByTagName('ILLUMINATION');
+	
 	if(illuminations == null) return "Illumination element is missing!";
 	if(illuminations.length != 1) return "More than one 'illumination' elements found. Expected only one!";
 
 	var illuminationElems = illuminations[0];
-
 	
 	//ambient
-	
 	var ambients = illuminationElems.getElementsByTagName("ambient");
+	
 	if(ambients == null) return "Ambient values missing!";
 	if(ambients.length != 1) return "More than one 'ambient' elements found. Expected only one!";
 
@@ -192,11 +286,9 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	this.illu.ambient["b"] = this.reader.getFloat(ambient, "b", true);
 	this.illu.ambient["a"] = this.reader.getFloat(ambient, "a", true);
 
-
-	
 	//background
-	
 	var backgrounds = illuminationElems.getElementsByTagName("background");
+	
 	if(backgrounds == null) return "Backgrounds values missing!";
 	if(backgrounds.length != 1) return "More than one 'backgrounds' element found. Expected only one!";
 
@@ -209,9 +301,7 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	this.illu.background["a"] = this.reader.getFloat(background, "a", true);
 
 	console.log(this.illu);
-	
 }
-
 
 
 /*
@@ -219,9 +309,8 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
  */
  
 MySceneGraph.prototype.parseLights = function(rootElement) {
-	
-	console.log("\n");	
-	console.log("LIGHTS:");
+		
+	console.log("\nLIGHTS:");
 	
 	this.lights = {};
 	
@@ -288,11 +377,9 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 
 		this.lights[currLight["id"]]=currLight;
 	}
-
 		console.log(this.lights);	
 };
 	
-
 
 /*
  * Method that parses elements of Textures block and stores information in a specific data structure
@@ -300,8 +387,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
  
 MySceneGraph.prototype.parseTextures = function(rootElement) {
 	
-	console.log("\n");	
-	console.log("TEXTURES:");
+	console.log("\nTEXTURES:");
 	
 	this.textures = {};
 	
@@ -313,7 +399,6 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 
 
 	//Texture
-	
 	var texture = first_textures.getElementsByTagName("TEXTURE");
 	if(texture == null) return "light values missing";
 	if(texture.length < 1) return "0 light elements were found";
@@ -322,30 +407,28 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 		var currText = {};
 		var iterText = texture[i];
 
-		//stores ids
-		currText["id"] = this.reader.getString(iterText,"id",true);
+	//stores ids
+	currText["id"] = this.reader.getString(iterText,"id",true);
 
-		//path
-		var path = iterText.getElementsByTagName("file");
-		var file = path[0];
-		currText["file"] = this.reader.getString(file,"path",true);
+	//path
+	var path = iterText.getElementsByTagName("file");
+	var file = path[0];
+	currText["file"] = this.reader.getString(file,"path",true);
 
-		//amplif_factor
-
-		var amplif_factor = iterText.getElementsByTagName("amplif_factor");
-		var factor = amplif_factor[0];
+	//amplif_factor
+	var amplif_factor = iterText.getElementsByTagName("amplif_factor");
+	var factor = amplif_factor[0];
 		
-		currText["amplif_factor"]={};
-		currText["amplif_factor"]['s']=this.reader.getFloat(factor,'s',true);
-		currText["amplif_factor"]['t']=this.reader.getFloat(factor,'t',true);
+	currText["amplif_factor"]={};
+	currText["amplif_factor"]['s']=this.reader.getFloat(factor,'s',true);
+	currText["amplif_factor"]['t']=this.reader.getFloat(factor,'t',true);
 	
-		this.textures[currText["id"]]=currText;
+	this.textures[currText["id"]]=currText;
 	}
 
-		console.log(this.textures);
+	console.log(this.textures);
 
 };
-
 
 
 /*
@@ -354,8 +437,7 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
  
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	
-	console.log("\n");	
-	console.log("MATERIALS:");
+	console.log("\nMATERIALS:");
 	
 	this.materials = {};	
 	
@@ -364,7 +446,6 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	if(materials.length != 1) return "More than one 'MATERIALS' element found. Expected only one!";
 
 	var first_materials = materials[0];
-
 
 	//Material
 	
@@ -446,7 +527,6 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
 	var leaves_elements = elems[0];
 	
     this.leaves = {};
-	
 
     for (var i=0; i < leaves_elements.children.length; i++)
     {
@@ -469,111 +549,12 @@ MySceneGraph.prototype.parseLeaf = function(element) {
     leaf['args'] = tempArgs.split(' ');
 	
     for(var i = 0; i < leaf['args'].length; i++){
-    
     leaf['args'][i] = parseFloat(leaf['args'][i]);
-
     }
+	
     return leaf;
 };
 
-
-
-/*
- * Method that parses translate transformation
- */
-
-MySceneGraph.prototype.parseTranslate = function(element) {
-	
-    var arr = [];
-    
-	arr['x'] = this.reader.getFloat(element, 'x', true);
-    arr['y'] = this.reader.getFloat(element, 'y', true);
-    arr['z'] = this.reader.getFloat(element, 'z', true);
-    
-	for(var e in arr){
-    
-    if(arr.hasOwnProperty(e)){
-
-	if(typeof(arr[e]) != "number")
-		console.error('Error parsing ' + e + ' in parseTranslate');
-        }
-		
-    }
-    
-	arr['type'] = 'translation';
-    
-	return arr;
-
-};
-
-
-
-/*
- * Method that parses rotation transformation
- */
- 
-MySceneGraph.prototype.parseRotation = function(element) {
-  
-	var arr = [];
-    
-	arr['axis'] = this.reader.getString(element, 'axis', true);
-    
-	if(arr['axis'] != 'x' && arr['axis'] != 'y' && arr['axis'] != 'z'){    
-    console.error('Error parsing axis in parseRotation');
-    }
-    
-	arr['angle'] = this.reader.getFloat(element, 'angle', true);
-    
-	if(typeof(arr['angle']) != "number"){
-        console.error('Error parsing angle in parseRotation');
-    }
-    
-	arr['type'] = 'rotation';
-    
-	return arr;
-
-};
-
-
-
-/*
- * Method that parses scale transformation
- */
- 
-MySceneGraph.prototype.parseScale = function(element) {
-
-    var arr = [];
-
-    arr['sx'] = this.reader.getFloat(element, 'sx', true);
-    arr['sy'] = this.reader.getFloat(element, 'sy', true);
-    arr['sz'] = this.reader.getFloat(element, 'sz', true);
-    
-	for(var e in arr){
-    
-    if(arr.hasOwnProperty(e)){
-		if(typeof(arr[e]) != "number")
-                console.error('Error parsing ' + e + ' in parseScale');
-        }
-    }
-    
-	arr['type'] = 'scale';
-    
-	return arr;
-
-};
-
-MySceneGraph.prototype.parseFrustum = function(element) {
-    var arr = [];
-    arr['near'] = this.reader.getFloat(element, 'near', true);
-    arr['far'] = this.reader.getFloat(element, 'far', true);
-    for(var e in arr){
-        if(arr.hasOwnProperty(e)){
-            if(typeof(arr[e]) != "number" || arr[e] < 0 )
-                console.error('Error parsing ' + e + ' in parseFrustum');
-        }
-    }
-    return arr;
-};
 
 /*
  * Method that parses nodes elements of Materials block and stores information in a specific data structure
@@ -582,10 +563,7 @@ MySceneGraph.prototype.parseFrustum = function(element) {
 MySceneGraph.prototype.parseNodes= function(rootElement) {
 
     var elems = rootElement.getElementsByTagName('NODES')[0];
-
-    if (elems == null) {
-        return "NODES element is missing.";
-    }    
+    if (elems == null) return "NODES element is missing.";    
 
     var root_node = elems.getElementsByTagName('ROOT')[0];
     this.root_id = this.reader.getString(root_node, 'id');
@@ -599,37 +577,28 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
     for (var i = 1; i < nModes; i++)
     {
         var e = elems.children[i];
-
         this.nodes[e.id] = this.parseNode(e);
     }
-	
+
 	console.log(this.nodes);
 
 };
 
+
+/*
+ * Method that parses node
+ */
+
 MySceneGraph.prototype.parseNode = function(element) {
 
     var node = {};
-
     node['material'] = this.reader.getString(element.children[0], 'id', true);
     node['texture'] = this.reader.getString(element.children[1], 'id', true);
-
 	node["matrix"] = mat4.create();
 	mat4.identity(node["matrix"]);
 
     var transformations = [];
-
-	/*
-	//Translation
-		var translation = iterNode.getElementsByTagName("TRANSLATION");
-		var currTranslation = translation[0];
-		
-		currNode.translation ={};
-		currNode.translation['x']=this.reader.getFloat(currTranslation,'x',true);
-		currNode.translation['y']=this.reader.getFloat(currTranslation,'y',true);
-		currNode.translation['z']=this.reader.getFloat(currTranslation,'z',true);
-
-	*/
+	
 
     for(var i = 2; i < element.children.length; i++){
 
@@ -660,16 +629,19 @@ MySceneGraph.prototype.parseNode = function(element) {
     }
 	
 	node['descendants'] = this.parseDescendants(element.children[i]);
-
     return node;
 
 };
 
+
+/*
+ * Descendants Parser of node
+ */ 
+ 
 MySceneGraph.prototype.parseDescendants = function(element) {
 
     var descendants = [];
-
-    for (var i = 0; i < element.children.length; i++) {;
+    for (var i = 0; i < element.children.length; i++) {
         descendants.push(this.reader.getString(element.children[i],'id', true));
     }
 
@@ -678,185 +650,18 @@ MySceneGraph.prototype.parseDescendants = function(element) {
 };
 
 
-
 /*
  * Callback to be executed on any read error
  */ 
  
 MySceneGraph.prototype.onXMLError=function (message) {
-
+	
 	console.error("XML Loading Error: "+message);
 	this.loadedOk=false;
 
 };
 
 
-
-//********************************************************
-//********************************************************
-
-
-/*
-/*
- * Method that parses elements of Leaves block and stores information in a specific data structure
- 
-
-MySceneGraph.prototype.parseLeaves = function(rootElement) {
-	
-	console.log("\n");	
-	console.log("LEAVES:");
-	
-	this.leaves = {};
-	
-	var leaves = rootElement.getElementsByTagName("LEAVES");
-	if(leaves == null) return "Leaves element missing!";
-	if(leaves.length != 1) return "More than one 'LEAVES' element found. Expected only one!";
-
-	
-	var first_leaves = leaves[0];
-	//console.log(first_textures);
-
-	//Leaf
-	
-	var leaf = first_leaves.getElementsByTagName("LEAF");
-	//console.log(leaf[0]);
-	if(leaf == null) return "leaf values missing";
-	if(leaf.length < 1) return "0 leaf elements were found";
-
-	for(var i=0; i<leaf.length; i++) {
-		var currLeaf = {};
-		var iterLeaf = leaf[i];
-
-		//stores ids
-		currLeaf["id"] = this.reader.getString(iterLeaf,"id",true);
-
-		//type
-		currLeaf["type"] = this.reader.getString(iterLeaf,"type",true);
-
-		//args
-		currLeaf["args"] = this.reader.getString(iterLeaf,"args",true);
-	
-		this.leaves[i]=currLeaf;
-	}
-
-	console.log(this.leaves);
-};
-*/
-
-
-
-
-/*
- * Method that parses elements of Nodes block and stores information in a specific data structure
- *
- 
-MySceneGraph.prototype.parseNodes = function(rootElement) {
-	
-	console.log("\n");	
-	console.log("NODES:");
-	
-	var nodes = rootElement.getElementsByTagName("NODES");
-	if(nodes == null) return "Nodes element missing!";
-	if(nodes.length != 1) return "More than one 'NODES' element found. Expected only one!";
-	
-	var root_node = nodes[0];
-	
-	this.nodes = {};
-	
-	var root = root_node.getElementsByTagName("ROOT");
-	if(root == null) return "Root element missing!";
-	if(root.length != 1) return "More than one 'ROOT' element found. Expected only one!";
-	
-	this.nodes["root"] = this.reader.getString(root[0],"id",true);
-	
-	
-	
-	nodes = root_node.getElementsByTagName("NODE");
-	if(nodes == null) return "Node element missing!";
-	if(nodes.length < 1) return "More than one 'NODE' element found. Expected only one!";
-	
-	for(var i=0; i<nodes.length; i++) {
-		var currNode = {};
-		var iterNode = nodes[i];
-
-		//stores ids
-		var currNodeId = this.reader.getString(iterNode,"id",true);
-		
-		//material 
-		var material = iterNode.getElementsByTagName("MATERIAL");
-		if(material == null) return "Material element missing!";
-		if(material.length != 1) return "More than one 'Material' element found. Expected only one!";
-		
-		var currMaterial = material[0];
-		
-		currNode.material = this.materials[this.reader.getString(currMaterial,"id",true)];
-		
-		//Texture
-		var texture = iterNode.getElementsByTagName("TEXTURE");
-		if(texture == null) return "Texture element missing!";
-		if(texture.length != 1) return "More than one 'Material' element found. Expected only one!";
-		
-		var currTexture = texture[0];
-		
-		currNode.texture = this.textures[this.reader.getString(currTexture,"id",true)];
-		
-		
-		
-		
-		
-		//Translation
-		var translation = iterNode.getElementsByTagName("TRANSLATION");
-		var currTranslation = translation[0];
-		
-		currNode.translation ={};
-		currNode.translation['x']=this.reader.getFloat(currTranslation,'x',true);
-		currNode.translation['y']=this.reader.getFloat(currTranslation,'y',true);
-		currNode.translation['z']=this.reader.getFloat(currTranslation,'z',true);
-
-		
-		//Rotation
-		var rotation = iterNode.getElementsByTagName("ROTATION");
-		var currRotation = rotation[0];	
-		
-		currNode.rotation = {};	
-		currNode.rotation[this.reader.getString(currRotation,'axis',true)] = this.reader.getFloat(currRotation,'angle',true);
-		
-		
-		//Scale
-		
-		var scale = iterNode.getElementsByTagName("SCALE");
-		var currScale = scale[0];
-		
-		currNode.scale = {};	
-		currNode.scale['sx']=this.reader.getFloat(currScale,'sx',true);
-		currNode.scale['sy']=this.reader.getFloat(currScale,'sy',true);
-		currNode.scale['sz']=this.reader.getFloat(currScale,'sz',true);
-		
-		
-		
-		
-		
-		var descendants = iterNode.getElementsByTagName("DESCENDANTS");
-		var currDes = descendants[0];
-	
-		var desc = currDes.getElementsByTagName("DESCENDANT");
-		currNode.descendant = {};
-	
-		for(var i=0; i<desc.length; i++){
-	
-		currNode.descendant= this.reader.getString(descendante[i],"id",true);
-		
-		}
-		
-		
-		this.nodes[currNodeId]=currNode;
-	}
-	
-	console.log(this.nodes);
-	
-	
-};
-*/
 
 
 
