@@ -30,11 +30,18 @@ function MyRingBody(scene, Sradius, thickness, slices, stacks) {
  	this.indices=[];
 
 	for(var i = 0; i < this.stacks; i++){
-		for(var j = 0; j < this.slices-1; j++){
+		for(var j = 0; j < this.slices; j++){
 			if ( j == this.slices-1 ) {
+				/* LADO DE FORA */
+				this.indices.push((i*this.slices*2)+1, (i*this.slices*2)+j*2+1, ((i+1)*this.slices*2)+j*2+1);
+				this.indices.push(((i+1)*this.slices*2)+j*2+1, ((i+1)*this.slices*2)+1, (i*this.slices*2)+1);
 
+				/* LADO DE DENTRO */
+				this.indices.push((i*this.slices*2)+j*2, (i*this.slices*2), ((i+1)*this.slices*2));
+				this.indices.push(((i+1)*this.slices*2), ((i+1)*this.slices*2)+j*2, (i*this.slices*2)+j*2);
+				break;
 			}
-			
+
 			/* LADO DE FORA */
 			this.indices.push((i*this.slices*2)+(j*2)+3, (i*this.slices*2)+(j*2)+1, ((i+1)*this.slices*2)+(j*2)+1);
 			this.indices.push(((i+1)*this.slices*2)+(j*2)+1, ((i+1)*this.slices*2)+(j*2)+3, (i*this.slices*2)+(j*2)+3);
