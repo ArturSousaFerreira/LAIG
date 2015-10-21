@@ -54,7 +54,7 @@
     </MATERIALS>
 
 	<LEAVES>
-		<LEAF id="diamond" type="sims" args="6" />
+		<LEAF id="diamond" type="ring" args="4 2 1 8 4" />
 	</LEAVES>
 
 	<NODES>
