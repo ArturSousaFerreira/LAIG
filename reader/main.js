@@ -22,6 +22,7 @@ serialInclude([
 	'primitives/MyCylinder.js',
 	'primitives/MyCylinderBody.js',
 	'primitives/MyDiamond.js',
+    'primitives/MyEllipse.js',
     'primitives/MyRectangle.js',
     'primitives/MyRing.js',    
     'primitives/MyRingBody.js',

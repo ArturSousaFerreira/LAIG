@@ -236,6 +236,8 @@ XMLscene.prototype.init_Leaves = function () {
 			this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'ring')
 			this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
+			else if(graph_leaf.type == 'ellipse')
+			this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 	}
 
 };
