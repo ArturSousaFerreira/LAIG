@@ -1,6 +1,8 @@
-function MySims(scene, slices) {
+function MySims(scene, height, radius, slices) {
  	CGFobject.call(this, scene);
 	
+	this.height = height;
+	this.radius = radius;
 	this.slices = slices;
 
  	this.initBuffers();
@@ -16,15 +18,15 @@ function MySims(scene, slices) {
  	this.normals = [];
  	this.texCoords = [];
  	
-    this.vertices.push(0,-1,0);
-    this.vertices.push(0,1,0);    
+    this.vertices.push(0,-this.height/2,0);
+    this.vertices.push(0,this.height/2,0);
     this.normals.push(0,0,1);
     this.normals.push(0,0,1);
     this.texCoords.push(0,0);
     this.texCoords.push(0,1);
 
  	for(var i = 0; i < this.slices; i++){
- 		this.vertices.push(Math.cos(i*angle)/2, 0, Math.sin(i*angle)/2);
+ 		this.vertices.push(Math.cos(i*angle)*this.radius, 0, Math.sin(i*angle)*this.radius);
  		this.normals.push(0,0,1);
  		this.texCoords.push(1,i/this.slices);
  	} 	

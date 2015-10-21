@@ -231,7 +231,7 @@ XMLscene.prototype.init_Leaves = function () {
 		else if(graph_leaf.type == 'diamond')
 			this.leaves[i] = new MyDiamond(this, graph_leaf.args[0], graph_leaf.args[1]);
 		else if(graph_leaf.type == 'sims')
-			this.leaves[i] = new MySims(this, graph_leaf.args[0]);
+			this.leaves[i] = new MySims(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'annulus')
 			this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'ring')
