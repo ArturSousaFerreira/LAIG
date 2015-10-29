@@ -231,12 +231,12 @@ XMLscene.prototype.init_Leaves = function () {
 		else if(graph_leaf.type == 'diamond')
 			this.leaves[i] = new MyDiamond(this, graph_leaf.args[0], graph_leaf.args[1]);
 		else if(graph_leaf.type == 'sims')
-			this.leaves[i] = new MySims(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
+			this.leaves[i] = new MySims(this, graph_leaf.args[0]);
+		else if(graph_leaf.type == 'ring')//
+			this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
 		else if(graph_leaf.type == 'annulus')
 			this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
-		else if(graph_leaf.type == 'ring')
-			this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
-			else if(graph_leaf.type == 'ellipse')
+		else if(graph_leaf.type == 'ellipse')
 			this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 	}
 
@@ -307,7 +307,6 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         		}
         	}
         	primitive.matrix = nextMatrix;
-console.log(primitive);
         	this.nodes.push(primitive);
         	continue;
         }
@@ -382,12 +381,16 @@ XMLscene.prototype.display = function () {
 	this.axis.display();
 	this.setDefaultAppearance();
 
-/*
-	for(var i in this.graph.leaves){
-		this.leaves[i].display();
-	}
-*/
 
+	/*for(var i in this.leaves){
+		
+		//if(this.leaves[i].type == "cylinder"){
+		this.leaves[i].display();
+		//}
+		//console.log(this.leaves[i]);
+	}
+
+*/
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it

@@ -73,6 +73,12 @@ MySceneGraph.prototype.onXMLReady=function()
 		return;
 	}	
 
+		var error = this.parseAnimations(rootElement);
+		if (error != null) {
+		this.onXMLError(error);
+		return;
+	}	
+	
 	this.loadedOk=true;
 	
 	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -196,19 +202,21 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	var init = elems[0];
 	
 	//Frustum
-	if(rootElement.getElementsByTagName('frustum') == null) return "Frustum element is missing!";
-	if(rootElement.getElementsByTagName('frustum').length != 1)return "More than one 'frustum' elements found. Expected only one!";
-		
-	this.initials['frustum'] = this.parseFrustum(elems[0].children[0]);
+	var elems =  rootElement.getElementsByTagName('frustum');
+	if(elems == null) return "Frustum element is missing!";
+	if(elems.length != 1) return "More than one 'frustum' elements found. Expected only one!";
+	
+	this.initials['frustum'] = this.parseFrustum(elems[0]);
 
 	if(isNaN(this.initials.frustum["near"])) return "Invalid frustum near!";
 	if(isNaN(this.initials.frustum["far"])) return "Invalid frustum far!";
 	
 	//Translate
-	if(rootElement.getElementsByTagName('translation') == null) return "Translation element is missing!";
-	if(rootElement.getElementsByTagName('translation').length != 1)return "More than one 'translation' elements found. Expected only one!";
-
-	 this.initials['translation'] = this.parseTranslate(elems[0].children[1]);    
+	var elems =  rootElement.getElementsByTagName('translation');
+	if(elems == null) return "translation element is missing!";
+	if(elems.length != 1) return "More than one 'translation' elements found. Expected only one!";
+	
+	 this.initials['translation'] = this.parseTranslate(elems[0]);    
 	
 	if(this.initials.translation["x"] == undefined) return "Invalid translation x!";
 	if(this.initials.translation["y"] == undefined) return "Invalid translation y!";
@@ -219,30 +227,33 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	if(isNaN(this.initials.translation["z"])) return "Invalid translation z!";
 
 	//Rotation
-	if(rootElement.getElementsByTagName('rotation').length != 3)return "Wrong number of 'rotation' elements found. Expected exactly 3!";
-
-	this.initials['rotate3'] = this.parseRotation(elems[0].children[2]);
-    this.initials['rotate2'] = this.parseRotation(elems[0].children[3]);
-    this.initials['rotate1'] = this.parseRotation(elems[0].children[4]);
+	var elems =  rootElement.getElementsByTagName('rotation');
+	if(elems == null) return "rotation element is missing!";
+	if(elems.length != 3) return "Wrong number of 'rotation' elements found. Expected exactly 3!";
+	
+	this.initials['rotate3'] = this.parseRotation(elems[0]);
+    this.initials['rotate2'] = this.parseRotation(elems[1]);
+    this.initials['rotate1'] = this.parseRotation(elems[2]);
 	
 	if(isNaN(this.initials['rotate3'].angle)) return "Invalid rotation value!";
 	if(isNaN(this.initials['rotate2'].angle)) return "Invalid rotation value!";
 	if(isNaN(this.initials['rotate1'].angle)) return "Invalid rotation value!";
 
 	//Scale
-	if(rootElement.getElementsByTagName('scale').length != 1)return "More than one 'scale' elements found. Expected only one!";
+	var elems =  rootElement.getElementsByTagName('scale');
+	if(elems == null) return "scale element is missing!";
+	if(elems.length != 1) return "More than one 'scale' elements found. Expected only one!";
 
-	this.initials['scale'] = this.parseScale(elems[0].children[5]);
+	this.initials['scale'] = this.parseScale(elems[0]);
 	
 	if(isNaN(this.initials['scale'].sx)) return "Invalid scale value!";
 	if(isNaN(this.initials['scale'].sy)) return "Invalid scale value!";
 	if(isNaN(this.initials['scale'].sz)) return "Invalid scale value!";
 	
 	//Reference
-	var elems = init.getElementsByTagName('reference');
-	
-	if (elems == null)  return "Reference element is missing!";
-	if (elems.length != 1) return "More than one 'reference' elements found. Expected only one!";
+	var elems =  rootElement.getElementsByTagName('reference');
+	if(elems == null) return "reference element is missing!";
+	if(elems.length != 1) return "More than one 'reference' elements found. Expected only one!";
 
 	var reference = elems[0];
 
@@ -523,7 +534,6 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
     var elems = rootElement.getElementsByTagName('LEAVES');
     if(elems == null)	return "Leaves element is missing!";
     if(elems.length != 1)	return "More than one 'LEAVES' element found. Expected only one!";
-
 	var leaves_elements = elems[0];
 	
     this.leaves = {};
@@ -576,8 +586,8 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
     var nModes = elems.children.length;
     for (var i = 1; i < nModes; i++)
     {
-        var e = elems.children[i];
-        this.nodes[e.id] = this.parseNode(e);
+        var node = elems.children[i];
+        this.nodes[node.id] = this.parseNode(node);
     }
 
 	console.log(this.nodes);
@@ -592,15 +602,28 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 MySceneGraph.prototype.parseNode = function(element) {
 
     var node = {};
+
     node['material'] = this.reader.getString(element.children[0], 'id', true);
     node['texture'] = this.reader.getString(element.children[1], 'id', true);
+		
+	var animations = element.getElementsByTagName('ANIMATION');
+	node['animations'] = [];
+	
+	var j=0;
+	for(; j < animations.length; j++){
+		
+		node['animations'][j]=this.reader.getString(animations[j], 'id', true);
+		
+	}
+	
+	
 	node["matrix"] = mat4.create();
 	mat4.identity(node["matrix"]);
 
     var transformations = [];
 	
-
-    for(var i = 2; i < element.children.length; i++){
+	
+    for(var i = j+2; i < element.children.length; i++){
 
 		if(element.children[i].tagName === 'TRANSLATION'){
 			var translation = this.parseTranslate(element.children[i]);
@@ -626,7 +649,8 @@ MySceneGraph.prototype.parseNode = function(element) {
 		} 
 		else
 			break;       
-    }
+    
+	}
 	
 	node['descendants'] = this.parseDescendants(element.children[i]);
     return node;
@@ -649,6 +673,78 @@ MySceneGraph.prototype.parseDescendants = function(element) {
 
 };
 
+/*
+ * Animations Parser
+ */ 
+ 
+
+MySceneGraph.prototype.parseAnimations= function(rootElement) {
+
+	console.log("\nAnimations");
+   
+   var elems = rootElement.getElementsByTagName('ANIMATIONS');
+    if (elems == null) return "Animation element is missing."; 
+	var animes = elems[0];
+	
+   	this.animations = {};
+
+console.log(elems);
+    var nAnimations = animes.children.length;
+    for (var i = 0; i < nAnimations; i++)
+    {
+        var animation = animes.children[i];
+        this.animations[animation.id] = this.parseAnimation(animation);
+    }
+
+	console.log(this.animations);
+};
+
+/*
+ * Method that parses animation
+ */
+
+MySceneGraph.prototype.parseAnimation = function(element) {
+
+    var animation = {};
+
+    animation['span'] = this.reader.getFloat(element, 'span', true);
+	animation['type'] = this.reader.getString(element, 'type', true);
+	
+	if(animation['type'] === 'circular'){
+		
+		animation['radius'] = this.reader.getFloat(element, 'radius', true);
+		animation['startang'] = this.reader.getFloat(element, 'startang', true);
+		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
+	
+				var coords = this.reader.getString(element,"center",true);
+				animation["center"]	= coords.trim().split(/\s+/);
+				
+				for(var j = 0 ; j < animation['center'].length ; j++){
+        		animation['center'][j] = parseFloat(animation['center'][j]);
+				}
+	
+	} else if(animation['type'] === 'linear'){
+		var control_points = element.getElementsByTagName("controlpoint");
+
+		for(var j = 0 ; j < control_points.length ; j++)
+			{
+				var x = this.reader.getFloat(control_points[j], "xx", true);
+				var y = this.reader.getFloat(control_points[j], "yy", true);
+				var z = this.reader.getFloat(control_points[j], "zz", true);
+
+				if(isNaN(x) || isNaN(y) || isNaN(z))
+	                return " invalid number in control_points!";
+				
+				animation['control_points'+j] = [];
+				animation['control_points'+j]["xx"] = x;
+				animation['control_points'+j]["yy"] = y;
+				animation['control_points'+j]["zz"] = z;
+			}
+		
+	}else return "invalid type of animation!";
+    return animation;
+
+};
 
 /*
  * Callback to be executed on any read error

@@ -55,7 +55,7 @@
 
 	<LEAVES>
 		<LEAF id="sims" type="sims" args="8 2 10" />
-		<LEAF id="ring" type="ring" args="1 1 1 50 16" />
+		<LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
 		<LEAF id="ellipse" type="ellipse" args="4 2 100" />
 	</LEAVES>
 
@@ -74,7 +74,7 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="chair_pattern" />
 			<DESCENDANTS>
-				<DESCENDANT id="ellipse" />
+				<DESCENDANT id="ring" />
 			</DESCENDANTS>
 		</NODE>
 
