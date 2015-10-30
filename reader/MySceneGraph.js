@@ -688,7 +688,6 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 	
    	this.animations = {};
 
-console.log(elems);
     var nAnimations = animes.children.length;
     for (var i = 0; i < nAnimations; i++)
     {

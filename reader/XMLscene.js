@@ -19,6 +19,8 @@ XMLscene.prototype.init = function (application) {
 	this.axis=new CGFaxis(this);
 	this.loadedOk = false;
 	this.interface = null;
+	
+	this.setUpdatePeriod(50);
 
 	this.nodes = [];
 };
@@ -122,7 +124,6 @@ XMLscene.prototype.init_Illumination = function () {
 
 XMLscene.prototype.init_Lights = function () {
 
-    this.shader.bind();
 	this.lights_enable = [];
 
     this.lights_id = [];
@@ -168,7 +169,6 @@ XMLscene.prototype.init_Lights = function () {
     	this.lights_enable[current_id] = this.graph.lights[current_id].enable;
 
 	}
-    this.shader.unbind();
     this.interface.create_interface();
 };
 
@@ -233,14 +233,31 @@ XMLscene.prototype.init_Leaves = function () {
 		else if(graph_leaf.type == 'sims')
 			this.leaves[i] = new MySims(this, graph_leaf.args[0]);
 		else if(graph_leaf.type == 'ring')//
-			this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
-		else if(graph_leaf.type == 'annulus')
-			this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
-		else if(graph_leaf.type == 'ellipse')
-			this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
+            this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
+        else if(graph_leaf.type == 'annulus')
+            this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
+        else if(graph_leaf.type == 'ellipse')
+            this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 	}
 
 };
+
+XMLscene.prototype.init_Animations = function() {
+	
+	this.animations = [];
+	
+	var j=0;
+	
+	for(var i in this.graph.animations){
+		if(this.graph.animations[i]["type"] == "linear") {
+			this.animations[i] = new LinearAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['time'],this.graph.animations[i]["control_point" + j]);
+			j++;
+		}
+		else if(this.graph.animations[i]["type"] == "circular"){
+			this.animations[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['time'],this.graph.animations[i]['radius'],this.graph.animations[i]["startang"],this.graph.animations[i]["rotang"],this.graph.animations[i]["center"]["x"],this.graph.animations[i]["center"]["y"],this.graph.animations[i]["center"]["z"]);
+		}
+	}
+}
 
 XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
@@ -321,6 +338,8 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 
 };
 
+
+
 function Primitive(id) {
     this.id = id;
     this.texture = null;
@@ -355,16 +374,24 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.init_Textures();
 	this.init_Materials();
 	this.init_Leaves();
+	this.init_Animations();
 	this.init_Nodes();
 
 	this.loadedOk = true;
+};
+
+XMLscene.prototype.update = function (currTime) {
+
+	
+	
+
+
 };
 
 XMLscene.prototype.display = function () {
 
 	if (this.loadedOk == false) return;
 	// ---- BEGIN Background, camera and axis setup
-    this.shader.bind();
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -417,6 +444,6 @@ XMLscene.prototype.display = function () {
 
 	};
 
-    this.shader.unbind();
+ 
 
 };
