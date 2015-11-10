@@ -1,21 +1,18 @@
 function Plane(scene, parts) {
     CGFobject.call(this, scene);
 
-    this.texture = null;
-   	this.appearance = null;
+    this.parts = parts;
+
    	this.surfaces = [];
    	this.translations = [];
+
+   	this.initBuffers();
 }
 
 Plane.prototype = Object.create(CGFobject.prototype);
 Plane.prototype.constructor = Plane;
 
-Plane.prototype.initBuffers = function (application) {   
-    //this.setUpdatePeriod(500);
-	//this.appearance.setTextureWrap ('REPEAT', 'REPEAT');
-	
-	this.surfaces = [];
-		
+Plane.prototype.initBuffers = function() {		
 
 	this.makeSurface("0", 1, // degree on U: 2 control vertexes U
 					 1, // degree on V: 2 control vertexes on V
@@ -115,8 +112,8 @@ Plane.prototype.initBuffers = function (application) {
 					], // translation of surface 
 					[7.5,0,0]);*/
 	
-	//this.primitiveType = this.scene.gl.TRIANGLES;
-	//this.initGLBuffers();
+	this.primitiveType = this.scene.gl.TRIANGLES;
+	this.initGLBuffers();
 };
 
 Plane.prototype.makeSurface = function (id, degree1, degree2, knots1, knots2, controlvertexes, translation) {
@@ -133,13 +130,7 @@ Plane.prototype.makeSurface = function (id, degree1, degree2, knots1, knots2, co
 }
 
 Plane.prototype.display = function () {
-	// Clear image and depth buffer every time we update the scene
-    //this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    //this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-    //this.gl.clearColor(0.1, 0.1, 0.1, 1.0);
-    //this.gl.enable(this.gl.DEPTH_TEST);
-	
-	//this.appearance.apply();
+
 	for (i = 0; i < this.surfaces.length; i++) {
 		this.pushMatrix();
 	

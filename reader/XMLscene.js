@@ -23,7 +23,73 @@ XMLscene.prototype.init = function (application) {
 	this.setUpdatePeriod(50);
 
 	this.nodes = [];
+
+
+
+
+
+
+	//inicio batota
+   	this.surfaces = [];
+   	this.translations = [];
+
+	this.makeSurface("3", 2, // degree on U: 3 control vertexes U
+					3, // degree on V: 4 control vertexes on V
+					[0, 0, 0, 1, 1, 1], // knots for U
+					[0, 0, 0, 0, 1, 1, 1, 1], // knots for V
+					[	// U = 0
+						[ // V = 0..3;
+							 [ -2.0, -2.0, 1.0, 1 ],
+							 [ -2.0, -1.0, -2.0, 1 ],
+							 [ -2.0, 1.0, 5.0, 1 ],
+							 [ -2.0, 2.0, -1.0, 1 ]
+						],
+						// U = 1
+						[ // V = 0..3
+							 [ 0, -2.0, 0, 1 ],
+							 [ 0, -1.0, -1.0, 5 ],
+							 [ 0, 1.0, 1.5, 5 ],
+							 [ 0, 2.0, 0, 1 ]
+						],
+						// U = 2
+						[ // V = 0..3
+							 [ 2.0, -2.0, -1.0, 1 ],
+							 [ 2.0, -1.0, 2.0, 1 ],
+							 [ 2.0, 1.0, -5.0, 1 ],
+							 [ 2.0, 2.0, 1.0, 1 ]
+						]
+					], // translation of surface 
+					[7.5,0,0]);
+
+
+
+
+
 };
+
+
+
+
+XMLscene.prototype.makeSurface = function (id, degree1, degree2, knots1, knots2, controlvertexes, translation) {
+		
+	var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes);
+	getSurfacePoint = function(u, v) {
+		return nurbsSurface.getPoint(u, v);
+	};
+
+	var obj = new CGFnurbsObject(this, getSurfacePoint, 20, 20 );
+	this.surfaces.push(obj);	
+	this.translations.push(translation);
+
+}
+
+
+
+//fim batota
+
+
+
+
 
 XMLscene.prototype.setInterface = function (interface) {
 	this.interface = interface;
@@ -239,8 +305,7 @@ XMLscene.prototype.init_Leaves = function () {
         else if(graph_leaf.type == 'ellipse')
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
         else if(graph_leaf.type == 'plane') {
-            this.leaves[i] = new Plane(this, graph_leaf.parts);
-            console.log(this);
+            this.leaves[i] = new Plane(this, graph_leaf.args[0]);
         }
 	}
 	
@@ -386,11 +451,8 @@ XMLscene.prototype.onGraphLoaded = function () {
 
 XMLscene.prototype.update = function (currTime) {
 
-	
-	
-
-
 };
+
 
 XMLscene.prototype.display = function () {
 
@@ -412,24 +474,39 @@ XMLscene.prototype.display = function () {
 	this.axis.display();
 	this.setDefaultAppearance();
 
-
-	/*for(var i in this.leaves){
-		
-		//if(this.leaves[i].type == "cylinder"){
-		this.leaves[i].display();
-		//}
-		//console.log(this.leaves[i]);
+	// Update all lights used
+	for(var i in this.lights){
+		this.lights[i].update();
 	}
 
-*/
+
+
+
+	console.log(this.leaves["plane"].display());
+
+	//inicio batota
+
+	//this.plane.display();
+	for (i = 0; i < this.surfaces.length; i++) {
+		this.pushMatrix();
+		this.translate(this.translations[i][0], this.translations[i][1], this.translations[i][2]);
+		this.surfaces[i].display();
+		this.popMatrix();
+	}
+	
+	//fim batota
+
+
+
+
+
+
+
+
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk) {
-
-		for(var i in this.lights){
-			this.lights[i].update();
-		}
 
 		// Nodes
         for (i = 0; i < this.nodes.length; i++) {
@@ -442,6 +519,7 @@ XMLscene.prototype.display = function () {
 			
 			if(node.material != null)
 				node.material.apply();
+			//console.log(node.leaf.display());
 			node.leaf.display();
 			this.popMatrix();
         }

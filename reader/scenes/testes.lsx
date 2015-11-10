@@ -24,7 +24,7 @@
 
 	<ILLUMINATION>
         <ambient r="0" g="0" b="0" a="1" />
-        <background r="0.6" g="0.6" b="0.6" a="1" />
+        <background r="0.2" g="0.2" b="0.2" a="1" />
     </ILLUMINATION>
 
 	<LIGHTS>
@@ -69,7 +69,7 @@
 		<LEAF id="sims" type="sims" args="8 2 10" />
 		<LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
 		<LEAF id="ellipse" type="ellipse" args="4 2 100" />
-		<LEAF id="plane" type="plane" parts="5" />
+		<LEAF id="plane" type="plane" args="5" />
 	</LEAVES>
 
 	<NODES>

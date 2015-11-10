@@ -1,5 +1,5 @@
 function MyRing(scene, height, Sradius, thickness, slices, stacks) {
- 	CGFobject.call(this,scene);
+ 	CGFobject.call(this, scene);
 	
 	this.slices = slices;
 	this.stacks = stacks;

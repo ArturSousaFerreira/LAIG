@@ -1,5 +1,5 @@
 function MyEllipse(scene, axis1, axis2, slices) {
- 	CGFobject.call(this,scene);
+ 	CGFobject.call(this, scene);
 	
 	this.axis1 = axis1;
 	this.axis2 = axis2;
