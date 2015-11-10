@@ -238,8 +238,12 @@ XMLscene.prototype.init_Leaves = function () {
             this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
         else if(graph_leaf.type == 'ellipse')
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
+        else if(graph_leaf.type == 'plane') {
+            this.leaves[i] = new Plane(this, graph_leaf.parts);
+            console.log(this);
+        }
 	}
-
+	
 };
 
 XMLscene.prototype.init_Animations = function() {

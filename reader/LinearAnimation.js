@@ -7,7 +7,7 @@ function LinearAnimation(scene, duration, controlPoints) {
 	this.duration = duration;
     this.vectors = [];
 
-    for(var i in this.controlPoints){
+    for(var i in this.controlPoints) {
         var x = this.controlPoints[i+1].x - this.controlPoints[i].x;
         var y = this.controlPoints[i+1].y - this.controlPoints[i].y;
         var z = this.controlPoints[i+1].z - this.controlPoints[i].z;
@@ -24,7 +24,7 @@ function LinearAnimation(scene, duration, controlPoints) {
 	var d = new Date();
 	this.startTime = d.getTime();
     
-	this.acabou = false;	
+	this.acabou = false;
 	
 	this.time = 0;
     this.vecAnimating = 0;

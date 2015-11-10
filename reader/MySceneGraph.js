@@ -50,31 +50,31 @@ MySceneGraph.prototype.onXMLReady=function()
 	}	
 	
 	var error = this.parseTextures(rootElement);
-		if (error != null) {
+	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}
 
 	var error = this.parseMaterials(rootElement);
-		if (error != null) {
+	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 
 	var error = this.parseLeaves(rootElement);
-		if (error != null) {
+	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 	
 	var error = this.parseNodes(rootElement);
-		if (error != null) {
+	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
 
-		var error = this.parseAnimations(rootElement);
-		if (error != null) {
+	var error = this.parseAnimations(rootElement);
+	if (error != null) {
 		this.onXMLError(error);
 		return;
 	}	
@@ -127,7 +127,7 @@ MySceneGraph.prototype.parseRotation = function(element) {
     
 	arr['angle'] = this.reader.getFloat(element, 'angle', true);
     
-	if(typeof(arr['angle']) != "number"){
+	if(typeof(arr['angle']) != "number") {
         console.error('Error parsing angle in parseRotation');
     }
     
@@ -553,15 +553,25 @@ MySceneGraph.prototype.parseLeaf = function(element) {
     
 	var leaf = {};
     var tempArgs;
-
+	
     leaf['type'] = this.reader.getString(element, 'type', true);
-    tempArgs = this.reader.getString(element, 'args', true);
-    leaf['args'] = tempArgs.split(' ');
+    
+	// verificar se a leaf tem args ou tem parts, pois é plane
+    var args_flag = element.attributes.getNamedItem('args');
+    
+    if( args_flag !== null ) {
+    	tempArgs = this.reader.getString(element, 'args', true);
+    	leaf['args'] = tempArgs.split(' ');
 	
-    for(var i = 0; i < leaf['args'].length; i++){
-    leaf['args'][i] = parseFloat(leaf['args'][i]);
+		for(var i = 0; i < leaf['args'].length; i++){
+			leaf['args'][i] = parseFloat(leaf['args'][i]);
+		}
     }
-	
+    else {
+		leaf['parts'] = this.reader.getString(element, 'parts', true);
+		leaf['parts'] = parseFloat(leaf['parts']);
+    }
+
     return leaf;
 };
 
@@ -747,17 +757,13 @@ MySceneGraph.prototype.parseAnimation = function(element) {
 
 /*
  * Callback to be executed on any read error
- */ 
- 
+ */
+
 MySceneGraph.prototype.onXMLError=function (message) {
-	
+
 	console.error("XML Loading Error: "+message);
 	this.loadedOk=false;
 
 };
-
-
-
-
 
 

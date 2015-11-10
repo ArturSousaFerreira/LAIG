@@ -20,8 +20,7 @@
 
 		<ANIMATION id="circle1" span="10" type="circular" center="10 5 1" radius="5" startang="40" rotang="20"/>
 		<ANIMATION id="circle2" span="10" type="circular" center="10 10 10" radius="5" startang="40" rotang="20"/>
- 		
-</ANIMATIONS>
+	</ANIMATIONS>
 
 	<ILLUMINATION>
         <ambient r="0" g="0" b="0" a="1" />
