@@ -532,14 +532,16 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
 	console.log("\nLEAVES:");
 	
     var elems = rootElement.getElementsByTagName('LEAVES');
-    if(elems == null)	return "Leaves element is missing!";
-    if(elems.length != 1)	return "More than one 'LEAVES' element found. Expected only one!";
+    if(elems == null)
+    	return "Leaves element is missing!";
+    if(elems.length != 1)
+    	return "More than one 'LEAVES' element found. Expected only one!";
+
 	var leaves_elements = elems[0];
 	
     this.leaves = {};
 
-    for (var i=0; i < leaves_elements.children.length; i++)
-    {
+    for (var i=0; i < leaves_elements.children.length; i++) {
         var leaf = leaves_elements.children[i];
 
         this.leaves[leaf.id] = this.parseLeaf(leaf);
@@ -563,7 +565,7 @@ MySceneGraph.prototype.parseLeaf = function(element) {
     	tempArgs = this.reader.getString(element, 'args', true);
     	leaf['args'] = tempArgs.split(' ');
 	
-		for(var i = 0; i < leaf['args'].length; i++){
+		for( var i = 0; i < leaf['args'].length; i++ ) {
 			leaf['args'][i] = parseFloat(leaf['args'][i]);
 		}
     }
@@ -583,7 +585,7 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 MySceneGraph.prototype.parseNodes= function(rootElement) {
 
     var elems = rootElement.getElementsByTagName('NODES')[0];
-    if (elems == null) return "NODES element is missing.";    
+    if (elems == null) return "NODES element is missing.";
 
     var root_node = elems.getElementsByTagName('ROOT')[0];
     this.root_id = this.reader.getString(root_node, 'id');
@@ -594,8 +596,7 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 
     this.nodes['root'] = elems.children[0].id;
     var nModes = elems.children.length;
-    for (var i = 1; i < nModes; i++)
-    {
+    for (var i = 1; i < nModes; i++) {
         var node = elems.children[i];
         this.nodes[node.id] = this.parseNode(node);
     }
@@ -613,33 +614,29 @@ MySceneGraph.prototype.parseNode = function(element) {
 
     var node = {};
 
+	// parse do id de NODE
+	node["id"] = this.reader.getString(element, 'id');
+
+	// parse da tag MATERIALS de NODE
     node['material'] = this.reader.getString(element.children[0], 'id', true);
+
+    // parse da tag TEXTURE de NODE
     node['texture'] = this.reader.getString(element.children[1], 'id', true);
-		
-	var animations = element.getElementsByTagName('ANIMATION');
-	node['animations'] = [];
 	
-	var j=0;
-	for(; j < animations.length; j++){
-		
-		node['animations'][j]=this.reader.getString(animations[j], 'id', true);
-		
-	}
-	
-	
+	// parse das tags de Transformação, se existirem
 	node["matrix"] = mat4.create();
 	mat4.identity(node["matrix"]);
 
     var transformations = [];
 	
-	
-    for(var i = j+2; i < element.children.length; i++){
+	var i = 2;
+    for( ; i < element.children.length; i++ ) {
 
-		if(element.children[i].tagName === 'TRANSLATION'){
+		if( element.children[i].tagName === 'TRANSLATION' ) {
 			var translation = this.parseTranslate(element.children[i]);
 			mat4.translate(node["matrix"],node["matrix"],[translation["x"],translation["y"],translation["z"]]);
 		}
-		else if(element.children[i].tagName === 'ROTATION'){
+		else if(element.children[i].tagName === 'ROTATION') {
 			var rotation = this.parseRotation(element.children[i]);			
 			var axis;
 
@@ -662,7 +659,16 @@ MySceneGraph.prototype.parseNode = function(element) {
     
 	}
 	
+	// parse da tag DESCENDANTS
 	node['descendants'] = this.parseDescendants(element.children[i]);
+
+	// parse das tags ANIMATIONREF, se existirem
+	i++;
+	for( ; i < element.children.length; i++ ) {
+		node['animationref'] = this.reader.getString(element.children[i], 'id', true);
+	}
+
+
     return node;
 
 };
@@ -690,17 +696,17 @@ MySceneGraph.prototype.parseDescendants = function(element) {
 
 MySceneGraph.prototype.parseAnimations= function(rootElement) {
 
-	console.log("\nAnimations");
+	console.log("\nANIMATIONS:");
    
-   var elems = rootElement.getElementsByTagName('ANIMATIONS');
-    if (elems == null) return "Animation element is missing."; 
+   	var elems = rootElement.getElementsByTagName('ANIMATIONS');
+    if (elems == null) return "ANIMATIONS element is missing.";
+    if (elems.length != 1) return "More than one 'ANIMATIONS' element found. Expected only one!";
 	var animes = elems[0];
 	
    	this.animations = {};
 
     var nAnimations = animes.children.length;
-    for (var i = 0; i < nAnimations; i++)
-    {
+    for (var i = 0; i < nAnimations; i++) {
         var animation = animes.children[i];
         this.animations[animation.id] = this.parseAnimation(animation);
     }
@@ -716,43 +722,51 @@ MySceneGraph.prototype.parseAnimation = function(element) {
 
     var animation = {};
 
+	animation.id = element.id;
     animation['span'] = this.reader.getFloat(element, 'span', true);
 	animation['type'] = this.reader.getString(element, 'type', true);
 	
-	if(animation['type'] === 'circular'){
-		
+	if( animation['type'] === 'circular' ) {
+		var coords = this.reader.getString(element,"center",true);
+		animation["center"]	= coords.trim().split(/\s+/);
+
+		for( var j = 0 ; j < animation['center'].length ; j++ ) {
+			animation['center'][j] = parseFloat(animation['center'][j]);
+		}
+
 		animation['radius'] = this.reader.getFloat(element, 'radius', true);
 		animation['startang'] = this.reader.getFloat(element, 'startang', true);
 		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
+		
+		this.animations[animation.id] = new CircularAnimation(animation.id, animation["span"], vec3.fromValues(animation["center"][0], animation["center"][1], animation["center"][2]), animation["startang"] * Math.PI / 180, animation["rotang"] * Math.PI / 180);
 	
-				var coords = this.reader.getString(element,"center",true);
-				animation["center"]	= coords.trim().split(/\s+/);
-				
-				for(var j = 0 ; j < animation['center'].length ; j++){
-        		animation['center'][j] = parseFloat(animation['center'][j]);
-				}
-	
-	} else if(animation['type'] === 'linear'){
+	} 
+	else if( animation['type'] === 'linear' ){
 		var control_points = element.getElementsByTagName("controlpoint");
 
-		for(var j = 0 ; j < control_points.length ; j++)
-			{
-				var x = this.reader.getFloat(control_points[j], "xx", true);
-				var y = this.reader.getFloat(control_points[j], "yy", true);
-				var z = this.reader.getFloat(control_points[j], "zz", true);
+		var controls_array = [];
+		for(var j = 0 ; j < control_points.length ; j++) {
+			var x = this.reader.getFloat(control_points[j], "xx", true);
+			var y = this.reader.getFloat(control_points[j], "yy", true);
+			var z = this.reader.getFloat(control_points[j], "zz", true);
 
-				if(isNaN(x) || isNaN(y) || isNaN(z))
-	                return " invalid number in control_points!";
-				
-				animation['control_points'+j] = [];
-				animation['control_points'+j]["xx"] = x;
-				animation['control_points'+j]["yy"] = y;
-				animation['control_points'+j]["zz"] = z;
-			}
+			if(isNaN(x) || isNaN(y) || isNaN(z))
+				return " invalid number in control_points!";
+
+			animation['control_points'+j] = [];
+			animation['control_points'+j]["xx"] = x;
+			animation['control_points'+j]["yy"] = y;
+			animation['control_points'+j]["zz"] = z;
+
+			controls_array.push(vec3.fromValues(x, y, z));
+		}
+
+		this.animations[animation.id] = new LinearAnimation(animation.id, animation["span"], controls_array);
 		
-	}else return "invalid type of animation!";
-    return animation;
+	} else 
+		return "invalid type of animation!";
 
+    return animation;
 };
 
 /*
