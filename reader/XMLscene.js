@@ -25,7 +25,6 @@ XMLscene.prototype.init = function (application) {
 	this.nodes = [];
 };
 
-
 XMLscene.prototype.setInterface = function (interface) {
 	this.interface = interface;
 }
@@ -218,7 +217,7 @@ XMLscene.prototype.init_Leaves = function () {
 
 	this.leaves = [];
 
-	for( var i in this.graph.leaves) {
+	for( var i in this.graph.leaves){
 		var graph_leaf = this.graph.leaves[i];
 
 		if(graph_leaf.type == 'cylinder')
@@ -233,42 +232,64 @@ XMLscene.prototype.init_Leaves = function () {
 			this.leaves[i] = new MyDiamond(this, graph_leaf.args[0], graph_leaf.args[1]);
 		else if(graph_leaf.type == 'sims')
 			this.leaves[i] = new MySims(this, graph_leaf.args[0]);
-		else if(graph_leaf.type == 'ring')//
+		else if(graph_leaf.type == 'diamond_cone')
+			this.leaves[i] = new MyDiamond_cone(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
+		else if(graph_leaf.type == 'cone')
+			this.leaves[i] = new MyCone(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
+		else if(graph_leaf.type == 'piramide')
+			this.leaves[i] = new MyPiramide(this, graph_leaf.args[0]);
+        else if(graph_leaf.type == 'ring')
             this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
         else if(graph_leaf.type == 'annulus')
             this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
         else if(graph_leaf.type == 'ellipse')
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
-        //else if(graph_leaf.type == 'plane')
-            //this.leaves[i] = new Plane(this, graph_leaf.args[0]);
 	}
-	
+
 };
 
-/*XMLscene.prototype.init_Animations = function() {
+XMLscene.prototype.init_Animations = function() {
 	
-	this.animations = [];
-	
+	this.animationsobjects = [];
 	var j=0;
 	
 	for(var i in this.graph.animations){
 		if(this.graph.animations[i]["type"] == "linear") {
-			this.animations[i] = new LinearAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['time'],this.graph.animations[i]["control_point" + j]);
+            console.log(this.graph.animations[i]['control_points']);
+			this.animationsobjects[i] = new LinearAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['control_points']);
+			
 			j++;
 		}
 		else if(this.graph.animations[i]["type"] == "circular"){
-			this.animations[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['time'],this.graph.animations[i]['radius'],this.graph.animations[i]["startang"],this.graph.animations[i]["rotang"],this.graph.animations[i]["center"]["x"],this.graph.animations[i]["center"]["y"],this.graph.animations[i]["center"]["z"]);
+			//this.animations[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['radius'],this.graph.animations[i]["startang"],this.graph.animations[i]["rotang"],this.graph.animations[i]["center"]["x"],this.graph.animations[i]["center"]["y"],this.graph.animations[i]["center"]["z"]);
 		}
 	}
-}*/
+}
 
+// initialization of Patches
+XMLscene.prototype.initPatches = function() {
+    this.patches = [];
+    
+    for(var i in this.graph.patchList){
+        var id = this.graph.patchList[i]["id"];
+        var degree_u = this.graph.patchList[i]["degree_u"];
+        var degree_v = this.graph.patchList[i]["degree_v"];
+        var knots1 = this.graph.patchList[i]["knots1"];
+        var knots2 = this.graph.patchList[i]["knots2"];
+        var control_vertexes = this.graph.patchList[i]["control_vertexes"];
+        var divs = this.graph.patchList[i]["divs"];
+        this.patch[i] = new MyPatch(id,degree_u,degree_v,knots1,knots2,control_vertexes,divs);
+    }
+}
+
+// initialization of Nodes
 XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
 
 
     var root_node = this.graph.nodes[main_id]; //node.js
+	
 	root_node["matrix"]=this.initialMatrix;
-	console.log(root_node)
 	this.pushMatrix();
     this.itDescend(root_node, root_node["texture"], root_node["material"], root_node["matrix"]);
     this.popMatrix();
@@ -287,14 +308,12 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
    	var nextMaterial_ID = node.material;
 	if (node.material == "null")
 		nextMaterial_ID = currMaterial_ID;
-
-	console.log(node.id);
-	console.log(this.graph.nodes[node.id]);
-
-	this.applyAnimation(this.graph.nodes[node.id]);////////////////////
+	
+	
 	var nextMatrix = mat4.create();
     mat4.multiply(nextMatrix, curr_Matrix, node.matrix);
 
+	
     for (var i = 0; i < node.descendants.length; i++) {
     	var num_nodes = 0;
     	var index_no = 0;
@@ -337,9 +356,18 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         }
 
         index_no++;
-
+		
+		
 		
 		this.pushMatrix();
+		
+		if(typeof node.animationref != "undefined"){
+			this.applyAnimation(node);
+
+		  this.multMatrix(node.matrix);
+			
+		}	
+		
         this.itDescend(nextNode, nextTexture_ID, nextMaterial_ID, nextMatrix);
         this.popMatrix();
     }
@@ -382,14 +410,13 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.init_Textures();
 	this.init_Materials();
 	this.init_Leaves();
-	//this.init_Animations();
+	this.init_Animations();
 	this.init_Nodes();
 
+	 this.timer = 0;
+    this.setUpdatePeriod(100/6);
+	
 	this.loadedOk = true;
-};
-
-XMLscene.prototype.update = function (currTime) {
-
 };
 
 
@@ -413,16 +440,24 @@ XMLscene.prototype.display = function () {
 	this.axis.display();
 	this.setDefaultAppearance();
 
-	// Update all lights used
-	for(var i in this.lights){
-		this.lights[i].update();
+
+	/*for(var i in this.leaves){
+		
+		//if(this.leaves[i].type == "cylinder"){
+		this.leaves[i].display();
+		//}
+		//console.log(this.leaves[i]);
 	}
 
-
+*/
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk) {
+
+		for(var i in this.lights) {
+			this.lights[i].update();
+		}
 
 		// Nodes
         for (i = 0; i < this.nodes.length; i++) {
@@ -431,11 +466,12 @@ XMLscene.prototype.display = function () {
 			
 			this.multMatrix(node.matrix);
 
-			if(node.material!=null) node.material.setTexture(node.texture);
+			if(node.material != null)
+                node.material.setTexture(node.texture);
 			
 			if(node.material != null)
 				node.material.apply();
-			//console.log(node.leaf.display());
+
 			node.leaf.display();
 			this.popMatrix();
         }
@@ -446,15 +482,24 @@ XMLscene.prototype.display = function () {
 
 };
 
+XMLscene.prototype.update = function(currTime) {
+	if (this.lastUpdate != 0)
+		this.timer += (currTime - this.lastUpdate) / 1000;
+	//console.log(this.timer);
+}
+XMLscene.prototype.calculateMatrix = function() {
+    var matrix = mat4.create();
+    mat4.identity(matrix);
 
+    return matrix;
+}
 XMLscene.prototype.applyAnimation = function(node) {
-	console.log(node.animationref);
-	if (node.animationref == null)
+	
+	if (node.animationref == 'null')
 		return;
-		console.log(this.graph.animations[node.animationref]);
-	var animation = this.graph.animations[node.animationref];
-	var animationMatrix = animation.calculateMatrix(0);
+	console.log(this.animationsobjects[node.animationref]);
+	var animation = this.animationsobjects[node.animationref];
+	var animationMatrix = animation.calculateMatrix(this.timer);
 
 	this.multMatrix(animationMatrix);
 }
-

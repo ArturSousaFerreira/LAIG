@@ -10,21 +10,9 @@
 		<reference length="6" />
 	</INITIALS>
 
-	<ANIMATIONS>
- 		<ANIMATION id="line1" span="30" type="linear">
- 			<controlpoint xx="1" yy="1" zz="1"/>
- 			<controlpoint xx="1" yy="1" zz="2"/>
- 			<controlpoint xx="2" yy="1" zz="2"/>
- 			<controlpoint xx="3" yy="1" zz="2"/>
- 		</ANIMATION>
-
-		<ANIMATION id="circle1" span="10" type="circular" center="10 5 1" radius="5" startang="40" rotang="20"/>
-		<ANIMATION id="circle2" span="10" type="circular" center="10 10 10" radius="5" startang="40" rotang="20"/>
-	</ANIMATIONS>
-
 	<ILLUMINATION>
         <ambient r="0" g="0" b="0" a="1" />
-        <background r="0.2" g="0.2" b="0.2" a="1" />
+        <background r="0.6" g="0.6" b="0.6" a="1" />
     </ILLUMINATION>
 
 	<LIGHTS>
@@ -50,7 +38,7 @@
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="chair_pattern">
-            <file path="textures/bordeaux.jpg" />
+            <file path="textures/mona_lisa.jpeg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
     </TEXTURES>
@@ -58,18 +46,15 @@
    	<MATERIALS>
         <MATERIAL id="default">
             <shininess value="100" />
-            <specular r="1.0" g="1.0" b="1.0" a="0.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="0.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
             <emission r="0" g="0" b="0" a="0" />
         </MATERIAL>
     </MATERIALS>
 
 	<LEAVES>
-		<LEAF id="sims" type="sims" args="8 2 10" />
-		<LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
-		<LEAF id="ellipse" type="ellipse" args="4 2 100" />
-		<LEAF id="plane" type="plane" args="5" />
+		<LEAF id="diamond" type="circle" args="6 5" />
 	</LEAVES>
 
 	<NODES>
@@ -82,12 +67,11 @@
 				<DESCENDANT id="teste" />
 			</DESCENDANTS>
 		</NODE>
-
 		<NODE id="teste">
 			<MATERIAL id="null" />
 			<TEXTURE id="chair_pattern" />
 			<DESCENDANTS>
-				<DESCENDANT id="plane" />
+				<DESCENDANT id="diamond" />
 			</DESCENDANTS>
 		</NODE>
 

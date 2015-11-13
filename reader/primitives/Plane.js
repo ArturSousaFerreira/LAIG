@@ -12,7 +12,10 @@ function Plane(scene, parts) {
 Plane.prototype = Object.create(CGFobject.prototype);
 Plane.prototype.constructor = Plane;
 
-Plane.prototype.initBuffers = function() {		
+Plane.prototype.initBuffers = function() {
+
+	this.vertices = [];
+	this.normals = [];
 
 	this.makeSurface("0", 1, // degree on U: 2 control vertexes U
 					 1, // degree on V: 2 control vertexes on V
@@ -20,8 +23,8 @@ Plane.prototype.initBuffers = function() {
 					[0, 0, 1, 1], // knots for V
 					[	// U = 0
 						[ // V = 0..1;
-							 [-2.0, -2.0, 0.0, 1 ],
-							 [-2.0,  2.0, 0.0, 1 ]
+							 [-0.5, -0.5, 0.0, 1 ],
+							 [-0.5,  0.5, 0.0, 1 ]
 							
 						],
 						// U = 1
@@ -124,7 +127,7 @@ Plane.prototype.makeSurface = function (id, degree1, degree2, knots1, knots2, co
 	};
 
 	var obj = new CGFnurbsObject(this, getSurfacePoint, 20, 20);
-	this.surfaces.push(obj);	
+	this.surfaces.push(obj);
 	this.translations.push(translation);
 
 }
