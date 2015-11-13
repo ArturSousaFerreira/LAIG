@@ -21,8 +21,8 @@ MyCylinderBody.prototype.initBuffers = function() {
  	this.normals=[];
  	this.texCoords = [];
 
- 	for(var i = 0; i < this.stacks+1; i++) {
- 		for(var j = 0; j < this.slices; j++) {
+ 	for(var i = 0; i < this.stacks+1; i++){
+ 		for(var j = 0; j < this.slices; j++){
  			this.vertices.push((this.bRadius + (deltaRadius * i))*Math.cos(j*angle),(this.bRadius + (deltaRadius * i))*Math.sin(j*angle),i/this.stacks);
  			this.normals.push(Math.cos(j*angle),Math.sin(j*angle),0);
  			this.texCoords.push(

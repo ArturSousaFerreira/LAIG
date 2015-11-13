@@ -688,7 +688,6 @@ MySceneGraph.prototype.parseDescendants = function(element) {
     }
 
     return descendants;
-
 };
 
 /*
@@ -700,15 +699,17 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 
 	console.log("\nAnimations");
    
-   var elems = rootElement.getElementsByTagName('ANIMATIONS');
-    if (elems == null) return "Animation element is missing."; 
+   	var elems = rootElement.getElementsByTagName('ANIMATIONS');
+    
+    if (elems == null)
+    	return "Animation element is missing.";
+
 	var animes = elems[0];
 	
    	this.animations = {};
 
     var nAnimations = animes.children.length;
-    for (var i = 0; i < nAnimations; i++)
-    {
+    for (var i = 0; i < nAnimations; i++) {
         var animation = animes.children[i];
         this.animations[animation.id] = this.parseAnimation(animation);
     }
@@ -760,36 +761,36 @@ MySceneGraph.prototype.parseAnimation = function(element) {
     animation['span'] = this.reader.getFloat(element, 'span', true);
 	animation['type'] = this.reader.getString(element, 'type', true);
 	
-	if(animation['type'] === 'circular'){
+	if(animation['type'] === 'circular') {
 		
 		animation['radius'] = this.reader.getFloat(element, 'radius', true);
 		animation['startang'] = this.reader.getFloat(element, 'startang', true);
 		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
-	
-				var coords = this.reader.getString(element,"center",true);
-				animation["center"]	= coords.trim().split(/\s+/);
-				
-				for(var j = 0 ; j < animation['center'].length ; j++){
-        		animation['center'][j] = parseFloat(animation['center'][j]);
-				}
-	
-	} else if(animation['type'] === 'linear') {
+		
+		var coords = this.reader.getString(element,"center",true);
+		animation["center"]	= coords.trim().split(/\s+/);
+		
+		for(var j = 0 ; j < animation['center'].length ; j++) {
+			animation['center'][j] = parseFloat(animation['center'][j]);
+		}
+	}
+	else if(animation['type'] === 'linear') {
 		var control_points = element.getElementsByTagName("CONTROLPOINT");
 
 		var ctrPoints = [];
+		console.log(control_points.length);
 		for(var j = 0 ; j < control_points.length ; j++) {
-				var x = this.reader.getFloat(control_points[j], "xx", true);
-				var y = this.reader.getFloat(control_points[j], "yy", true);
-				var z = this.reader.getFloat(control_points[j], "zz", true);
+			var x = this.reader.getFloat(control_points[j], "xx", true);
+			var y = this.reader.getFloat(control_points[j], "yy", true);
+			var z = this.reader.getFloat(control_points[j], "zz", true);
 
-				if(isNaN(x) || isNaN(y) || isNaN(z))
-	                return " invalid number in control_points!";
-				
+			if(isNaN(x) || isNaN(y) || isNaN(z))
+                return " invalid number in control_points!";
+			
 			ctrPoints.push(vec3.fromValues(x,y,z));
-			}
-			animation['control_points']=ctrPoints;
-
+		}
 		
+		animation['control_points'] = ctrPoints;		
 	} else
 		return "invalid type of animation!";
 

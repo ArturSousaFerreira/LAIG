@@ -1,8 +1,8 @@
-function MyDiamond(scene, length, width) {
+function MyDiamond(scene, x, y) {
     CGFobject.call(this,scene);
 
-    this.length = length;
-    this.width = width;
+    this.largura = x;
+    this.altura = y;
 
     this.initBuffers();
 }
@@ -14,15 +14,15 @@ MyDiamond.prototype.constructor = MyDiamond;
 MyDiamond.prototype.initBuffers = function() {
 
     this.vertices = [
-        0, this.length/2, 0,
-        this.width/2, this.length, 0,
-        this.width, this.length/2, 0,
-        this.width/2, 0, 0
+        0, 0, 0,
+        this.largura/2, this.altura/2, 0,
+        this.largura, 0, 0,
+        this.largura/2, -this.altura/2, 0
     ];
 
     this.indices = [
-    	0, 1, 2,
-    	0, 2, 3
+    	2,1,0,
+    	3, 2, 0
     ];
 
     this.normals = [
@@ -33,10 +33,10 @@ MyDiamond.prototype.initBuffers = function() {
     ];
 
     this.texCoords = [
-		1, 0,
-		0, 0,
-		0, 1,
-		1, 1
+		0, 0.5,
+		0.5, 0,
+		1, 0.5,
+		0.5, 1
 	];
 
 	this.primitiveType=this.scene.gl.TRIANGLES;

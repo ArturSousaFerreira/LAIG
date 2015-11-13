@@ -10,10 +10,24 @@
 		<reference length="6" />
 	</INITIALS>
 
+
+    <ANIMATIONS>
+        <ANIMATION id="OMGAMesaAnda" span="3" type="linear">
+            <CONTROLPOINT xx="0" yy="0" zz="0" />
+            <CONTROLPOINT xx="0" yy="0" zz="4" />
+            <CONTROLPOINT xx="4" yy="0" zz="4" />
+            <CONTROLPOINT xx="4" yy="0" zz="0" />
+            <CONTROLPOINT xx="0" yy="0" zz="0" />
+        </ANIMATION>
+        <ANIMATION id="OMGAMesaRoda" span="10" type="circular" center="0 0 5" radius="3" startang="0" rotang="360"/>
+    </ANIMATIONS>
+
+
 	<ILLUMINATION>
         <ambient r="0" g="0" b="0" a="1" />
         <background r="0.6" g="0.6" b="0.6" a="1" />
     </ILLUMINATION>
+
 
 	<LIGHTS>
         <LIGHT id="light_default">
@@ -32,6 +46,7 @@
         </LIGHT>        
     </LIGHTS>
 
+
 	<TEXTURES>
         <TEXTURE id="floor_pattern">
             <file path="textures/floor.jpg" />
@@ -43,6 +58,7 @@
         </TEXTURE>
     </TEXTURES>
 
+
    	<MATERIALS>
         <MATERIAL id="default">
             <shininess value="100" />
@@ -53,9 +69,13 @@
         </MATERIAL>
     </MATERIALS>
 
+
 	<LEAVES>
-		<LEAF id="diamond" type="circle" args="6 5" />
+		<LEAF id="sims" type="sims" args="8 2 10" />
+        <LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
+        <LEAF id="ellipse" type="ellipse" args="4 2 100" />
 	</LEAVES>
+
 
 	<NODES>
 		<ROOT id="scene" />
@@ -71,10 +91,30 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="chair_pattern" />
 			<DESCENDANTS>
-				<DESCENDANT id="diamond" />
+				<DESCENDANT id="ellipse" />
 			</DESCENDANTS>
 		</NODE>
 
 	</NODES>
+
+
+    <PATCHES>
+        <PATCH id="1">
+            <DEGREE_U value ="1"/>
+            <DEGREE_V value ="1"/>
+            <KNOTS1 args = "1.0 1.0 1.0 1.0"/>
+            <KNOTS2 args = "1.0 1.0 1.0 1.0"/>
+            
+            <C_VERTEXES>
+                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+            </C_VERTEXES>
+            <C_VERTEXES>
+                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+            </C_VERTEXES>
+            <DIVS value="20.0"/>
+        </PATCH>
+    </PATCHES>
 
 </SCENE>

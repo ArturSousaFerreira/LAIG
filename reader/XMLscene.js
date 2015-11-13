@@ -221,7 +221,7 @@ XMLscene.prototype.init_Leaves = function () {
 		var graph_leaf = this.graph.leaves[i];
 
 		if(graph_leaf.type == 'cylinder')
-			this.leaves[i] =new MyCylinder(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
+			this.leaves[i] = new MyCylinder(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
 		else if(graph_leaf.type == 'rectangle')
 			this.leaves[i] = new MyRectangle(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3]);
 		else if(graph_leaf.type == 'triangle')
@@ -238,7 +238,7 @@ XMLscene.prototype.init_Leaves = function () {
 			this.leaves[i] = new MyCone(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
 		else if(graph_leaf.type == 'piramide')
 			this.leaves[i] = new MyPiramide(this, graph_leaf.args[0]);
-        else if(graph_leaf.type == 'ring')
+		else if(graph_leaf.type == 'ring')
             this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
         else if(graph_leaf.type == 'annulus')
             this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
@@ -251,16 +251,15 @@ XMLscene.prototype.init_Leaves = function () {
 XMLscene.prototype.init_Animations = function() {
 	
 	this.animationsobjects = [];
-	var j=0;
-	
-	for(var i in this.graph.animations){
+	var j = 0;
+
+	for(var i in this.graph.animations) {		
 		if(this.graph.animations[i]["type"] == "linear") {
-            console.log(this.graph.animations[i]['control_points']);
+			console.log(this.graph.animations);
 			this.animationsobjects[i] = new LinearAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['control_points']);
-			
 			j++;
 		}
-		else if(this.graph.animations[i]["type"] == "circular"){
+		else if(this.graph.animations[i]["type"] == "circular") {
 			//this.animations[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['radius'],this.graph.animations[i]["startang"],this.graph.animations[i]["rotang"],this.graph.animations[i]["center"]["x"],this.graph.animations[i]["center"]["y"],this.graph.animations[i]["center"]["z"]);
 		}
 	}
@@ -285,7 +284,8 @@ XMLscene.prototype.initPatches = function() {
 // initialization of Nodes
 XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
-
+	this.primitivas=[];
+	this.nodes=this.graph.nodes;
 
     var root_node = this.graph.nodes[main_id]; //node.js
 	
@@ -308,8 +308,7 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
    	var nextMaterial_ID = node.material;
 	if (node.material == "null")
 		nextMaterial_ID = currMaterial_ID;
-	
-	
+
 	var nextMatrix = mat4.create();
     mat4.multiply(nextMatrix, curr_Matrix, node.matrix);
 
@@ -351,7 +350,8 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
         		}
         	}
         	primitive.matrix = nextMatrix;
-        	this.nodes.push(primitive);
+        	this.primitivas.push(primitive);
+			node.leaf
         	continue;
         }
 
@@ -360,13 +360,9 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 		
 		
 		this.pushMatrix();
+	
 		
-		if(typeof node.animationref != "undefined"){
-			this.applyAnimation(node);
-
-		  this.multMatrix(node.matrix);
-			
-		}	
+	
 		
         this.itDescend(nextNode, nextTexture_ID, nextMaterial_ID, nextMatrix);
         this.popMatrix();
@@ -414,10 +410,40 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.init_Nodes();
 
 	 this.timer = 0;
-    this.setUpdatePeriod(100/6);
+    this.setUpdatePeriod(20);
 	
 	this.loadedOk = true;
 };
+
+XMLscene.prototype.drawNodes = function (node) {
+	
+	this.pushMatrix();
+	
+			this.multMatrix(node.matrix);
+
+			if(node.material != "null")
+                this.materials[node.material].setTexture(this.textures[node.texture]);
+			
+			if(node.material != "null")
+				this.materials[node.material].apply();
+			
+			for(var t in node.descendants){
+				this.pushMatrix();
+				if(typeof node.animationref != "undefined"){
+					this.multMatrix(this.animationsobjects[node.animationref].matrix);
+				}
+			
+				if(typeof this.graph.nodes[node.descendants[t]] == "undefined"){
+		
+					this.leaves[node.descendants[t]].display();
+				}
+				else this.drawNodes(this.nodes[node.descendants[t]]);
+				this.popMatrix();
+			}
+	
+	this.popMatrix();
+	
+}
 
 
 XMLscene.prototype.display = function () {
@@ -460,10 +486,10 @@ XMLscene.prototype.display = function () {
 		}
 
 		// Nodes
-        for (i = 0; i < this.nodes.length; i++) {
-			var node = this.nodes[i];
+      /*  for (i = 0; i < this.primitivas.length; i++) {
+			var node = this.primitivas[i];
 			this.pushMatrix();
-			
+			console.log(this.leaves);
 			this.multMatrix(node.matrix);
 
 			if(node.material != null)
@@ -471,10 +497,22 @@ XMLscene.prototype.display = function () {
 			
 			if(node.material != null)
 				node.material.apply();
+			
+			//if(typeof this.nodes[p].animationref != "undefined"){
+			//this.applyAnimation(this.nodes[p]);
 
+		 // this.multMatrix(this.nodes[p].matrix);
+			
+		
+		
+			
+			
 			node.leaf.display();
 			this.popMatrix();
         }
+		
+		*/
+			this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
 
 	};
 
@@ -483,23 +521,12 @@ XMLscene.prototype.display = function () {
 };
 
 XMLscene.prototype.update = function(currTime) {
+
 	if (this.lastUpdate != 0)
 		this.timer += (currTime - this.lastUpdate) / 1000;
-	//console.log(this.timer);
-}
-XMLscene.prototype.calculateMatrix = function() {
-    var matrix = mat4.create();
-    mat4.identity(matrix);
-
-    return matrix;
-}
-XMLscene.prototype.applyAnimation = function(node) {
 	
-	if (node.animationref == 'null')
-		return;
-	console.log(this.animationsobjects[node.animationref]);
-	var animation = this.animationsobjects[node.animationref];
-	var animationMatrix = animation.calculateMatrix(this.timer);
-
-	this.multMatrix(animationMatrix);
+	for(var k in this.animationsobjects){
+		this.animationsobjects[k].calculateMatrix(this.timer);
+	}
 }
+

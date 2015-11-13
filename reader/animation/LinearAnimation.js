@@ -2,7 +2,8 @@ function LinearAnimation(scene, id, span, controlPoints) {
     Animation.call(this, id, span, "linear");
 
     this.controlPoints = controlPoints;
-
+	this.matrix = mat4.create();
+	mat4.identity(this.matrix);
     this.init();
 }
 
@@ -68,6 +69,7 @@ LinearAnimation.prototype.calculateMatrix = function(t) {
 
     mat4.translate(matrix, matrix, position);
     mat4.rotateY(matrix,matrix,this.rotations[index]);
-    
+	
+    this.matrix = matrix;
     return matrix;
 }

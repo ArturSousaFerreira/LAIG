@@ -1497,7 +1497,6 @@
             <DESCENDANT id="armario1" />
         </DESCENDANTS>
     </NODE>
-      
 
 </NODES>
 
@@ -1514,20 +1513,20 @@
 
 <PATCHES>
     <PATCH id="1">
-            <DEGREE_U value ="1"/>
-            <DEGREE_V value ="1"/>
-            <KNOTS1 args = "1.0 1.0 1.0 1.0"/>
-            <KNOTS2 args = "1.0 1.0 1.0 1.0"/>
-            
-            <C_VERTEXES>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-            </C_VERTEXES>
-            <C_VERTEXES>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-            </C_VERTEXES>
-            <DIVS value="20.0"/>
+        <DEGREE_U value ="1"/>
+        <DEGREE_V value ="1"/>
+        <KNOTS1 args = "1.0 1.0 1.0 1.0"/>
+        <KNOTS2 args = "1.0 1.0 1.0 1.0"/>
+        
+        <C_VERTEXES>
+                <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+                <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+        </C_VERTEXES>
+        <C_VERTEXES>
+                <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+                <C_VERTEX values="1.0 1.0 1.0 1.0"/>
+        </C_VERTEXES>
+        <DIVS value="20.0"/>
     </PATCH>
 </PATCHES>
 
