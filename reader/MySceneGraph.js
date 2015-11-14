@@ -720,38 +720,6 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 /*
  * Method that parses animation
  */
- /*
- MySceneGraph.prototype.parseAnimation = function(animation) {
-	var id = this.reader.getString(animation, "id");
-	if (id in this.animations)
-		return "Animation id already in animation: " + id;
-
-	var span = this.reader.getFloat(animation, "span");
-	var type = this.reader.getString(animation, "type");
-
-	if(type == "circular") {
-		var center = this.reader.getCenter(animation, "center");
-		var radius = this.reader.getFloat(animation, "radius");
-		var startang = this.reader.getFloat(animation, "startang");
-		var rotang = this.reader.getFloat(animation, "rotang");
-		
-		
-		this.animations[id] = new CircularAnimation(id, span, vec3.fromValues(center[0], center[1], center[2]), startang * Math.PI / 180, rotang * Math.PI / 180, radius);
-	}
-	else if(type == "linear"){
-		var controlPoints = [];
-		for (var i = 0; i < animation.children.length; ++i) {
-			var controlpoint = animation.children[i];
-			var x = this.reader.getFloat(controlpoint, "xx");
-			var y = this.reader.getFloat(controlpoint, "yy");
-			var z = this.reader.getFloat(controlpoint, "zz");
-			controlPoints.push(vec3.fromValues(x,y,z));
-		}
-		this.animations[id] = new LinearAnimation(id, span, controlPoints);
-	}
-	else return "Unknown animation type: " + type;
-}*/
-
 
 MySceneGraph.prototype.parseAnimation = function(element) {
 
@@ -763,22 +731,25 @@ MySceneGraph.prototype.parseAnimation = function(element) {
 	
 	if(animation['type'] === 'circular') {
 		
-		animation['radius'] = this.reader.getFloat(element, 'radius', true);
+	animation['radius'] = this.reader.getFloat(element, 'radius', true);
 		animation['startang'] = this.reader.getFloat(element, 'startang', true);
 		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
 		
 		var coords = this.reader.getString(element,"center",true);
-		animation["center"]	= coords.trim().split(/\s+/);
+		var center= coords.trim().split(/\s+/);
+		var centerPoints = [];
 		
-		for(var j = 0 ; j < animation['center'].length ; j++) {
-			animation['center'][j] = parseFloat(animation['center'][j]);
-		}
+		centerPoints.push(vec3.fromValues(center[0], center[1], center[2]));
+		
+		animation["center"]	= centerPoints;
+
+		
+		
 	}
 	else if(animation['type'] === 'linear') {
 		var control_points = element.getElementsByTagName("CONTROLPOINT");
 
 		var ctrPoints = [];
-		console.log(control_points.length);
 		for(var j = 0 ; j < control_points.length ; j++) {
 			var x = this.reader.getFloat(control_points[j], "xx", true);
 			var y = this.reader.getFloat(control_points[j], "yy", true);

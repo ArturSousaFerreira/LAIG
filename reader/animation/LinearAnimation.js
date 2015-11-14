@@ -2,8 +2,7 @@ function LinearAnimation(scene, id, span, controlPoints) {
     Animation.call(this, id, span, "linear");
 
     this.controlPoints = controlPoints;
-	this.matrix = mat4.create();
-	mat4.identity(this.matrix);
+
     this.init();
 }
 
@@ -48,11 +47,11 @@ LinearAnimation.prototype.init = function() {
 
 LinearAnimation.prototype.calculateMatrix = function(t) {
     
-    var matrix = mat4.create();
-    mat4.identity(matrix);
+    this.matrix = mat4.create();
+    mat4.identity(this.matrix);
     
     if (t < 0)
-        return matrix;
+        return this.matrix;
 
     t = Math.min(t, this.span);
    
@@ -67,9 +66,9 @@ LinearAnimation.prototype.calculateMatrix = function(t) {
     vec3.scale(translation_amount, this.translations[index], tScale);
     vec3.add(position, position, translation_amount); 
 
-    mat4.translate(matrix, matrix, position);
-    mat4.rotateY(matrix,matrix,this.rotations[index]);
+    mat4.translate(this.matrix, this.matrix, position);
+    mat4.rotateY(this.matrix,this.matrix,this.rotations[index]);
 	
-    this.matrix = matrix;
-    return matrix;
+    
+    return this.matrix;
 }

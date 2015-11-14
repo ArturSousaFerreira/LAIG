@@ -12,16 +12,14 @@
 
 
 	<ANIMATIONS>
- 		<ANIMATION id="line1" span="30" type="linear">
- 			<controlpoint xx="1" yy="1" zz="1"/> 			
- 			<controlpoint xx="1" yy="1" zz="2"/> 	
- 			<controlpoint xx="2" yy="1" zz="2"/> 					
- 			<controlpoint xx="3" yy="1" zz="2"/> 			
- 		</ANIMATION>
-
-		<ANIMATION id="circle1" span="10" type="circular" center="10 5 1" radius="5" startang="40" rotang="20"/>
-		<ANIMATION id="circle2" span="10" type="circular" center="10 10 10" radius="5" startang="40" rotang="20"/>
- 		
+		<ANIMATION id="OMGAMesaAnda" span="3" type="linear">
+			<CONTROLPOINT xx="0" yy="0" zz="0" />
+			<CONTROLPOINT xx="0" yy="0" zz="4" />
+			<CONTROLPOINT xx="4" yy="0" zz="4" />
+			<CONTROLPOINT xx="4" yy="0" zz="0" />
+			<CONTROLPOINT xx="0" yy="0" zz="0" />
+		</ANIMATION>
+		<ANIMATION id="OMGAMesaRoda" span="10" type="circular" center="0 0 5" radius="3" startang="0" rotang="360"/>
 	</ANIMATIONS>
 
 
@@ -109,11 +107,8 @@
 		<ROOT id="scene" />
 
 	    <NODE id="scene">
-			<MATERIAL id="default" />
+			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
-			<ANIMATION id="null" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="environment" />
 				<DESCENDANT id="lamp" />
@@ -125,7 +120,6 @@
 		<NODE id="environment">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="walls" />
 				<DESCENDANT id="floor" />
@@ -133,9 +127,8 @@
 		</NODE>
 
 		<NODE id="walls">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="wall_front" />
 				<DESCENDANT id="wall_side" />
@@ -145,7 +138,6 @@
 		<NODE id="wall_side">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />	
-			<ANIMATION id="null" />
 			<ROTATION axis="y" angle="-90"/>
 			<SCALE sx="10" sy="6" sz="0"/>
 			<DESCENDANTS>
@@ -156,7 +148,6 @@
 		<NODE id="wall_front">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="10" y="0" z="0" />
 			<ROTATION axis="y" angle="180"/>
 			<SCALE sx="10" sy="6" sz="0"/>
@@ -166,9 +157,8 @@
 		</NODE>
 
 		<NODE id="floor">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="floor_pattern" />
-			<ANIMATION id="null" />
 			<ROTATION axis="x" angle="90"/>
 			<SCALE sx="10" sy="10" sz="0"/>
 			<DESCENDANTS>
@@ -179,7 +169,6 @@
 		<NODE id="lamp">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0.7" y="0" z="0.7" />
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_support" />
@@ -188,9 +177,8 @@
 		</NODE>
 
 		<NODE id="lamp_top">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="lamp_top_pattern" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0" y="3.05" z="0" />
 			<ROTATION axis="x" angle="-90"/>
 			<DESCENDANTS>
@@ -199,9 +187,8 @@
 		</NODE>
 
 		<NODE id="lamp_support">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="lamp_support_pattern" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_middle" />
 				<DESCENDANT id="lamp_bottom" />	
@@ -211,7 +198,6 @@
 		<NODE id="lamp_middle">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0" y="0.05" z="0" />
 			<ROTATION axis="x" angle="-90"/>
 			<DESCENDANTS>
@@ -222,7 +208,6 @@
 		<NODE id="lamp_bottom">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0" y="0.05" z="0" />
 			<ROTATION axis="x" angle="90"/>
 			<DESCENDANTS>
@@ -231,9 +216,9 @@
 		</NODE>
 
 		<NODE id="chair">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="chair_pattern" />
-			<ANIMATION id="line1" />
+			<ANIMATIONREF id="OMGAMesaAnda" />
 			<TRANSLATION x="4.5" y="0" z="4.5" />
 			<DESCENDANTS>
 				<DESCENDANT id="chair_seat" />
@@ -245,7 +230,6 @@
 		<NODE id="chair_seat">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0" y="0.8" z="0" />
 			<SCALE sx="1" sy="0.05" sz="1"/>
 			<DESCENDANTS>
@@ -256,7 +240,6 @@
 		<NODE id="chair_back">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0" y="0.85" z="0.90" />
 			<SCALE sx="1" sy="1.25" sz="0.1"/>
 			<DESCENDANTS>
@@ -267,7 +250,6 @@
 		<NODE id="chair_legs">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<SCALE sx="0.1" sy="0.8" sz="0.1"/>
 			<DESCENDANTS>
 				<DESCENDANT id="chair_leg_1" />
@@ -280,7 +262,6 @@
 		<NODE id="chair_leg_1">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="cube" />
 			</DESCENDANTS>
@@ -289,7 +270,6 @@
 		<NODE id="chair_leg_2">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="9" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="cube" />
@@ -299,7 +279,6 @@
 		<NODE id="chair_leg_3">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0" y="0" z="9" />
 			<DESCENDANTS>
 				<DESCENDANT id="cube" />
@@ -309,7 +288,6 @@
 		<NODE id="chair_leg_4">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="9" y="0" z="9" />
 			<DESCENDANTS>
 				<DESCENDANT id="cube" />
@@ -319,7 +297,6 @@
 		<NODE id="cube">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 	           	<DESCENDANT id="face_top" />
 	           	<DESCENDANT id="face_bot" />
@@ -333,7 +310,6 @@
   		<NODE id="face_top">
       		<MATERIAL id="null" />
       		<TEXTURE id="null" />
-			<ANIMATION id="null" />
       		<TRANSLATION x="0" y="1" z="0" />
       		<ROTATION axis="x" angle="90"/>
       		<DESCENDANTS>
@@ -344,7 +320,6 @@
 	  	<NODE id="face_bot">
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
-			<ANIMATION id="null" />
 	      	<TRANSLATION x="0" y="0" z="1" />
 	      	<ROTATION axis="x" angle="-90"/>
 	      	<DESCENDANTS>
@@ -355,7 +330,6 @@
 	  	<NODE id="face_left">
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
-			<ANIMATION id="null" />
 	      	<TRANSLATION x="0" y="0" z="1" />
 	      	<ROTATION axis="y" angle="90"/>
 	      	<DESCENDANTS>
@@ -366,7 +340,6 @@
 	  	<NODE id="face_right">
 	     	<MATERIAL id="null" />
 	    	<TEXTURE id="null" />
-			<ANIMATION id="null" />
 	      	<TRANSLATION x="1" y="0" z="0" />
 	      	<ROTATION axis="y" angle="-90"/>
 	      	<DESCENDANTS>
@@ -377,7 +350,6 @@
 	  	<NODE id="face_back">
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
-			<ANIMATION id="null" />
 	      	<TRANSLATION x="0" y="0" z="0" />
 	      	<DESCENDANTS>
 	          	<DESCENDANT id="rectangle" />
@@ -387,7 +359,6 @@
 	  	<NODE id="face_front">
 	      	<MATERIAL id="null" />
 	      	<TEXTURE id="null" />
-			<ANIMATION id="null" />
 	      	<TRANSLATION x="0" y="1" z="1" />
 	      	<ROTATION axis="x" angle="180"/>
 	      	<DESCENDANTS>
@@ -398,7 +369,6 @@
 	  	<NODE id="paintings">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<ANIMATION id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="o_grito" />
 				<DESCENDANT id="mona_lisa" />
@@ -407,9 +377,8 @@
 		</NODE>
 
 		<NODE id="o_grito">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="painting1" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0.001" y="1.5" z="5.9" />
 			<SCALE sx="0" sy="3" sz="2.5"/>
 			<ROTATION axis="y" angle="-90"/>
@@ -419,9 +388,8 @@
 		</NODE>
 
 		<NODE id="mona_lisa">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="painting2" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="0.001" y="1.5" z="1.6" />
 			<SCALE sx="0" sy="3" sz="2.5"/>
 			<ROTATION axis="y" angle="-90"/>
@@ -431,9 +399,8 @@
 		</NODE>
 
 		<NODE id="persistencia_da_memoria">
-			<MATERIAL id="null" />
+			<MATERIAL id="default" />
 			<TEXTURE id="painting3" />
-			<ANIMATION id="null" />
 			<TRANSLATION x="7.5" y="1.5" z="0.001" />
 			<SCALE sx="5" sy="3" sz="0"/>
 			<ROTATION axis="y" angle="180"/>
@@ -443,5 +410,25 @@
 		</NODE>
 
 	</NODES>	
+	
+	
+	<PATCHES>
+		<PATCH id="1">
+			<DEGREE_U value ="1"/>
+			<DEGREE_V value ="1"/>
+			<KNOTS1 args = "1.0 1.0 1.0 1.0"/>
+			<KNOTS2 args = "1.0 1.0 1.0 1.0"/>
 
+			<C_VERTEXES>
+					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
+					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
+			</C_VERTEXES>
+			<C_VERTEXES>
+					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
+					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
+			</C_VERTEXES>
+			<DIVS value="20.0"/>
+		</PATCH>
+	</PATCHES>
+	
 </SCENE>

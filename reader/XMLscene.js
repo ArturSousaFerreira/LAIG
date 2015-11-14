@@ -251,18 +251,17 @@ XMLscene.prototype.init_Leaves = function () {
 XMLscene.prototype.init_Animations = function() {
 	
 	this.animationsobjects = [];
-	var j = 0;
 
-	for(var i in this.graph.animations) {		
+	for(var i in this.graph.animations) {	
+	
 		if(this.graph.animations[i]["type"] == "linear") {
-			console.log(this.graph.animations);
 			this.animationsobjects[i] = new LinearAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['control_points']);
-			j++;
 		}
 		else if(this.graph.animations[i]["type"] == "circular") {
-			//this.animations[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['radius'],this.graph.animations[i]["startang"],this.graph.animations[i]["rotang"],this.graph.animations[i]["center"]["x"],this.graph.animations[i]["center"]["y"],this.graph.animations[i]["center"]["z"]);
+			this.animationsobjects[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['center'],this.graph.animations[i]['startang']* (Math.PI / 180.0),this.graph.animations[i]['rotang']* (Math.PI / 180.0),this.graph.animations[i]['radius']);
 		}
 	}
+	console.log(this.animationsobjects);
 }
 
 // initialization of Patches
@@ -370,8 +369,6 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 
 };
 
-
-
 function Primitive(id) {
     this.id = id;
     this.texture = null;
@@ -467,51 +464,15 @@ XMLscene.prototype.display = function () {
 	this.setDefaultAppearance();
 
 
-	/*for(var i in this.leaves){
-		
-		//if(this.leaves[i].type == "cylinder"){
-		this.leaves[i].display();
-		//}
-		//console.log(this.leaves[i]);
-	}
-
-*/
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
+	
 	if (this.graph.loadedOk) {
 
 		for(var i in this.lights) {
 			this.lights[i].update();
 		}
-
-		// Nodes
-      /*  for (i = 0; i < this.primitivas.length; i++) {
-			var node = this.primitivas[i];
-			this.pushMatrix();
-			console.log(this.leaves);
-			this.multMatrix(node.matrix);
-
-			if(node.material != null)
-                node.material.setTexture(node.texture);
-			
-			if(node.material != null)
-				node.material.apply();
-			
-			//if(typeof this.nodes[p].animationref != "undefined"){
-			//this.applyAnimation(this.nodes[p]);
-
-		 // this.multMatrix(this.nodes[p].matrix);
-			
-		
-		
-			
-			
-			node.leaf.display();
-			this.popMatrix();
-        }
-		
-		*/
 			this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
 
 	};
