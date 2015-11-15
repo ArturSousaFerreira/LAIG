@@ -246,6 +246,8 @@ XMLscene.prototype.init_Leaves = function () {
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'patch')
 			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
+		//else if(graph_leaf.type == 'plane')
+			//this.leaves[i] = new MyPlane(this, graph_leaf.parts);
 	}
 
 };
@@ -264,22 +266,6 @@ XMLscene.prototype.init_Animations = function() {
 		}
 	}
 	console.log(this.animationsobjects);
-}
-
-// initialization of Patches
-XMLscene.prototype.initPatches = function() {
-    this.patches = [];
-    
-    for(var i in this.graph.patchList){
-        var id = this.graph.patchList[i]["id"];
-        var degree_u = this.graph.patchList[i]["degree_u"];
-        var degree_v = this.graph.patchList[i]["degree_v"];
-        var knots1 = this.graph.patchList[i]["knots1"];
-        var knots2 = this.graph.patchList[i]["knots2"];
-        var control_vertexes = this.graph.patchList[i]["control_vertexes"];
-        var divs = this.graph.patchList[i]["divs"];
-        this.patch[i] = new MyPatch(id,degree_u,degree_v,knots1,knots2,control_vertexes,divs);
-    }
 }
 
 // initialization of Nodes
@@ -427,7 +413,6 @@ XMLscene.prototype.drawNodes = function (node) {
 				}
 			
 				if(typeof this.graph.nodes[node.descendants[t]] == "undefined"){
-					console.log(this.leaves[node.descendants[t]]);
 					this.leaves[node.descendants[t]].display();
 				}
 				else this.drawNodes(this.nodes[node.descendants[t]]);

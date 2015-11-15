@@ -564,7 +564,7 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 		leaf['order'] = this.reader.getString(element, 'order', true);
 		leaf['partsU'] = this.reader.getString(element, 'partsU', true);
 		leaf['partsV'] = this.reader.getString(element, 'partsV', true);
-
+		console.log(leaf['order']);
 		var control_points = element.getElementsByTagName("CONTROLPOINT");
 
 		var ctrPoints = [];
@@ -582,9 +582,9 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 		console.log(leaf['control_points'])
 
 	} 
-    else if ( leaf['type'] == "plane" ) { // Plane patch leaf
-    	//leaf['parts'] = this.reader.getString(element, 'parts', true);
-		console.log("nada feito para já");
+    else if ( leaf['type'] == "plane" ) { // Parse plane leaf
+    	leaf['parts'] = this.reader.getString(element, 'parts', true);
+    	console.log(leaf.parts);
     } else { // Parse all other leaves that have args as attribute
     	tempArgs = this.reader.getString(element, 'args', true);
     	leaf['args'] = tempArgs.split(' ');

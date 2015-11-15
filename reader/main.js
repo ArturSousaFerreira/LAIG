@@ -30,6 +30,7 @@ serialInclude([
 	'primitives/MyEllipse.js',
 	'primitives/MyPatch.js',
 	'primitives/MyPiramide.js',
+	'primitives/MyPlane.js',
     'primitives/MyRectangle.js',
     'primitives/MyRing.js',
     'primitives/MyRingBody.js',
