@@ -78,12 +78,6 @@ MySceneGraph.prototype.onXMLReady=function()
 		this.onXMLError(error);
 		return;
 	}
-
-	var error = this.parsePatches(rootElement);
-		if (error != null) {
-		this.onXMLError(error);
-		return;
-	}
 	
 	this.loadedOk=true;
 	
@@ -555,22 +549,53 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
 	
 };
 
+/*
+ * Method that parses each leaf
+ */
+
 MySceneGraph.prototype.parseLeaf = function(element) {
     
 	var leaf = {};
     var tempArgs;
-
-    leaf['type'] = this.reader.getString(element, 'type', true);
-    tempArgs = this.reader.getString(element, 'args', true);
-    leaf['args'] = tempArgs.split(' ');
 	
-    for(var i = 0; i < leaf['args'].length; i++){
-    leaf['args'][i] = parseFloat(leaf['args'][i]);
-    }
+    leaf['type'] = this.reader.getString(element, 'type', true);
+
+    if( leaf['type'] == "patch" ) {	// Parse patch leaf
+		leaf['order'] = this.reader.getString(element, 'order', true);
+		leaf['partsU'] = this.reader.getString(element, 'partsU', true);
+		leaf['partsV'] = this.reader.getString(element, 'partsV', true);
+
+		var control_points = element.getElementsByTagName("CONTROLPOINT");
+
+		var ctrPoints = [];
+		for(var i = 0 ; i < control_points.length ; i++) {
+			var x = this.reader.getFloat(control_points[i], "x", true);
+			var y = this.reader.getFloat(control_points[i], "y", true);
+			var z = this.reader.getFloat(control_points[i], "z", true);
+
+			if(isNaN(x) || isNaN(y) || isNaN(z))
+                return " invalid number in control_points!";
+			
+			ctrPoints.push(vec3.fromValues(x,y,z));
+		}
+		leaf['control_points'] = ctrPoints;
+		console.log(leaf['control_points'])
+
+	} 
+    else if ( leaf['type'] == "plane" ) { // Plane patch leaf
+    	//leaf['parts'] = this.reader.getString(element, 'parts', true);
+		console.log("nada feito para já");
+    } else { // Parse all other leaves that have args as attribute
+    	tempArgs = this.reader.getString(element, 'args', true);
+    	leaf['args'] = tempArgs.split(' ');
+
+    	for( var i = 0; i < leaf['args'].length; i++ ) {
+			leaf['args'][i] = parseFloat(leaf['args'][i]);
+		}
+    }  
 	
     return leaf;
 };
-
 
 /*
  * Method that parses nodes elements of Materials block and stores information in a specific data structure
@@ -590,8 +615,7 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 
     this.nodes['root'] = elems.children[0].id;
     var nModes = elems.children.length;
-    for (var i = 1; i < nModes; i++)
-    {
+    for (var i = 1; i < nModes; i++) {
         var node = elems.children[i];
         this.nodes[node.id] = this.parseNode(node);
     }
@@ -600,15 +624,13 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 
 };
 
-
 /*
- * Method that parses node
+ * Method that parses each node
  */
 
 MySceneGraph.prototype.parseNode = function(element) {
 
-    var node = {};
-	
+    var node = {};	
 	
 	node['id']= this.reader.getString(element, 'id', true);;
 	
@@ -617,15 +639,14 @@ MySceneGraph.prototype.parseNode = function(element) {
 		
 	var animations = element.getElementsByTagName('ANIMATIONREF');
 	
-	var j=0;
+	var j = 0;
 	var k = 2;
 	if(animations.length != 0){
 		node['animationref'] = this.reader.getString(element.children[k], 'id', true);
 		j++;
 		k++;
 		
-	}
-	
+	}	
 	
 	/*for(; j < animations.length; j++){
 		
@@ -638,16 +659,15 @@ MySceneGraph.prototype.parseNode = function(element) {
 	node["matrix"] = mat4.create();
 	mat4.identity(node["matrix"]);
 
-    var transformations = [];
+    var transformations = [];	
 	
-	
-    for(var i = j+2; i < element.children.length; i++){
+    for(var i = j+2; i < element.children.length; i++) {
 
-		if(element.children[i].tagName === 'TRANSLATION'){
+		if(element.children[i].tagName === 'TRANSLATION') {
 			var translation = this.parseTranslate(element.children[i]);
 			mat4.translate(node["matrix"],node["matrix"],[translation["x"],translation["y"],translation["z"]]);
 		}
-		else if(element.children[i].tagName === 'ROTATION'){
+		else if(element.children[i].tagName === 'ROTATION') {
 			var rotation = this.parseRotation(element.children[i]);			
 			var axis;
 
@@ -666,15 +686,13 @@ MySceneGraph.prototype.parseNode = function(element) {
 			mat4.scale(node["matrix"],node["matrix"],scalem);
 		} 
 		else
-			break;       
-    
+			break;
 	}
-	
+
 	node['descendants'] = this.parseDescendants(element.children[i]);
+
     return node;
-
 };
-
 
 /*
  * Descendants Parser of node
@@ -693,7 +711,6 @@ MySceneGraph.prototype.parseDescendants = function(element) {
 /*
  * Animations Parser
  */ 
- 
 
 MySceneGraph.prototype.parseAnimations= function(rootElement) {
 
@@ -718,7 +735,7 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 };
 
 /*
- * Method that parses animation
+ * Method that parses each animation
  */
 
 MySceneGraph.prototype.parseAnimation = function(element) {
@@ -761,134 +778,12 @@ MySceneGraph.prototype.parseAnimation = function(element) {
 			ctrPoints.push(vec3.fromValues(x,y,z));
 		}
 		
-		animation['control_points'] = ctrPoints;		
+		animation['control_points'] = ctrPoints;
 	} else
 		return "invalid type of animation!";
 
     return animation;
 };
-
-
-/*
- * Method to parse Patches
- */ 
-
-
-MySceneGraph.prototype.parsePatches = function(rootElement) {
-	
-	console.log("\nPatches: ");
-	
-	var elems = rootElement.getElementsByTagName('PATCHES');
-	if (elems == null) return "<PATCHES> element is missing.";
-	if (elems.length != 1) return "More than one <PATCHES> element found.";
-
-	var nnodes=elems[0].getElementsByTagName('PATCH');
-	if (nnodes == null || nnodes.length == 0) return "0 <PATCH> elements found";
-	this.patchList = [];
-
-	for (var i=0; i<nnodes.length; i++) {
-		var patch = nnodes[i];
-		var currentPatch = [];
-
-		currentPatch["id"] = this.reader.getString(patch,"id",true);
-		if(this.patchList[currentPatch["id"]] != null) return "Repeated <PATCH> id's.";
-
-		//DEGREE_U
-
-		var tempDegreeU = patch.getElementsByTagName("DEGREE_U");
-		if(tempDegreeU == null) return "<DEGREE_U> element is missing";
-		if(tempDegreeU.length != 1) return "<More than one <DEGREE_U> element found";
-		
-		var degreeU = tempDegreeU[0];
-		currentPatch["degree_u"] = this.reader.getFloat(degreeU, "value", true);
-
-		//DEGREE_V
-
-		var tempDegreeV = patch.getElementsByTagName("DEGREE_V");
-		if(tempDegreeV == null) return "<DEGREE_V> element is missing";
-		if(tempDegreeV.length != 1) return "<More than one <DEGREE_V> element found";
-		
-		var degreeV = tempDegreeV[0];
-		currentPatch["degree_v"] = this.reader.getFloat(degreeV, "value", true);
-		
-		//KNOTS1
-		currentPatch["knots1"] = [];
-		var tempKnots1 = patch.getElementsByTagName("KNOTS1");
-
-		if(tempKnots1 == null) return "<KNOTS1> element is missing";
-		if(tempKnots1.length != 1) return "<More than one <KNOTS1> element found";
-		
-		var knots1 = tempKnots1[0];
-		var tempKnots1args =  this.reader.getString(knots1,"args",true);
-
-
-		var argsKnots1 = tempKnots1args.split(" ");
-		if(argsKnots1.length != (currentPatch["degree_u"] *2 +2)) return "Invalid number of args for <KNOTS1> found";
-		else {
-			for(var j=0; j<argsKnots1.length; j++){
-				currentPatch["knots1"].push(argsKnots1[j]);
-			}
-		}
-
-		//KNOTS2
-		currentPatch["knots2"] = [];
-		var tempKnots2 = patch.getElementsByTagName("KNOTS2");
-		if(tempKnots2 == null) return "<KNOTS2> element is missing";
-		if(tempKnots2.length != 1) return "<More than one <KNOTS2> element found";
-		
-		var knots2 = tempKnots2[0];
-		var tempKnots2args =  this.reader.getString(knots2,"args",true);
-		var argsKnots2 = tempKnots2args.split(" ");
-		if(argsKnots2.length != (currentPatch["degree_v"] *2 +2)) return "Invalid number of args for <KNOTS2> found";
-		else {
-			for(var j=0; j<argsKnots2.length; j++){
-				currentPatch["knots2"].push(argsKnots2[j]);
-			}
-		}
-
-		//CONTROL VERTEXES
-
-		currentPatch["c_vertexes"] = [];
-
-		var tempKnots = patch.getElementsByTagName("C_VERTEXES");
-		if(tempKnots == null) return "<C_VERTEXES> element is missing";
-		if(tempKnots.length != currentPatch["degree_u"] + 1) return "<Invalid number of <C_VERTEXES> elements found for U degree";
-	
-		for(var j=0; j<tempKnots.length; j++){
-
-			var currentKnots = tempKnots[j];
-			var tempKnot = currentKnots.getElementsByTagName("C_VERTEX");
-
-			if(tempKnot.length != (currentPatch["degree_v"]+1 )) return "Invalid number of <C_VERTEX> elements found for V degree";
-
-			else {
-				currentPatch["c_vertexes"][j] = [];
-				for(var k=0; k<tempKnot.length;k++){
-					var currentKnot = tempKnot[k];
-					currentPatch["c_vertexes"][j][k] = [];
-					
-					var args = this.reader.getString(currentKnot,"values",true);
-					var argsCVertex = args.split(" ");
-
-					if(argsCVertex.length != 4) return "Invalid number of values for a <C_VERTEX>";
-					for(var l=0; l<argsCVertex.length; l++) currentPatch["c_vertexes"][j][k].push(argsCVertex[l]); 
-				}
-			}
-
-		}
-
-		var tempDivs = patch.getElementsByTagName("DIVS");
-		if(tempDivs == null) return "<C_VERTEXES> element is missing";
-		if(tempDivs.length != 1) return "<Invalid number of <DIVS> elements found";
-
-		var div = tempDivs[0];
-		currentPatch["divs"] = this.reader.getFloat(div,"value",true);
-
-		this.patchList[currentPatch["id"]] = currentPatch;
-	}
-	console.log(this.patchList);
-}
-
 
 /*
  * Callback to be executed on any read error

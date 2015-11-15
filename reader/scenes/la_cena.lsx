@@ -99,7 +99,6 @@
 		<LEAF id="lamp_default_top" type="cylinder" args="0.7 0.6 0.4 20 20" />
 		<LEAF id="lamp_default_middle" type="cylinder" args="3 0.025 0.025 20 20" />
 		<LEAF id="lamp_default_bottom" type="cylinder" args="0.05 0.25 0.25 20 20" />
-		<LEAF id="teste" type="texangle" args="3" />
 	</LEAVES>
 
 
@@ -410,25 +409,6 @@
 		</NODE>
 
 	</NODES>	
-	
-	
-	<PATCHES>
-		<PATCH id="1">
-			<DEGREE_U value ="1"/>
-			<DEGREE_V value ="1"/>
-			<KNOTS1 args = "1.0 1.0 1.0 1.0"/>
-			<KNOTS2 args = "1.0 1.0 1.0 1.0"/>
 
-			<C_VERTEXES>
-					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
-					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
-			</C_VERTEXES>
-			<C_VERTEXES>
-					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
-					<C_VERTEX values="1.0 1.0 1.0 1.0"/>
-			</C_VERTEXES>
-			<DIVS value="20.0"/>
-		</PATCH>
-	</PATCHES>
 	
 </SCENE>

@@ -1,21 +1,26 @@
+//Constructor of Linear Animation objects
 function LinearAnimation(scene, id, span, controlPoints) {
-    Animation.call(this, id, span, "linear");
+    
+	Animation.call(this, id, span, "linear");
 
     this.controlPoints = controlPoints;
-
     this.init();
 }
 
 LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
+//initialization of object proprieties
 LinearAnimation.prototype.init = function() {
-    var distance = 0;
-    this.translations = new Array(this.controlPoints.length - 1);
+    
+	var distance = 0;
+    
+	this.translations = new Array(this.controlPoints.length - 1);
     this.rotations = new Array(this.controlPoints.length - 1);
 
     for (var i = 0; i < this.controlPoints.length - 1; ++i) {
-        var vector = vec3.create();
+        
+		var vector = vec3.create();
         vec3.sub(vector, this.controlPoints[i + 1], this.controlPoints[i]);
         this.translations[i] = vector;
 
@@ -44,12 +49,13 @@ LinearAnimation.prototype.init = function() {
         this.controlPointsSpan[i-1] = this.controlPointsTime[i] - this.controlPointsTime[i-1]; 
     }
 }
-
+//Calculate de matrix the location of object in actual time
 LinearAnimation.prototype.calculateMatrix = function(t) {
     
     this.matrix = mat4.create();
     mat4.identity(this.matrix);
     
+
     if (t < 0)
         return this.matrix;
 
@@ -69,6 +75,4 @@ LinearAnimation.prototype.calculateMatrix = function(t) {
     mat4.translate(this.matrix, this.matrix, position);
     mat4.rotateY(this.matrix,this.matrix,this.rotations[index]);
 	
-    
-    return this.matrix;
 }

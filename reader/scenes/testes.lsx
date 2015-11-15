@@ -74,6 +74,24 @@
 		<LEAF id="sims" type="sims" args="8 2 10" />
         <LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
         <LEAF id="ellipse" type="ellipse" args="4 2 100" />
+        <LEAF id="patch" type="patch" order="3" partsU="20" partsV="20">           
+            <CONTROLPOINT x="-0.5" y="0" z="-0.5" />
+			<CONTROLPOINT x="-0.5" y="0" z="-0.25" />
+			<CONTROLPOINT x="-0.5" y="0" z="0.25" />
+			<CONTROLPOINT x="-0.5" y="0" z="0.5" />
+			<CONTROLPOINT x="-0.25" y="0" z="-0.5" />
+			<CONTROLPOINT x="-0.25" y="1" z="-0.25" />
+			<CONTROLPOINT x="-0.25" y="1" z="0.25" />
+			<CONTROLPOINT x="-0.25" y="0" z="0.5" />
+			<CONTROLPOINT x="0.25" y="0" z="-0.5" />
+			<CONTROLPOINT x="0.25" y="1" z="-0.25" />
+			<CONTROLPOINT x="0.25" y="1" z="0.25" />
+			<CONTROLPOINT x="0.25" y="0" z="0.5" />
+			<CONTROLPOINT x="0.5" y="0" z="-0.5" />
+			<CONTROLPOINT x="0.5" y="0" z="-0.25" />
+			<CONTROLPOINT x="0.5" y="0" z="0.25" />
+			<CONTROLPOINT x="0.5" y="0" z="0.5" />
+		</LEAF>
 	</LEAVES>
 
 
@@ -87,34 +105,16 @@
 				<DESCENDANT id="teste" />
 			</DESCENDANTS>
 		</NODE>
+		
 		<NODE id="teste">
 			<MATERIAL id="null" />
 			<TEXTURE id="chair_pattern" />
 			<DESCENDANTS>
-				<DESCENDANT id="ellipse" />
+				<DESCENDANT id="patch" />
 			</DESCENDANTS>
 		</NODE>
 
 	</NODES>
 
-
-    <PATCHES>
-        <PATCH id="1">
-            <DEGREE_U value ="1"/>
-            <DEGREE_V value ="1"/>
-            <KNOTS1 args = "1.0 1.0 1.0 1.0"/>
-            <KNOTS2 args = "1.0 1.0 1.0 1.0"/>
-            
-            <C_VERTEXES>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-            </C_VERTEXES>
-            <C_VERTEXES>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-                    <C_VERTEX values="1.0 1.0 1.0 1.0"/>
-            </C_VERTEXES>
-            <DIVS value="20.0"/>
-        </PATCH>
-    </PATCHES>
 
 </SCENE>

@@ -244,6 +244,8 @@ XMLscene.prototype.init_Leaves = function () {
             this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
         else if(graph_leaf.type == 'ellipse')
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
+		else if(graph_leaf.type == 'patch')
+			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
 	}
 
 };
@@ -356,14 +358,8 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 
         index_no++;
 		
-		
-		
 		this.pushMatrix();
-	
-		
-	
-		
-        this.itDescend(nextNode, nextTexture_ID, nextMaterial_ID, nextMatrix);
+	    this.itDescend(nextNode, nextTexture_ID, nextMaterial_ID, nextMatrix);
         this.popMatrix();
     }
 
@@ -431,7 +427,7 @@ XMLscene.prototype.drawNodes = function (node) {
 				}
 			
 				if(typeof this.graph.nodes[node.descendants[t]] == "undefined"){
-		
+					console.log(this.leaves[node.descendants[t]]);
 					this.leaves[node.descendants[t]].display();
 				}
 				else this.drawNodes(this.nodes[node.descendants[t]]);
@@ -456,13 +452,12 @@ XMLscene.prototype.display = function () {
 	this.updateProjectionMatrix();
     this.loadIdentity();
 
-
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 	// Draw axis
-	this.axis.display();
+	//this.axis.display();
+	
 	this.setDefaultAppearance();
-
 
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
@@ -474,10 +469,7 @@ XMLscene.prototype.display = function () {
 			this.lights[i].update();
 		}
 			this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
-
 	};
-
- 
 
 };
 
