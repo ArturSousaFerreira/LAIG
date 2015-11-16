@@ -29,6 +29,7 @@ XMLscene.prototype.setInterface = function (interface) {
 	this.interface = interface;
 }
 
+// Initialization of the Camera
 XMLscene.prototype.init_Cameras = function () {
 	var near =this.graph.initials.frustum["near"];
 	var far = this.graph.initials.frustum["far"];
@@ -45,6 +46,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);
 };
 
+// Initialization of the Initial values
 XMLscene.prototype.init_Initials = function () {
     //-> reference, build new axis
 	this.initials = this.graph.initials;
@@ -105,9 +107,9 @@ XMLscene.prototype.init_Initials = function () {
             this.initials.scale.sz
         ]
     );
-
 };
 
+// Initialization of Illumination
 XMLscene.prototype.init_Illumination = function () {
 
 	//-> ambient
@@ -122,8 +124,8 @@ XMLscene.prototype.init_Illumination = function () {
 
 };
 
+// Initialization of Lights
 XMLscene.prototype.init_Lights = function () {
-
 	this.lights_enable = [];
 
     this.lights_id = [];
@@ -172,6 +174,7 @@ XMLscene.prototype.init_Lights = function () {
     this.interface.create_interface();
 };
 
+// Initialization of Textures
 XMLscene.prototype.init_Textures = function () {
 	var num_textures_id = 0;
 	this.textures = [];
@@ -189,6 +192,7 @@ XMLscene.prototype.init_Textures = function () {
 
 };
 
+// Initialization of Materials
 XMLscene.prototype.init_Materials = function () {
 
     this.materials=[];
@@ -213,6 +217,7 @@ XMLscene.prototype.init_Materials = function () {
     }
 };
 
+// Initialization of Leaves
 XMLscene.prototype.init_Leaves = function () {
 
 	this.leaves = [];
@@ -246,29 +251,28 @@ XMLscene.prototype.init_Leaves = function () {
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'patch')
 			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
-		else if(graph_leaf.type == 'plane') {
-			console.log(graph_leaf.parts);
+		else if(graph_leaf.type == 'plane')
 			this.leaves[i] = new MyPlane(this, graph_leaf.parts);
-		}
 	}
 
 };
 
+// Initialization of Animations
 XMLscene.prototype.init_Animations = function() {
 	
 	this.animationsobjects = [];
 
 	for(var i in this.graph.animations) {	
 		var anim = this.graph.animations[i];
-		
+
 		if( anim["type"] == "linear" )
 			this.animationsobjects[i] = new LinearAnimation(this, anim['span'], anim['control_points']);
-		else if( this.graph.animations[i]["type"] == "circular" )
-			this.animationsobjects[i] = new CircularAnimation(this, anim['span'], anim['center'], anim['startang']*(Math.PI/180.0), anim['rotang']*(Math.PI / 180.0), anim['radius']);
+		else if( anim["type"] == "circular" )
+			this.animationsobjects[i] = new CircularAnimation(this, anim['span'], anim['center'], anim['startang'], anim['rotang'], anim['radius']);
 	}
 }
 
-// initialization of Nodes
+// Initialization of Nodes
 XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
 	this.primitivas=[];
@@ -388,7 +392,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.init_Animations();
 	this.init_Nodes();
 
-	 this.timer = 0;
+	this.timer = 0;
     this.setUpdatePeriod(20);
 	
 	this.loadedOk = true;

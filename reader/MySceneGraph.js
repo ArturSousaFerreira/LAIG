@@ -17,15 +17,13 @@ function MySceneGraph(filename, scene) {
 	this.reader.open('scenes/'+filename, this);  
 }
 
-
 /*
  * Callback to be executed after successful reading
  */
  
-MySceneGraph.prototype.onXMLReady=function() 
-{
+MySceneGraph.prototype.onXMLReady=function() {
 	
-	console.log("XML Loaded!");
+	console.log("\nXML Loaded!");
 	
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
@@ -35,7 +33,13 @@ MySceneGraph.prototype.onXMLReady=function()
 	if (error != null) {
 		this.onXMLError(error);
 		return;
-	}	
+	}
+		
+	var error = this.parseAnimations(rootElement);
+		if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
 
 	var error = this.parseIllumination(rootElement);
 	if (error != null) {
@@ -68,12 +72,6 @@ MySceneGraph.prototype.onXMLReady=function()
 	}	
 	
 	var error = this.parseNodes(rootElement);
-		if (error != null) {
-		this.onXMLError(error);
-		return;
-	}	
-
-	var error = this.parseAnimations(rootElement);
 		if (error != null) {
 		this.onXMLError(error);
 		return;
@@ -163,7 +161,7 @@ MySceneGraph.prototype.parseScale = function(element) {
 
 
 /*
- * Method that parses frustum element
+ * Method that parses frustum element in INITIALS tag
  */
  
 MySceneGraph.prototype.parseFrustum = function(element) {
@@ -183,10 +181,8 @@ MySceneGraph.prototype.parseFrustum = function(element) {
     return arr;
 };
 
-
-
 /*
- * Method that parses elements of Initials block and stores information in a specific data structure
+ * Method that parses elements of INITIALS tag and stores information in a data structure
  */
  
 MySceneGraph.prototype.parseInitials= function(rootElement) {
@@ -264,10 +260,82 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	console.log(this.initials);
 };
 
+/*
+ * Method that parses elements of ANIMATIONS tag and stores information in a data structure
+ */ 
 
+MySceneGraph.prototype.parseAnimations= function(rootElement) {
+
+	console.log("\nANIMATIONS:");
+   
+   	var elems = rootElement.getElementsByTagName('ANIMATIONS');
+    
+    if (elems == null)
+    	return "Animation element is missing.";
+
+	var animes = elems[0];
+	
+   	this.animations = {};
+
+    var nAnimations = animes.children.length;
+    for (var i = 0; i < nAnimations; i++) {
+        var animation = animes.children[i];
+        this.animations[animation.id] = this.parseAnimation(animation);
+    }
+	
+	console.log(this.animations);
+};
 
 /*
- * Method that parses elements of Illumination block and stores information in a specific data structure
+ * Method that parses each animation
+ */
+
+MySceneGraph.prototype.parseAnimation = function(element) {
+
+    var animation = {};
+	
+	animation['id'] = this.reader.getString(element, 'id');
+    animation['span'] = this.reader.getFloat(element, 'span', true);
+	animation['type'] = this.reader.getString(element, 'type', true);
+	
+	if(animation['type'] === 'circular') {
+		
+	animation['radius'] = this.reader.getFloat(element, 'radius', true);
+		animation['startang'] = this.reader.getFloat(element, 'startang', true);
+		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
+		
+		var coords = this.reader.getString(element,"center",true);
+		var center= coords.trim().split(/\s+/);
+		var centerPoints = [];
+		
+		centerPoints.push(vec3.fromValues(center[0], center[1], center[2]));
+		
+		animation["center"]	= centerPoints;
+	}
+	else if(animation['type'] === 'linear') {
+		var control_points = element.getElementsByTagName("CONTROLPOINT");
+
+		var ctrPoints = [];
+		for(var j = 0 ; j < control_points.length ; j++) {
+			var x = this.reader.getFloat(control_points[j], "xx", true);
+			var y = this.reader.getFloat(control_points[j], "yy", true);
+			var z = this.reader.getFloat(control_points[j], "zz", true);
+
+			if(isNaN(x) || isNaN(y) || isNaN(z))
+                return "Invalid number in tag CONTROLPOINT!";
+			
+			ctrPoints.push(vec3.fromValues(x,y,z));
+		}
+		
+		animation['control_points'] = ctrPoints;
+	} else
+		return "Invalid type of animation!";
+
+    return animation;
+};
+
+/*
+ * Method that parses elements of ILLUMINATION tag and stores information in a data structure
  */
 	
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
@@ -314,9 +382,8 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	console.log(this.illu);
 }
 
-
 /*
- * Method that parses elements of Lights block and stores information in a specific data structure
+ * Method that parses elements of LIGHTS tag and stores information in a data structure
  */
  
 MySceneGraph.prototype.parseLights = function(rootElement) {
@@ -390,10 +457,9 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 	}
 		console.log(this.lights);	
 };
-	
 
 /*
- * Method that parses elements of Textures block and stores information in a specific data structure
+ * Method that parses elements of TEXTURES tag and stores information in a data structure
  */
  
 MySceneGraph.prototype.parseTextures = function(rootElement) {
@@ -441,9 +507,8 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 
 };
 
-
 /*
- * Method that parses elements of Materials block and stores information in a specific data structure
+ * Method that parses elements of MATERIALS tag and stores information in a data structure
  */
  
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
@@ -522,9 +587,8 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 };
 
 
-
 /*
- * Method that parses elements of Materials block and stores information in a specific data structure
+ * Method that parses elements of LEAVES tag and stores information in a data structure
  */
  
 MySceneGraph.prototype.parseLeaves = function(rootElement) {
@@ -538,15 +602,13 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
 	
     this.leaves = {};
 
-    for (var i=0; i < leaves_elements.children.length; i++)
-    {
+    for (var i=0; i < leaves_elements.children.length; i++) {
         var leaf = leaves_elements.children[i];
 
         this.leaves[leaf.id] = this.parseLeaf(leaf);
     }
 	
-	console.log(this.leaves);
-	
+	console.log(this.leaves);	
 };
 
 /*
@@ -575,17 +637,17 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 			var w = this.reader.getFloat(control_points[i], "w", true);
 
 			if(isNaN(x) || isNaN(y) || isNaN(z) || isNaN(w))
-                return " invalid number in control_points!";
+                return "Invalid number in control_points!";
 			
 			ctrPoints.push(vec4.fromValues(x,y,z,w));
 		}
+		
 		leaf['control_points'] = ctrPoints;
-
 	} 
     else if ( leaf['type'] == "plane" ) { // Parse plane leaf
     	leaf['parts'] = this.reader.getFloat(element, 'parts', true);
     }
-    else if(leaf['type'] == "terrain") { // Parse terrain leaf
+    else if( leaf['type'] == "terrain" ) { // Parse terrain leaf
 		leaf["texture"] = this.reader.getString(element, 'texture', true);
 		leaf["heightmap"] = this.reader.getString(element, 'heightmap', true);             
 	} else { // Parse all other leaves that have args as attribute
@@ -601,18 +663,19 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 };
 
 /*
- * Method that parses nodes elements of Materials block and stores information in a specific data structure
+ * Method that parses elements of NODES tag and stores information in a data structure
  */
  
 MySceneGraph.prototype.parseNodes= function(rootElement) {
 
     var elems = rootElement.getElementsByTagName('NODES')[0];
-    if (elems == null) return "NODES element is missing.";    
+    if (elems == null)
+    	return "NODES element is missing.";    
 
     var root_node = elems.getElementsByTagName('ROOT')[0];
     this.root_id = this.reader.getString(root_node, 'id');
 
-    console.log("\nNODES: ");
+    console.log("\nNODES:");
 
    	this.nodes = {};
 
@@ -707,83 +770,6 @@ MySceneGraph.prototype.parseDescendants = function(element) {
     }
 
     return descendants;
-};
-
-/*
- * Animations Parser
- */ 
-
-MySceneGraph.prototype.parseAnimations= function(rootElement) {
-
-	console.log("\nAnimations");
-   
-   	var elems = rootElement.getElementsByTagName('ANIMATIONS');
-    
-    if (elems == null)
-    	return "Animation element is missing.";
-
-	var animes = elems[0];
-	
-   	this.animations = {};
-
-    var nAnimations = animes.children.length;
-    for (var i = 0; i < nAnimations; i++) {
-        var animation = animes.children[i];
-        this.animations[animation.id] = this.parseAnimation(animation);
-    }
-
-	console.log(this.animations);
-};
-
-/*
- * Method that parses each animation
- */
-
-MySceneGraph.prototype.parseAnimation = function(element) {
-
-    var animation = {};
-	
-	animation['id'] = this.reader.getString(element, 'id');
-    animation['span'] = this.reader.getFloat(element, 'span', true);
-	animation['type'] = this.reader.getString(element, 'type', true);
-	
-	if(animation['type'] === 'circular') {
-		
-	animation['radius'] = this.reader.getFloat(element, 'radius', true);
-		animation['startang'] = this.reader.getFloat(element, 'startang', true);
-		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
-		
-		var coords = this.reader.getString(element,"center",true);
-		var center= coords.trim().split(/\s+/);
-		var centerPoints = [];
-		
-		centerPoints.push(vec3.fromValues(center[0], center[1], center[2]));
-		
-		animation["center"]	= centerPoints;
-
-		
-		
-	}
-	else if(animation['type'] === 'linear') {
-		var control_points = element.getElementsByTagName("CONTROLPOINT");
-
-		var ctrPoints = [];
-		for(var j = 0 ; j < control_points.length ; j++) {
-			var x = this.reader.getFloat(control_points[j], "xx", true);
-			var y = this.reader.getFloat(control_points[j], "yy", true);
-			var z = this.reader.getFloat(control_points[j], "zz", true);
-
-			if(isNaN(x) || isNaN(y) || isNaN(z))
-                return " invalid number in control_points!";
-			
-			ctrPoints.push(vec3.fromValues(x,y,z));
-		}
-		
-		animation['control_points'] = ctrPoints;
-	} else
-		return "invalid type of animation!";
-
-    return animation;
 };
 
 /*
