@@ -584,7 +584,11 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 	} 
     else if ( leaf['type'] == "plane" ) { // Parse plane leaf
     	leaf['parts'] = this.reader.getFloat(element, 'parts', true);
-    } else { // Parse all other leaves that have args as attribute
+    }
+    else if(leaf['type'] == "terrain") { // Parse terrain leaf
+		leaf["texture"] = this.reader.getString(element, 'texture', true);
+		leaf["heightmap"] = this.reader.getString(element, 'heightmap', true);             
+	} else { // Parse all other leaves that have args as attribute
     	tempArgs = this.reader.getString(element, 'args', true);
     	leaf['args'] = tempArgs.split(' ');
 
