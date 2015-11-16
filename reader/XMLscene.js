@@ -246,9 +246,10 @@ XMLscene.prototype.init_Leaves = function () {
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'patch')
 			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
-
-		//else if(graph_leaf.type == 'plane')
-			//this.leaves[i] = new MyPlane(this, graph_leaf.parts);
+		else if(graph_leaf.type == 'plane') {
+			console.log(graph_leaf.parts);
+			this.leaves[i] = new MyPlane(this, graph_leaf.parts);
+		}
 	}
 
 };
@@ -266,7 +267,6 @@ XMLscene.prototype.init_Animations = function() {
 			this.animationsobjects[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['center'],this.graph.animations[i]['startang']* (Math.PI / 180.0),this.graph.animations[i]['rotang']* (Math.PI / 180.0),this.graph.animations[i]['radius']);
 		}
 	}
-	console.log(this.animationsobjects);
 }
 
 // initialization of Nodes
@@ -409,9 +409,15 @@ XMLscene.prototype.drawNodes = function (node) {
 			
 			for(var t in node.descendants){
 				this.pushMatrix();
-				if(typeof node.animationref != "undefined"){
-					this.multMatrix(this.animationsobjects[node.animationref].matrix);
+				
+					if(typeof node.animations != "undefined"){
+						for(var i=0; i < node.animations.length; i++){
+					this.multMatrix(this.animationsobjects[node.animations[i]].matrix);
+						}
 				}
+
+				
+				
 				
 				if(node.descendants[t] == "patch"){
 					this.leaves[node.descendants[t]].display();
@@ -445,7 +451,7 @@ XMLscene.prototype.display = function () {
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 	// Draw axis
-	//this.axis.display();
+	this.axis.display();
 	
 	this.setDefaultAppearance();
 

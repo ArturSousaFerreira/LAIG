@@ -583,7 +583,7 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 
 	} 
     else if ( leaf['type'] == "plane" ) { // Parse plane leaf
-    	leaf['parts'] = this.reader.getString(element, 'parts', true);
+    	leaf['parts'] = this.reader.getFloat(element, 'parts', true);
     } else { // Parse all other leaves that have args as attribute
     	tempArgs = this.reader.getString(element, 'args', true);
     	leaf['args'] = tempArgs.split(' ');

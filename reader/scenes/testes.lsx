@@ -111,7 +111,7 @@
 			<MATERIAL id="default" />
 			<TEXTURE id="chair_pattern" />
 			<DESCENDANTS>
-				<DESCENDANT id="patch" />
+				<DESCENDANT id="plane" />
 			</DESCENDANTS>
 		</NODE>
 

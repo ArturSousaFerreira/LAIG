@@ -4,10 +4,15 @@ function MyPatch(scene, order, partsU, partsV, controlpoints) {
     this.partsV = partsV;
     this.all_controlPoints = this.getControlPoints(controlpoints);
     
-    var knots = this.getKnots();
+    if( this.order == 1 )
+        this.knots = [0, 0, 1, 1];
+    else if( this.order == 2 )
+        this.knots = [0, 0, 0, 1, 1, 1];
+    else if( this.order == 3 )
+        this.knots = [0, 0, 0, 0, 1, 1, 1, 1];
 
     
-    var nurbsSurface = new CGFnurbsSurface(this.order, this.order, knots, knots, this.all_controlPoints);
+    var nurbsSurface = new CGFnurbsSurface(this.order, this.order, this.knots, this.knots, this.all_controlPoints);
 
     getSurfacePoint = function(u, v) {
         return nurbsSurface.getPoint(u, v);

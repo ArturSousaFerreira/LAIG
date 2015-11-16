@@ -20,22 +20,17 @@ CircularAnimation.prototype.init = function() {
 				   vec3.fromValues(0, 0, this.radius));
 
 	mat4.rotateY(this.matrix, this.matrix,
-				this.rotAngle > 0 ? Math.PI / 2 : - Math.PI / 2);
-				
-					
+				this.rotAngle > 0 ? Math.PI / 2 : - Math.PI / 2);					
 }
 
 CircularAnimation.prototype.calculateMatrix = function(t) {
 
 	t = Math.min(t, this.span);
 
-
 	if (t < 0)
-		return this.matrix;
+		return this.matrix;	
 	
-	
-	//var trans = console.log(this.matrix);
-	
+	//var trans = console.log(this.matrix);	
 	
 	mat4.translate(this.matrix, this.matrix, this.center[0]);
 
