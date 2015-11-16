@@ -16,7 +16,7 @@
 			<CONTROLPOINT xx="0" yy="0" zz="0" />
 			<CONTROLPOINT xx="3" yy="0" zz="3" />
 		</ANIMATION>
-		<ANIMATION id="circular" span="8" type="circular" center="5 0 10" radius="5" startang="0" rotang="360"/>
+		<ANIMATION id="circular" span="8" type="circular" center="1 0 1" radius="2" startang="270" rotang="90"/>
 	</ANIMATIONS>
 
 
@@ -96,6 +96,24 @@
 		<LEAF id="lamp_default_top" type="cylinder" args="0.7 0.6 0.4 20 20" />
 		<LEAF id="lamp_default_middle" type="cylinder" args="3 0.025 0.025 20 20" />
 		<LEAF id="lamp_default_bottom" type="cylinder" args="0.05 0.25 0.25 20 20" />
+		<LEAF id="patch" type="patch" order="3" partsU="20" partsV="20">           
+			<CONTROLPOINT x="3" y="2" z="1" w="1"/>
+			<CONTROLPOINT x="3" y="1" z="1" w="1"/>
+			<CONTROLPOINT x="3" y="1" z="1" w="1"/>
+			<CONTROLPOINT x="0" y="2" z="-1" w="1"/>
+			<CONTROLPOINT x="0" y="2" z="0" w="1"/>
+			<CONTROLPOINT x="5" y="1" z="-1" w="1"/>
+			<CONTROLPOINT x="0" y="1" z="1.5" w="1"/>
+			<CONTROLPOINT x="0" y="2" z="0" w="1"/>
+			<CONTROLPOINT x="0" y="1" z="-1" w="1"/>
+			<CONTROLPOINT x="0" y="0" z="2" w="1"/>
+			<CONTROLPOINT x="0" y="1" z="-1" w="1"/>
+			<CONTROLPOINT x="0" y="2" z="1" w="1"/>
+			<CONTROLPOINT x="0" y="0" z="1" w="1"/>
+			<CONTROLPOINT x="0" y="0" z="1" w="1"/>
+			<CONTROLPOINT x="0" y="0" z="-1" w="1"/>
+			<CONTROLPOINT x="0" y="0" z="-1" w="1"/>
+		</LEAF>
 	</LEAVES>
 
 
@@ -110,9 +128,20 @@
 				<DESCENDANT id="lamp" />
 				<DESCENDANT id="chair" />
 				<DESCENDANT id="paintings" />
+				<DESCENDANT id="flag" />
 			</DESCENDANTS>
 		</NODE>
 
+		<NODE id="flag">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="5" y="3" z="2" />
+			<ROTATION axis="z" angle="180"/>
+			<DESCENDANTS>
+				<DESCENDANT id="patch" />
+			</DESCENDANTS>
+		</NODE>
+		
 		<NODE id="environment">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
@@ -214,7 +243,7 @@
 		<NODE id="chair">
 			<MATERIAL id="default" />
 			<TEXTURE id="chair_pattern" />
-			<ANIMATIONREF id="linear" />
+			<ANIMATIONREF id="circular" />
 			<TRANSLATION x="4.5" y="0" z="4.5" />
 			<DESCENDANTS>
 				<DESCENDANT id="chair_seat" />
