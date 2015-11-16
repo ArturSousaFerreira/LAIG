@@ -74,24 +74,28 @@
 		<LEAF id="sims" type="sims" args="8 2 10" />
         <LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
         <LEAF id="ellipse" type="ellipse" args="4 2 100" />
+        <LEAF id="triangle" type="triangle" args="-1.3 0 0 -0.2 0 0 0 0 -3" />
+        <LEAF id="triangle2" type="triangle" args="-0.2 0 0 0 -0.5 0 0 0 -3" />
+        <LEAF id="triangle3" type="triangle" args="0 -0.5 0 0.2 0 0 0 0 -3" />
+        <LEAF id="triangle4" type="triangle" args="0.2 0 0 1.3 0 0 0 0 -3" />
         <LEAF id="plane" type="plane" parts="5" />
         <LEAF id="patch" type="patch" order="3" partsU="20" partsV="20">           
-            <CONTROLPOINT x="0" y="0" z="1" w="1"/>
-        	<CONTROLPOINT x="2" y="0" z="1" w="0.3333333333333333"/>
-        	<CONTROLPOINT x="2" y="0" z="-1" w="0.3333333333333333"/>
-        	<CONTROLPOINT x="0" y="0" z="-1" w="1"/>
-        	<CONTROLPOINT x="0" y="0" z="1" w="0.3333333333333333"/>
-        	<CONTROLPOINT x="2" y="-4" z="1" w="0.1111111111111111"/>
-        	<CONTROLPOINT x="2" y="-4" z="-1" w="0.1111111111111111"/>
-        	<CONTROLPOINT x="0" y="0" z="-1" w="0.3333333333333333"/>
-			<CONTROLPOINT x="0" y="0" z="1" w="0.3333333333333333"/>
-			<CONTROLPOINT x="-2" y="-4" z="1" w="0.1111111111111111"/>
-			<CONTROLPOINT x="-2" y="-4" z="-1" w="0.1111111111111111"/>
-			<CONTROLPOINT x="0" y="0" z="-1" w="0.3333333333333333"/>
-			<CONTROLPOINT x="0" y="0" z="1" w="1"/>
-			<CONTROLPOINT x="-2" y="0" z="1" w="0.3333333333333333"/>
-			<CONTROLPOINT x="-2" y="0" z="-1" w="0.3333333333333333"/>
-			<CONTROLPOINT x="0" y="0" z="-1" w="1"/>
+			<CONTROLPOINT x="-9" y="-6" z="0" w="1"/>
+			<CONTROLPOINT x="-9" y="-2" z="0" w="1"/>
+			<CONTROLPOINT x="-9" y="2" z="0" w="1"/>
+			<CONTROLPOINT x="-9" y="6" z="0" w="1"/>
+			<CONTROLPOINT x="-3" y="-6" z="4" w="1"/>
+			<CONTROLPOINT x="-3" y="-2" z="4" w="1"/>
+			<CONTROLPOINT x="-3" y="2" z="4" w="1"/>
+			<CONTROLPOINT x="-3" y="6" z="4" w="1"/>
+			<CONTROLPOINT x="3" y="-6" z="-4" w="1"/>
+			<CONTROLPOINT x="3" y="-2" z="-4" w="1"/>
+			<CONTROLPOINT x="3" y="2" z="-4" w="1"/>
+			<CONTROLPOINT x="3" y="6" z="-4" w="1"/>
+			<CONTROLPOINT x="9" y="-6" z="0" w="1"/>
+			<CONTROLPOINT x="9" y="-2" z="0" w="1"/>
+			<CONTROLPOINT x="9" y="2" z="0" w="1"/>
+			<CONTROLPOINT x="9" y="6" z="0" w="1"/>
 		</LEAF>
 	</LEAVES>
 
@@ -104,6 +108,9 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="teste" />
+				<DESCENDANT id="teste2" />
+				<DESCENDANT id="teste3" />
+				<DESCENDANT id="teste4" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -111,7 +118,31 @@
 			<MATERIAL id="default" />
 			<TEXTURE id="chair_pattern" />
 			<DESCENDANTS>
-				<DESCENDANT id="plane" />
+				<DESCENDANT id="triangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="teste2">
+			<MATERIAL id="default" />
+			<TEXTURE id="chair_pattern" />
+			<DESCENDANTS>
+				<DESCENDANT id="triangle2" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="teste3">
+			<MATERIAL id="default" />
+			<TEXTURE id="chair_pattern" />
+			<DESCENDANTS>
+				<DESCENDANT id="triangle3" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="teste4">
+			<MATERIAL id="default" />
+			<TEXTURE id="chair_pattern" />
+			<DESCENDANTS>
+				<DESCENDANT id="triangle4" />
 			</DESCENDANTS>
 		</NODE>
 

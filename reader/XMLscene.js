@@ -259,13 +259,12 @@ XMLscene.prototype.init_Animations = function() {
 	this.animationsobjects = [];
 
 	for(var i in this.graph.animations) {	
-	
-		if(this.graph.animations[i]["type"] == "linear") {
-			this.animationsobjects[i] = new LinearAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['control_points']);
-		}
-		else if(this.graph.animations[i]["type"] == "circular") {
-			this.animationsobjects[i] = new CircularAnimation(this,this.graph.animations[i]['id'],this.graph.animations[i]['span'],this.graph.animations[i]['center'],this.graph.animations[i]['startang']* (Math.PI / 180.0),this.graph.animations[i]['rotang']* (Math.PI / 180.0),this.graph.animations[i]['radius']);
-		}
+		var anim = this.graph.animations[i];
+		
+		if( anim["type"] == "linear" )
+			this.animationsobjects[i] = new LinearAnimation(this, anim['span'], anim['control_points']);
+		else if( this.graph.animations[i]["type"] == "circular" )
+			this.animationsobjects[i] = new CircularAnimation(this, anim['span'], anim['center'], anim['startang']*(Math.PI/180.0), anim['rotang']*(Math.PI / 180.0), anim['radius']);
 	}
 }
 
@@ -399,39 +398,35 @@ XMLscene.prototype.drawNodes = function (node) {
 	
 	this.pushMatrix();
 	
-			this.multMatrix(node.matrix);
+	this.multMatrix(node.matrix);
 
-			if(node.material != "null")
-                this.materials[node.material].setTexture(this.textures[node.texture]);
-			
-			if(node.material != "null")
-				this.materials[node.material].apply();
-			
-			for(var t in node.descendants){
-				this.pushMatrix();
-				
-					if(typeof node.animations != "undefined"){
-						for(var i=0; i < node.animations.length; i++){
-					this.multMatrix(this.animationsobjects[node.animations[i]].matrix);
-						}
-				}
+	if(node.material != "null")
+		this.materials[node.material].setTexture(this.textures[node.texture]);
 
-				
-				
-				
-				if(node.descendants[t] == "patch"){
-					this.leaves[node.descendants[t]].display();
-				}
-			
-				if(typeof this.graph.nodes[node.descendants[t]] == "undefined"){
-					this.leaves[node.descendants[t]].display();
-				}
-				else this.drawNodes(this.nodes[node.descendants[t]]);
-				this.popMatrix();
+	if(node.material != "null")
+		this.materials[node.material].apply();
+
+	for(var t in node.descendants) {
+		this.pushMatrix();
+
+		if(typeof node.animations != "undefined") {
+			for(var i=0; i < node.animations.length; i++){
+				this.multMatrix(this.animationsobjects[node.animations[i]].matrix);
 			}
-	
-	this.popMatrix();
-	
+		}				
+
+		if(node.descendants[t] == "patch") {
+			this.leaves[node.descendants[t]].display();
+		}
+
+		if(typeof this.graph.nodes[node.descendants[t]] == "undefined") {
+			this.leaves[node.descendants[t]].display();
+		}
+		else this.drawNodes(this.nodes[node.descendants[t]]);
+		this.popMatrix();
+	}
+
+	this.popMatrix();	
 }
 
 

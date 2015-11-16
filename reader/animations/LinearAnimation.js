@@ -1,8 +1,7 @@
 //Constructor of Linear Animation objects
-function LinearAnimation(scene, id, span, controlPoints) {
-    
-	Animation.call(this, id, span, "linear");
-
+function LinearAnimation(scene, span, controlPoints) {
+	Animation.call(this, span, "linear");
+	
     this.controlPoints = controlPoints;
     this.init();
 }
@@ -18,25 +17,24 @@ LinearAnimation.prototype.init = function() {
 	this.translations = new Array(this.controlPoints.length - 1);
     this.rotations = new Array(this.controlPoints.length - 1);
 
-    for (var i = 0; i < this.controlPoints.length - 1; ++i) {
+    for (var i = 0; i < this.controlPoints.length - 1; i++) {
         
 		var vector = vec3.create();
-        vec3.sub(vector, this.controlPoints[i + 1], this.controlPoints[i]);
+        vec3.sub(vector, this.controlPoints[i+1], this.controlPoints[i]);
         this.translations[i] = vector;
 
         var projectionXZ = vec3.fromValues(vector[0], 0, vector[2]);
 
-        if (vec3.length(projectionXZ) > 0) {
+        if( vec3.length(projectionXZ) > 0 ) {
             var sign = projectionXZ[0] < 0 ? -1 : 1;
-            this.rotations[i] = sign * Math.acos(vec3.dot(projectionXZ, vec3.fromValues(0, 0, 1))/ vec3.length(projectionXZ));
-        } else {
-            this.rotations[i] = (i == 0 ? 0 : this.rotations[i - 1]);  
-        }
+            this.rotations[i] = sign * Math.acos(vec3.dot(projectionXZ, vec3.fromValues(0, 0, 1))/vec3.length(projectionXZ));
+        } else
+           	this.rotations[i] = (i == 0 ? 0 : this.rotations[i-1]);
     
         distance += vec3.length(vector);
     }
 
-    var velocity = distance / this.span;
+    var velocity = distance/this.span;
 
     this.controlPointsTime = new Array(this.controlPoints.length);
     this.controlPointsTime[0] = 0;
@@ -44,17 +42,16 @@ LinearAnimation.prototype.init = function() {
     this.controlPointsSpan = new Array(this.controlPoints.length - 1);
 
     for (var i = 1; i < this.controlPoints.length; ++i) {    
-        this.controlPointsTime[i] = this.controlPointsTime[i - 1] +
-                               vec3.length(this.translations[i-1]) / velocity;
+        this.controlPointsTime[i] = this.controlPointsTime[i-1] + vec3.length(this.translations[i-1])/velocity;
         this.controlPointsSpan[i-1] = this.controlPointsTime[i] - this.controlPointsTime[i-1]; 
     }
 }
+
 //Calculate de matrix the location of object in actual time
 LinearAnimation.prototype.calculateMatrix = function(t) {
     
     this.matrix = mat4.create();
     mat4.identity(this.matrix);
-    
 
     if (t < 0)
         return this.matrix;
@@ -70,9 +67,8 @@ LinearAnimation.prototype.calculateMatrix = function(t) {
     var position = vec3.clone(this.controlPoints[index]);
     var translation_amount = vec3.create();
     vec3.scale(translation_amount, this.translations[index], tScale);
-    vec3.add(position, position, translation_amount); 
+    vec3.add(position, position, translation_amount);
 
     mat4.translate(this.matrix, this.matrix, position);
-    mat4.rotateY(this.matrix,this.matrix,this.rotations[index]);
-	
+    mat4.rotateY(this.matrix, this.matrix, this.rotations[index]);	
 }

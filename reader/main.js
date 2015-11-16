@@ -17,9 +17,9 @@ serialInclude([
 	'MySceneGraph.js',
 	'Node.js',
 	'XMLscene.js',
-	'animation/Animation.js',
-	'animation/CircularAnimation.js',
-	'animation/LinearAnimation.js',
+	'animations/Animation.js',
+	'animations/CircularAnimation.js',
+	'animations/LinearAnimation.js',
 	'primitives/MyAnnulus.js',
 	'primitives/MyCircle.js',
 	'primitives/MyCone.js',
@@ -36,6 +36,7 @@ serialInclude([
     'primitives/MyRingBody.js',
     'primitives/MySims.js',
     'primitives/MySphere.js',
+    'primitives/MyTerrain.js',
     'primitives/MyTriangle.js',	
 main=function()
 {
