@@ -218,6 +218,7 @@
 			<MATERIAL id="default" />
 			<TEXTURE id="chair_pattern" />
 			<ANIMATIONREF id="OMGAMesaAnda" />
+			<ANIMATIONREF id="OMGAMesaRoda" />
 			<TRANSLATION x="4.5" y="0" z="4.5" />
 			<DESCENDANTS>
 				<DESCENDANT id="chair_seat" />

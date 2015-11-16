@@ -561,10 +561,10 @@ MySceneGraph.prototype.parseLeaf = function(element) {
     leaf['type'] = this.reader.getString(element, 'type', true);
 
     if( leaf['type'] == "patch" ) {	// Parse patch leaf
-		leaf['order'] = this.reader.getString(element, 'order', true);
-		leaf['partsU'] = this.reader.getString(element, 'partsU', true);
-		leaf['partsV'] = this.reader.getString(element, 'partsV', true);
-		console.log(leaf['order']);
+		leaf['order'] = this.reader.getFloat(element, 'order', true);
+		leaf['partsU'] = this.reader.getFloat(element, 'partsU', true);
+		leaf['partsV'] = this.reader.getFloat(element, 'partsV', true);
+
 		var control_points = element.getElementsByTagName("CONTROLPOINT");
 
 		var ctrPoints = [];
@@ -584,7 +584,6 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 	} 
     else if ( leaf['type'] == "plane" ) { // Parse plane leaf
     	leaf['parts'] = this.reader.getString(element, 'parts', true);
-    	console.log(leaf.parts);
     } else { // Parse all other leaves that have args as attribute
     	tempArgs = this.reader.getString(element, 'args', true);
     	leaf['args'] = tempArgs.split(' ');
@@ -641,25 +640,23 @@ MySceneGraph.prototype.parseNode = function(element) {
 	
 	var j = 0;
 	var k = 2;
-	if(animations.length != 0){
-		node['animationref'] = this.reader.getString(element.children[k], 'id', true);
-		j++;
-		k++;
-		
-	}	
 	
-	/*for(; j < animations.length; j++){
-		
-		node['animations'][j]=this.reader.getString(animations[j], 'id', true);
-		
+	var tempAnimations = [];
+	var existAnimation = element.getElementsByTagName('ANIMATIONREF');
+
+	for( ; j < existAnimation.length ; j++)
+	{
+	tempAnimations[j] = existAnimation[j].id;
+	k++;
 	}
-	console.log("pilas");
-	*/
+
+	if(tempAnimations.length > 0)
+		node['animations'] = tempAnimations;
 	
 	node["matrix"] = mat4.create();
 	mat4.identity(node["matrix"]);
 
-    var transformations = [];	
+    var transformations = [];
 	
     for(var i = j+2; i < element.children.length; i++) {
 

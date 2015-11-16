@@ -412,6 +412,10 @@ XMLscene.prototype.drawNodes = function (node) {
 				if(typeof node.animationref != "undefined"){
 					this.multMatrix(this.animationsobjects[node.animationref].matrix);
 				}
+				
+				if(node.descendants[t] == "patch"){
+					this.leaves[node.descendants[t]].display();
+				}
 			
 				if(typeof this.graph.nodes[node.descendants[t]] == "undefined"){
 					this.leaves[node.descendants[t]].display();
