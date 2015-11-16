@@ -76,22 +76,22 @@
         <LEAF id="ellipse" type="ellipse" args="4 2 100" />
         <LEAF id="plane" type="plane" parts="5" />
         <LEAF id="patch" type="patch" order="3" partsU="20" partsV="20">           
-            <CONTROLPOINT x="-0.5" y="0" z="-0.5" />
-			<CONTROLPOINT x="-0.5" y="0" z="-0.25" />
-			<CONTROLPOINT x="-0.5" y="0" z="0.25" />
-			<CONTROLPOINT x="-0.5" y="0" z="0.5" />
-			<CONTROLPOINT x="-0.25" y="0" z="-0.5" />
-			<CONTROLPOINT x="-0.25" y="1" z="-0.25" />
-			<CONTROLPOINT x="-0.25" y="1" z="0.25" />
-			<CONTROLPOINT x="-0.25" y="0" z="0.5" />
-			<CONTROLPOINT x="0.25" y="0" z="-0.5" />
-			<CONTROLPOINT x="0.25" y="1" z="-0.25" />
-			<CONTROLPOINT x="0.25" y="1" z="0.25" />
-			<CONTROLPOINT x="0.25" y="0" z="0.5" />
-			<CONTROLPOINT x="0.5" y="0" z="-0.5" />
-			<CONTROLPOINT x="0.5" y="0" z="-0.25" />
-			<CONTROLPOINT x="0.5" y="0" z="0.25" />
-			<CONTROLPOINT x="0.5" y="0" z="0.5" />
+            <CONTROLPOINT x="0" y="0" z="1" w="1"/>
+        	<CONTROLPOINT x="2" y="0" z="1" w="0.3333333333333333"/>
+        	<CONTROLPOINT x="2" y="0" z="-1" w="0.3333333333333333"/>
+        	<CONTROLPOINT x="0" y="0" z="-1" w="1"/>
+        	<CONTROLPOINT x="0" y="0" z="1" w="0.3333333333333333"/>
+        	<CONTROLPOINT x="2" y="-4" z="1" w="0.1111111111111111"/>
+        	<CONTROLPOINT x="2" y="-4" z="-1" w="0.1111111111111111"/>
+        	<CONTROLPOINT x="0" y="0" z="-1" w="0.3333333333333333"/>
+			<CONTROLPOINT x="0" y="0" z="1" w="0.3333333333333333"/>
+			<CONTROLPOINT x="-2" y="-4" z="1" w="0.1111111111111111"/>
+			<CONTROLPOINT x="-2" y="-4" z="-1" w="0.1111111111111111"/>
+			<CONTROLPOINT x="0" y="0" z="-1" w="0.3333333333333333"/>
+			<CONTROLPOINT x="0" y="0" z="1" w="1"/>
+			<CONTROLPOINT x="-2" y="0" z="1" w="0.3333333333333333"/>
+			<CONTROLPOINT x="-2" y="0" z="-1" w="0.3333333333333333"/>
+			<CONTROLPOINT x="0" y="0" z="-1" w="1"/>
 		</LEAF>
 	</LEAVES>
 

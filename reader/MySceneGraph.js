@@ -572,14 +572,14 @@ MySceneGraph.prototype.parseLeaf = function(element) {
 			var x = this.reader.getFloat(control_points[i], "x", true);
 			var y = this.reader.getFloat(control_points[i], "y", true);
 			var z = this.reader.getFloat(control_points[i], "z", true);
+			var w = this.reader.getFloat(control_points[i], "w", true);
 
-			if(isNaN(x) || isNaN(y) || isNaN(z))
+			if(isNaN(x) || isNaN(y) || isNaN(z) || isNaN(w))
                 return " invalid number in control_points!";
 			
-			ctrPoints.push(vec3.fromValues(x,y,z));
+			ctrPoints.push(vec4.fromValues(x,y,z,w));
 		}
 		leaf['control_points'] = ctrPoints;
-		console.log(leaf['control_points'])
 
 	} 
     else if ( leaf['type'] == "plane" ) { // Parse plane leaf

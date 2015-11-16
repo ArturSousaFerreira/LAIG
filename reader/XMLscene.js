@@ -246,6 +246,7 @@ XMLscene.prototype.init_Leaves = function () {
             this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
 		else if(graph_leaf.type == 'patch')
 			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
+
 		//else if(graph_leaf.type == 'plane')
 			//this.leaves[i] = new MyPlane(this, graph_leaf.parts);
 	}
