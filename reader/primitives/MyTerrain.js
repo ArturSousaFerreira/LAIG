@@ -1,4 +1,5 @@
 function MyTerrain(scene, texture, heightmap) {
+  
     this.scene = scene;
     CGFobject.call(this, scene);
 
@@ -42,7 +43,7 @@ MyTerrain.prototype.display = function() {
     this.scene.pushMatrix();
     
     this.heightmap_terrain.bind(1);
-    
+
     this.plane.display();
     this.scene.popMatrix();
 

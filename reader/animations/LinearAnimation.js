@@ -42,7 +42,7 @@ LinearAnimation.prototype.init = function() {
     this.controlPointsTime = [this.controlPoints.length];
     this.controlPointsTime[0] = 0;
 	
-    this.controlPointsSpan = new Array(this.controlPoints.length - 1);
+    this.controlPointsSpan = [this.controlPoints.length - 1];
 	
     for (var i = 1; i < this.controlPoints.length; ++i) {    
         this.controlPointsTime[i] = this.controlPointsTime[i-1] + vec3.length(this.translations[i-1])/this.velocity;
@@ -61,7 +61,6 @@ LinearAnimation.prototype.calculateMatrix = function(t) {
    		//return;
    	}
    	
-	
     var index;
     for( index = this.controlPointsTime.length - 1; index > 0; index-- )
         if( this.controlPointsTime[index] < time )
