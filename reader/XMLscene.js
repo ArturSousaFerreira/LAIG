@@ -253,6 +253,8 @@ XMLscene.prototype.init_Leaves = function () {
 			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
 		else if(graph_leaf.type == 'plane')
 			this.leaves[i] = new MyPlane(this, graph_leaf.parts);
+		else if(graph_leaf.type == 'terrain')
+			this.leaves[i] = new MyTerrain(this, graph_leaf.texture, graph_leaf.heightmap);
 	}
 
 };
@@ -414,8 +416,8 @@ XMLscene.prototype.drawNodes = function (node) {
 		this.pushMatrix();
 
 		if(typeof node.animations != "undefined") {
-			for(var i=0; i < node.animations.length; i++){
-				this.multMatrix(this.animationsobjects[node.animations[i]].matrix);
+			for(var i = 0; i < node.animations.length; i++) {
+            	this.multMatrix(this.animationsobjects[node.animations[i]].matrix);
 			}
 		}				
 
@@ -450,7 +452,7 @@ XMLscene.prototype.display = function () {
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 	// Draw axis
-	this.axis.display();
+	//this.axis.display();
 	
 	this.setDefaultAppearance();
 
@@ -473,8 +475,10 @@ XMLscene.prototype.update = function(currTime) {
 	if (this.lastUpdate != 0)
 		this.timer += (currTime - this.lastUpdate) / 1000;
 	
-	for(var k in this.animationsobjects){
-		this.animationsobjects[k].calculateMatrix(this.timer);
+	for(var k in this.animationsobjects) {
+        //while( this.animationsobjects[k].finish != true ) {
+            this.animationsobjects[k].calculateMatrix(this.timer);
+        //}
 	}
 }
 

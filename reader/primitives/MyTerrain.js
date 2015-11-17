@@ -1,29 +1,31 @@
-function terrain(scene, texture, heightmap) {
-    CGFobject.call(this,scene);
+function MyTerrain(scene, texture, heightmap) {
     
+    this.scene = scene;
+    CGFobject.call(this, this.scene);
+
     this.texture = texture;
     this.heightmap = heightmap;
 
-    this.materialTerrain = new CGFappearance(scene);
+    this.materialTerrain = new CGFappearance(this.scene);
     this.materialTerrain.setAmbient(0.5,0.5,0.5,1);
     this.materialTerrain.setDiffuse(0.5,0.5,0.5,1);
     this.materialTerrain.setSpecular(0.5,0.5,0.5,1);
     this.materialTerrain.setShininess(1);
-    this.textureTerrain = new CGFtexture(scene, this.texture);
-    this.heightmapTerrain = new CGFtexture(scene, this.heightmap);
+    this.textureTerrain = new CGFtexture(this.scene, this.texture);
+    this.heightmapTerrain = new CGFtexture(this.scene, this.heightmap);
     this.materialTerrain.setTexture(this.textureTerrain);
 
-    this.myShader = new CGFshader(scene.gl, "scenes/shaders/myShader.vert", "scenes/shaders/myShader.frag");
+    this.myShader = new CGFshader(this.scene.gl, "scenes/shaders/myShader.vert", "scenes/shaders/myShader.frag");
     this.myShader.setUniformsValues({uSampler2: 1});
     this.myShader.setUniformsValues({scale: 0.5});
     
-    this.plane = new plane(scene, 200);
+    this.plane = new MyPlane(this.scene, 200);
  }
  
-terrain.prototype = Object.create(CGFobject.prototype);
-terrain.prototype.constructor = terrain;
+MyTerrain.prototype = Object.create(CGFobject.prototype);
+MyTerrain.prototype.constructor = MyTerrain;
  
-terrain.prototype.display = function() {
+MyTerrain.prototype.display = function() {
     this.materialTerrain.apply();
     this.scene.setActiveShader(this.myShader);
 

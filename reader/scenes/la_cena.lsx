@@ -54,7 +54,7 @@
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="floor_pattern">
-            <file path="textures/floor.jpg" />
+            <file path="textures/floor_dirt.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="chair_pattern">
@@ -70,7 +70,7 @@
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="painting1">
-            <file path="textures/ogrito.jpeg" />
+            <file path="textures/ogrito.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="painting2">
@@ -78,7 +78,7 @@
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="painting3">
-            <file path="textures/salvadordali.jpeg" />
+            <file path="textures/salvadordali.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="paper">
@@ -135,7 +135,7 @@
 			<CONTROLPOINT x="9" y="2" z="0" w="1" />
 			<CONTROLPOINT x="9" y="6" z="0" w="1" />
 		</LEAF>
-		<LEAF id="elevterrain" type="terrain" texture="textures/moon_color.jpg" heightmap="textures/moon_height_high.png" />
+		<LEAF id="grass_leaf" type="terrain" texture="textures/grass.jpg" heightmap="textures/grass_heightmap.jpg" />
 	</LEAVES>
 
 
@@ -195,12 +195,31 @@
 		</NODE>
 
 		<NODE id="floor">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="actual_floor" />
+				<DESCENDANT id="grass" />											
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="actual_floor">
 			<MATERIAL id="default" />
 			<TEXTURE id="floor_pattern" />
 			<ROTATION axis="x" angle="90"/>
 			<SCALE sx="10" sy="10" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />												
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="grass">
+			<MATERIAL id="default" />
+			<TEXTURE id="grass" />
+			<TRANSLATION x="5" y="0.0001" z="5" />
+			<SCALE sx="10" sy="0.35" sz="10"/>
+			<DESCENDANTS>
+				<DESCENDANT id="grass_leaf" />												
 			</DESCENDANTS>
 		</NODE>
 

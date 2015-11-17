@@ -14,6 +14,7 @@ CircularAnimation.prototype = Object.create(Animation.prototype);
 CircularAnimation.prototype.constructor = CircularAnimation;
 
 CircularAnimation.prototype.init = function() {
+	this.finish = false;
 	this.transform = mat4.create();
 	mat4.identity(this.transform);
 
@@ -25,6 +26,12 @@ CircularAnimation.prototype.init = function() {
 CircularAnimation.prototype.calculateMatrix = function(t) {
 	var time = Math.min(t, this.span);
 	
+	if( time >= this.span ){
+		this.finish = true;
+		//return;
+	}
+		
+		
 	this.matrix = mat4.create();
 	mat4.identity(this.matrix);
 
@@ -34,5 +41,4 @@ CircularAnimation.prototype.calculateMatrix = function(t) {
 	mat4.rotateY(this.matrix, this.matrix, rot);
 	mat4.multiply(this.matrix, this.matrix, this.transform);
 
-	return this.matrix;
 }
