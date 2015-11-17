@@ -61,7 +61,7 @@ LinearAnimation.prototype.calculateMatrix = function(t) {
    		//return;
    	}
    	
-
+	
     var index;
     for( index = this.controlPointsTime.length - 1; index > 0; index-- )
         if( this.controlPointsTime[index] < time )
