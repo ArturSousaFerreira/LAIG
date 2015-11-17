@@ -702,9 +702,7 @@ MySceneGraph.prototype.parseNode = function(element) {
 	
     node['material'] = this.reader.getString(element.children[0], 'id', true);
     node['texture'] = this.reader.getString(element.children[1], 'id', true);
-		
-	var animations = element.getElementsByTagName('ANIMATIONREF');
-	
+			
 	var j = 0;
 	var k = 2;
 	
@@ -753,6 +751,8 @@ MySceneGraph.prototype.parseNode = function(element) {
 			break;
 	}
 
+	node["timer"] =0;
+	
 	node['descendants'] = this.parseDescendants(element.children[i]);
 
     return node;

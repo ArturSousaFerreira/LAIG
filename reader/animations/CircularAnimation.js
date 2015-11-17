@@ -5,7 +5,8 @@ function CircularAnimation(scene, span, center, startang, rotang, radius) {
     this.startang = startang*(Math.PI/180.0); // angulo inicial do objecto
     this.rotang = rotang*(Math.PI/180.0); // angulo de rotaça do objecto
     this.radius = radius; // raio/distancia do objecto ao centro
-
+	this.scene = scene;
+	
    	Animation.call(this, this.span, "circular");
 
    	this.init();
@@ -14,13 +15,20 @@ function CircularAnimation(scene, span, center, startang, rotang, radius) {
 CircularAnimation.prototype = Object.create(Animation.prototype);
 CircularAnimation.prototype.constructor = CircularAnimation;
 
-CircularAnimation.prototype.init = function() {
+CircularAnimation.prototype.clone = function () {
 	
+	return new CircularAnimation(this.scene, this.span, this.center, this.startang * (180.0/Math.PI), this.rotang * (180/Math.PI), this.radius);
+	
+};
+
+CircularAnimation.prototype.init = function() {
+	this.start = false;
 	this.finish = false;
 	
 	this.transform_matrix = mat4.create();// cria matriz transformação inicial
 	mat4.identity(this.transform_matrix);
 
+	
 	mat4.rotateY(this.transform_matrix, this.transform_matrix, this.startang); // mete na matrix inicial a rotaçao do angulo inicial em torno do eixo y
 	mat4.translate(this.transform_matrix, this.transform_matrix, vec3.fromValues(0, 0, this.radius)); // mete na matriz inicial a translação em z do valor do raio
 
@@ -37,15 +45,17 @@ CircularAnimation.prototype.init = function() {
 
 CircularAnimation.prototype.calculateMatrix = function(t) {
 	
+	this.matrix = mat4.create();
+	mat4.identity(this.matrix);
+	
 	this.current_time = Math.min(t, this.span);
+	
 	
 	if( this.current_time == this.span ) {
 		this.finish = true;
+		this.start = false;
 		return;
 	}
-
-	this.matrix = mat4.create();
-	mat4.identity(this.matrix);
 
 	mat4.translate(this.matrix, this.matrix, this.center[0]); // mete na matriz do objecto a translação do centro
 

@@ -13,14 +13,14 @@
 
 	<ANIMATIONS>
 		<ANIMATION id="flag_animation" span="10" type="linear">
-			<CONTROLPOINT xx="0" yy="-40" zz="0" />
+			<CONTROLPOINT xx="0" yy="-44" zz="0" />
 			<CONTROLPOINT xx="0" yy="0" zz="0" />
 		</ANIMATION>
-		<ANIMATION id="paperPlane_animation" span="8" type="linear">
-			<CONTROLPOINT xx="0" yy="0" zz="0" />
+		<ANIMATION id="paperPlane_animation" span="4" type="linear">
 			<CONTROLPOINT xx="0" yy="-7" zz="0" />
+			<CONTROLPOINT xx="0" yy="0" zz="0" />
 		</ANIMATION>
-		<ANIMATION id="circular" span="8" type="circular" center="-18 0 -1" radius="18" startang="90" rotang="-90"/>
+		<ANIMATION id="circular" span="20" type="circular" center="0 0 0" radius="0" startang="160" rotang="-430"/>
 	</ANIMATIONS>
 
 
@@ -74,7 +74,7 @@
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="painting2">
-            <file path="textures/mona_lisa.jpeg" />
+            <file path="textures/mona_lisa.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="painting3">
@@ -258,7 +258,7 @@
 			<TEXTURE id="paper" />
 			<ANIMATIONREF id="paperPlane_animation" />
 			<ANIMATIONREF id="circular" />
-			<TRANSLATION x="1" y="3" z="8" />
+			<TRANSLATION x="2" y="3" z="8" />
 			<ROTATION axis="y" angle="180"/>
 			<SCALE sx="0.4" sy="0.4" sz="0.4"/>
 			<DESCENDANTS>

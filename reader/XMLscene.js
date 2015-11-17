@@ -279,6 +279,7 @@ XMLscene.prototype.init_Nodes = function() {
 	var main_id = this.graph.root_id;
 	this.primitivas=[];
 	this.nodes=this.graph.nodes;
+	
 
     var root_node = this.graph.nodes[main_id]; //node.js
 	
@@ -304,7 +305,16 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 
 	var nextMatrix = mat4.create();
     mat4.multiply(nextMatrix, curr_Matrix, node.matrix);
-
+	
+	
+	if(typeof node.animations != "undefined"){
+		for(var l  in node.animations){
+			
+			node.animations[l]= this.animationsobjects[node.animations[l]].clone();
+		}
+		
+		
+	}
 	
     for (var i = 0; i < node.descendants.length; i++) {
     	var num_nodes = 0;
@@ -394,7 +404,6 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.init_Animations();
 	this.init_Nodes();
 
-	this.timer = 0;
     this.setUpdatePeriod(20);
 	
 	this.loadedOk = true;
@@ -416,10 +425,15 @@ XMLscene.prototype.drawNodes = function (node) {
 		this.pushMatrix();
 
 		if(typeof node.animations != "undefined") {
-			for(var i = 0; i < node.animations.length; i++) {
-            	this.multMatrix(this.animationsobjects[node.animations[i]].matrix);
+			for(var k in node.animations){
+				if(node.animations[k].finish == false){
+					this.multMatrix(node.animations[k].matrix);
+				break;
+				}
+				
 			}
-		}				
+			
+				}				
 
 		if(node.descendants[t] == "patch") {
 			this.leaves[node.descendants[t]].display();
@@ -434,7 +448,6 @@ XMLscene.prototype.drawNodes = function (node) {
 
 	this.popMatrix();	
 }
-
 
 XMLscene.prototype.display = function () {
 
@@ -471,14 +484,22 @@ XMLscene.prototype.display = function () {
 };
 
 XMLscene.prototype.update = function(currTime) {
-
-	if (this.lastUpdate != 0)
-		this.timer += (currTime - this.lastUpdate) / 1000;
 	
-	for(var k in this.animationsobjects) {
-        //while( this.animationsobjects[k].finish != true ) {
-            this.animationsobjects[k].calculateMatrix(this.timer);
-        //}
+
+	for (var n in this.graph.nodes){
+		for(var k in this.graph.nodes[n].animations) {
+		
+		if (this.lastUpdate != 0)
+		this.graph.nodes[n].timer += (currTime - this.lastUpdate) / 1000;
+	
+			if(this.graph.nodes[n].animations[k].finish == false){
+				this.graph.nodes[n].animations[k].calculateMatrix(this.graph.nodes[n].timer);
+				break;
+			}
+		}
+			
 	}
+	
+	
 }
 
