@@ -58,11 +58,16 @@ LinearAnimation.prototype.init = function() {
 }
 
 LinearAnimation.prototype.calculateMatrix = function(t) {
+
+    if ( this.startTime < 0 ) {
+        this.startTime = t;
+    }
+
     this.matrix = mat4.create();
     mat4.identity(this.matrix);
 	
-    time = Math.min(t, this.span);
-   	
+    time = Math.min(t - this.startTime, this.span);
+
    	if(time >= this.span){
 		this.finish = true;
 		this.start = false;

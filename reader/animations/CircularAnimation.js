@@ -45,12 +45,18 @@ CircularAnimation.prototype.init = function() {
 
 CircularAnimation.prototype.calculateMatrix = function(t) {
 	
+	if ( this.startTime < 0 ) {
+		this.startTime = t;
+	}
+
 	this.matrix = mat4.create();
 	mat4.identity(this.matrix);
 	
-	this.current_time = Math.min(t, this.span);
-	
-	
+	this.current_time = Math.min(t - this.startTime, this.span);
+
+	console.log(this.current_time);
+	console.log(this.span);
+
 	if( this.current_time == this.span ) {
 		this.finish = true;
 		this.start = false;

@@ -20,7 +20,7 @@
 			<CONTROLPOINT xx="0" yy="-7" zz="0" />
 			<CONTROLPOINT xx="0" yy="0" zz="0" />
 		</ANIMATION>
-		<ANIMATION id="circular" span="20" type="circular" center="0 0 0" radius="0" startang="160" rotang="-430"/>
+		<ANIMATION id="circular" span="3" type="circular" center="0 0 0" radius="0" startang="160" rotang="-430"/>
 	</ANIMATIONS>
 
 

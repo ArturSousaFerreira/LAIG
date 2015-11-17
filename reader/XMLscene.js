@@ -489,11 +489,11 @@ XMLscene.prototype.update = function(currTime) {
 	for (var n in this.graph.nodes){
 		for(var k in this.graph.nodes[n].animations) {
 		
-		if (this.lastUpdate != 0)
-		this.graph.nodes[n].timer += (currTime - this.lastUpdate) / 1000;
-	
+			if (this.lastUpdate != 0)
+				this.graph.nodes[n].timer += (currTime - this.lastUpdate) / 1000;
+
 			if(this.graph.nodes[n].animations[k].finish == false){
-				this.graph.nodes[n].animations[k].calculateMatrix(this.graph.nodes[n].timer);
+				this.graph.nodes[n].animations[k].calculateMatrix(currTime / 1000);
 				break;
 			}
 		}
