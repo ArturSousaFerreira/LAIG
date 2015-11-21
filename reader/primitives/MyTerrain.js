@@ -49,3 +49,4 @@ MyTerrain.prototype.display = function() {
 
     this.scene.setActiveShader(this.scene.defaultShader);    
 };
+
