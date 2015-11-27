@@ -1,10 +1,14 @@
 @font-face {
-	font-family: "vtks giz";
-	src: url("vtks giz.ttf")
+	font-family: "immortal";
+	src: url("immortal.ttf")
 }
 
 body, html {
-	background: url('textures/grass.jpg');
+	background: url('textures/damas_wallpaper_modified.jpg') no-repeat center center;
+	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
     border: 0;
     padding: 0;
     margin: 0;
@@ -17,10 +21,39 @@ canvas {
 }
 
 #game_name {
-	font-family: "vtks giz";
-	font-size: 40px;
-	color: #332200;
+	font-family: "immortal" bold;
+	font-size: 50px;
+	color: #B37700;
 	margin-top: 6%;
 	text-align: center;
 	position: relative;
+	cursor: default;
+}
+
+.button_class {
+	position: relative;
+	margin-top: 3%;
+	margin-bottom: 3%;
+	width: 40%;
+	height: 70px;
+	left: 29.5%;
+	border: 2px solid #332200;
+    border-radius: 25px;
+    font-family: "immortal";
+    font-size: 30px;
+    color: #B37700;
+    cursor: pointer;
+    background: url('textures/darkwood_pattern.jpg') no-repeat;
+    -webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}
+
+.button_class:hover {
+	background: url('textures/darkwood_pattern_hover.jpg') no-repeat;
+    -webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
 }

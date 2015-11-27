@@ -2,7 +2,7 @@
 <html>
 
 <head lang="en">
-	<title>Checkers</title>
+	<title>checkers.</title>
 	<!-- meta tags -->
     <meta name="author" content="Rui/Artur">
 	<meta name="description" content="Checkers game made using WebGL">
@@ -11,12 +11,25 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- css file -->
 	<link href="index.css" rel="stylesheet" type="text/css">
+	<!-- html page icon -->
+	<link rel="shortcut icon" href="textures/page_icon.png">
 </head>
 
 <body>
 	<div id="game_name">
-		<h1>Checkers.</h1>
+		<h1>checkers.</h1>
+	</div>
+	<div>
+		<button class="button_class" type="button" onClick="mudaCena()">Play</button></a>
+		<br>
+		<button class="button_class" type="button" onClick="mudaCena()">Text of Some Page</button></a>
 	</div>
 </body>
+
+<script>
+	function mudaCena() {
+		location.replace("scene.html");
+	}
+</script>
 
 </html>
