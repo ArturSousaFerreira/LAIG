@@ -5,6 +5,8 @@ function XMLscene() {
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
+id_pick = 0;
+
 XMLscene.prototype.init = function (application) {
 
 	CGFscene.prototype.init.call(this, application);
@@ -21,6 +23,9 @@ XMLscene.prototype.init = function (application) {
 	this.interface = null;
 	
 	this.setUpdatePeriod(50);
+
+	// set Picking
+	this.setPickEnabled(true);
 
 	this.nodes = [];
 };
@@ -438,6 +443,7 @@ XMLscene.prototype.drawNodes = function (node) {
 		}
 
 		if(typeof this.graph.nodes[node.descendants[t]] == "undefined") {
+			this.registerForPick(id_pick++,this.leaves[node.descendants[t]]);
 			this.leaves[node.descendants[t]].display();
 		} else
 			this.drawNodes(this.nodes[node.descendants[t]]);
@@ -450,6 +456,8 @@ XMLscene.prototype.drawNodes = function (node) {
 
 XMLscene.prototype.display = function () {
 
+	this.logPicking();
+	this.clearPickRegistration();
 	if (this.loadedOk == false) return;
 	// ---- BEGIN Background, camera and axis setup
 
@@ -478,6 +486,7 @@ XMLscene.prototype.display = function () {
 		}
 
 		this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
+		id_pick = 0;
 	};
 
 };
@@ -495,5 +504,21 @@ XMLscene.prototype.update = function(currTime) {
 			}
 		}		
 	}	
+}
+
+
+XMLscene.prototype.logPicking = function () {
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj) {
+					var customId = this.pickResults[i][1];				
+					console.log("Picked object: " + obj + ", with pick id " + customId);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}		
+	}
 }
 

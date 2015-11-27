@@ -649,7 +649,7 @@ console.log(this.textures);
     }
     else if( leaf['type'] == "terrain" ) { // Parse terrain leaf
     	leaf["texture"] = this.reader.getString(element, 'texture', true);
-    	leaf["heightmap"] = this.reader.getString(element, 'heightmap', true);             
+    	leaf["heightmap"] = this.reader.getString(element, 'heightmap', true);
 	} else { // Parse all other leaves that have args as attribute
 		tempArgs = this.reader.getString(element, 'args', true);
 		leaf['args'] = tempArgs.split(' ');
