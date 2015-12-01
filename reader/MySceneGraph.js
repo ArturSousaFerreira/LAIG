@@ -207,6 +207,21 @@ MySceneGraph.prototype.onXMLReady=function() {
 	if(isNaN(this.initials.frustum["near"])) return "Invalid frustum near!";
 	if(isNaN(this.initials.frustum["far"])) return "Invalid frustum far!";
 	
+	//Camera
+	var elems =  rootElement.getElementsByTagName('camera');
+	if(elems == null) return "camera element is missing!";
+	if(elems.length != 1) return "More than one 'camera' elements found. Expected only one!";
+	
+	this.initials['camera'] = this.parseTranslate(elems[0]);    
+	
+	if(this.initials.camera["x"] == undefined) return "Invalid camera x!";
+	if(this.initials.camera["y"] == undefined) return "Invalid camera y!";
+	if(this.initials.camera["z"] == undefined) return "Invalid camera z!";
+
+	if(isNaN(this.initials.camera["x"])) return "Invalid camera x!";
+	if(isNaN(this.initials.camera["y"])) return "Invalid camera y!";
+	if(isNaN(this.initials.camera["z"])) return "Invalid camera z!";
+	
 	//Translate
 	var elems =  rootElement.getElementsByTagName('translation');
 	if(elems == null) return "translation element is missing!";

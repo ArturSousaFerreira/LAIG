@@ -24,7 +24,7 @@ XMLscene.prototype.init = function (application) {
 	
 	this.setUpdatePeriod(50);
 
-	// set Picking
+	// set Picking to true
 	this.setPickEnabled(true);
 
 	this.nodes = [];
@@ -40,7 +40,13 @@ XMLscene.prototype.init_Cameras = function () {
 	var far = this.graph.initials.frustum["far"];
 	if(near == 0)
 		near = 0.1;
-	this.camera = new CGFcamera(0.4, near, far, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
+	var camera_x =this.graph.initials.camera["x"];
+	var camera_y = this.graph.initials.camera["y"];
+	var camera_z = this.graph.initials.camera["z"];
+	console.log(camera_x);
+	console.log(camera_y);
+	console.log(camera_z);
+	this.camera = new CGFcamera(0.4, near, far, vec3.fromValues(camera_x, camera_y, camera_z), vec3.fromValues(0, 0, 0));
 	this.interface.setActiveCamera(this.camera);
 };
 
@@ -472,7 +478,7 @@ XMLscene.prototype.display = function () {
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 	// Draw axis
-	//this.axis.display();
+	this.axis.display();
 	
 	this.setDefaultAppearance();
 

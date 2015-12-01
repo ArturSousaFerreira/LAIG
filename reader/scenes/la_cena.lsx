@@ -2,6 +2,7 @@
 
 	<INITIALS>
 		<frustum near="1.5" far="500" />
+		<camera x="20" y="20" z="20" />
 		<translation x="0" y="0" z="0" />
 		<rotation axis="x" angle="0" />
 		<rotation axis="y" angle="0" />

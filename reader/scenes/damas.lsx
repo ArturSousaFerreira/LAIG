@@ -1,7 +1,8 @@
 <SCENE>
 
 	<INITIALS>
-		<frustum near="1.5" far="500" />
+		<frustum near="0" far="500" />
+		<camera x="0" y="20" z="30" />
 		<translation x="0" y="0" z="0" />
 		<rotation axis="x" angle="0" />
 		<rotation axis="y" angle="0" />
@@ -124,19 +125,18 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="environment" />
+				<DESCENDANT id="tabuleiro" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tabuleiro">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
 				<DESCENDANT id="pecas" />
 			</DESCENDANTS>
 		</NODE>
 		
-		<NODE id="environment">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="floor" />
-			</DESCENDANTS>
-		</NODE>
-
 		<NODE id="floor">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
@@ -170,7 +170,6 @@
 			<TEXTURE id="paper" />
 			<TRANSLATION x="0.5" y="-0.5" z="0" />
 			<DESCENDANTS>
-				<DESCENDANT id="peca_branca0" />
 			    <DESCENDANT id="peca_branca1" />
 				<DESCENDANT id="peca_branca2" />
 				<DESCENDANT id="peca_branca3" />
@@ -181,26 +180,14 @@
 				<DESCENDANT id="peca_branca8" />
 				<DESCENDANT id="peca_branca9" />
 				<DESCENDANT id="peca_branca10" />
-				<DESCENDANT id="peca_branca11" />
+				<DESCENDANT id="peca_branca11" />				
 				<DESCENDANT id="peca_branca12" />
-				<DESCENDANT id="peca_branca13" />
-				<DESCENDANT id="peca_branca14" />
-				<DESCENDANT id="peca_branca15" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_branca0">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
 			</DESCENDANTS>
 		</NODE>
 
 		<NODE id="peca_branca1">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="1" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -218,7 +205,7 @@
 		<NODE id="peca_branca3">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="3" y="0" z="0" />
+			<TRANSLATION x="4" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -227,7 +214,7 @@
 		<NODE id="peca_branca4">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="4" y="0" z="0" />
+			<TRANSLATION x="6" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -236,7 +223,7 @@
 		<NODE id="peca_branca5">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="5" y="0" z="0" />
+			<TRANSLATION x="1" y="-1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -245,7 +232,7 @@
 		<NODE id="peca_branca6">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="6" y="0" z="0" />
+			<TRANSLATION x="3" y="-1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -254,7 +241,7 @@
 		<NODE id="peca_branca7">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="7" y="0" z="0" />
+			<TRANSLATION x="5" y="-1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -263,7 +250,7 @@
 		<NODE id="peca_branca8">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="0" y="-1" z="0" />
+			<TRANSLATION x="7" y="-1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -272,7 +259,7 @@
 		<NODE id="peca_branca9">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="1" y="-1" z="0" />
+			<TRANSLATION x="0" y="-2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -281,7 +268,7 @@
 		<NODE id="peca_branca10">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="2" y="-1" z="0" />
+			<TRANSLATION x="2" y="-2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -290,7 +277,7 @@
 		<NODE id="peca_branca11">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="3" y="-1" z="0" />
+			<TRANSLATION x="4" y="-2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -299,34 +286,7 @@
 		<NODE id="peca_branca12">
 			<MATERIAL id="default" />
 			<TEXTURE id="paper" />
-			<TRANSLATION x="4" y="-1" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_branca13">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
-			<TRANSLATION x="5" y="-1" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_branca14">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
-			<TRANSLATION x="6" y="-1" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_branca15">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
-			<TRANSLATION x="7" y="-1" z="0" />
+			<TRANSLATION x="6" y="-2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -337,7 +297,6 @@
 			<TEXTURE id="wall_pattern" />
 			<TRANSLATION x="0.5" y="-7.5" z="0" />
 			<DESCENDANTS>
-				<DESCENDANT id="peca_preta0" />
 				<DESCENDANT id="peca_preta1" />
 				<DESCENDANT id="peca_preta2" />
 				<DESCENDANT id="peca_preta3" />
@@ -350,17 +309,6 @@
 				<DESCENDANT id="peca_preta10" />
 				<DESCENDANT id="peca_preta11" />
 				<DESCENDANT id="peca_preta12" />
-				<DESCENDANT id="peca_preta13" />
-				<DESCENDANT id="peca_preta14" />
-				<DESCENDANT id="peca_preta15" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_preta0">
-			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -376,7 +324,7 @@
 		<NODE id="peca_preta2">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="2" y="0" z="0" />
+			<TRANSLATION x="3" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -385,7 +333,7 @@
 		<NODE id="peca_preta3">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="3" y="0" z="0" />
+			<TRANSLATION x="5" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -394,7 +342,7 @@
 		<NODE id="peca_preta4">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="4" y="0" z="0" />
+			<TRANSLATION x="7" y="0" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -403,7 +351,7 @@
 		<NODE id="peca_preta5">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="5" y="0" z="0" />
+			<TRANSLATION x="0" y="1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -412,7 +360,7 @@
 		<NODE id="peca_preta6">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="6" y="0" z="0" />
+			<TRANSLATION x="2" y="1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -421,7 +369,7 @@
 		<NODE id="peca_preta7">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="7" y="0" z="0" />
+			<TRANSLATION x="4" y="1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -430,7 +378,7 @@
 		<NODE id="peca_preta8">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="7" y="1" z="0" />
+			<TRANSLATION x="6" y="1" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -439,7 +387,7 @@
 		<NODE id="peca_preta9">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="6" y="1" z="0" />
+			<TRANSLATION x="1" y="2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -448,7 +396,7 @@
 		<NODE id="peca_preta10">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="5" y="1" z="0" />
+			<TRANSLATION x="3" y="2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -457,7 +405,7 @@
 		<NODE id="peca_preta11">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="4" y="1" z="0" />
+			<TRANSLATION x="5" y="2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
@@ -466,34 +414,7 @@
 		<NODE id="peca_preta12">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="3" y="1" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_preta13">
-			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="2" y="1" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_preta14">
-			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="1" y="1" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="peca" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="peca_preta15">
-			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="0" y="1" z="0" />
+			<TRANSLATION x="7" y="2" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="peca" />
 			</DESCENDANTS>
