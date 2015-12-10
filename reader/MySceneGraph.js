@@ -77,44 +77,38 @@ MySceneGraph.prototype.onXMLReady=function() {
 		return;
 	}
 	
-	this.loadedOk=true;
+	this.loadedOk = true;
 	
 	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
 	this.scene.onGraphLoaded();
 };
 
-
 /*
- * Method that parses translate
+ * Method that parses translation
  */
 
- MySceneGraph.prototype.parseTranslate = function(element) {
+MySceneGraph.prototype.parseTranslation = function(element) {
+	var arr = [];
 
- 	var arr = [];
+	arr['x'] = this.reader.getFloat(element, 'x', true);
+	arr['y'] = this.reader.getFloat(element, 'y', true);
+	arr['z'] = this.reader.getFloat(element, 'z', true);
 
- 	arr['x'] = this.reader.getFloat(element, 'x', true);
- 	arr['y'] = this.reader.getFloat(element, 'y', true);
- 	arr['z'] = this.reader.getFloat(element, 'z', true);
+	for(var e in arr)
+		if(arr.hasOwnProperty(e))
+			if(typeof(arr[e]) != "number")
+ 				console.error('Error parsing ' + e + ' in parseTranslation');
 
- 	for(var e in arr){
- 		if(arr.hasOwnProperty(e)){
- 			if(typeof(arr[e]) != "number")
- 				console.error('Error parsing ' + e + ' in parseTranslate');
- 		}
- 	}
-
- 	arr['type'] = 'translation';
+ 	arr['type'] = "translation";
 
  	return arr;
- };
-
+};
 
 /*
  * Method that parses rotation 
  */
  
  MySceneGraph.prototype.parseRotation = function(element) {
-
  	var arr = [];
 
  	arr['axis'] = this.reader.getString(element, 'axis', true);
@@ -189,16 +183,16 @@ MySceneGraph.prototype.onXMLReady=function() {
 
  	console.log("\nINITIALS:");
 
- 	this.initials={};
+ 	this.initials = {};
 
- 	var elems =  rootElement.getElementsByTagName('INITIALS');
+ 	var elems = rootElement.getElementsByTagName('INITIALS');
  	if(elems == null) return "Initials element is missing!";
  	if(elems.length != 1) return "More than one 'initials' elements found. Expected only one!";
 
  	var init = elems[0];
 
 	//Frustum
-	var elems =  rootElement.getElementsByTagName('frustum');
+	var elems = rootElement.getElementsByTagName('frustum');
 	if(elems == null) return "Frustum element is missing!";
 	if(elems.length != 1) return "More than one 'frustum' elements found. Expected only one!";
 	
@@ -208,11 +202,11 @@ MySceneGraph.prototype.onXMLReady=function() {
 	if(isNaN(this.initials.frustum["far"])) return "Invalid frustum far!";
 	
 	//Camera
-	var elems =  rootElement.getElementsByTagName('camera');
+	var elems = rootElement.getElementsByTagName('camera');
 	if(elems == null) return "camera element is missing!";
 	if(elems.length != 1) return "More than one 'camera' elements found. Expected only one!";
 	
-	this.initials['camera'] = this.parseTranslate(elems[0]);    
+	this.initials['camera'] = this.parseTranslation(elems[0]);    
 	
 	if(this.initials.camera["x"] == undefined) return "Invalid camera x!";
 	if(this.initials.camera["y"] == undefined) return "Invalid camera y!";
@@ -223,11 +217,11 @@ MySceneGraph.prototype.onXMLReady=function() {
 	if(isNaN(this.initials.camera["z"])) return "Invalid camera z!";
 	
 	//Translate
-	var elems =  rootElement.getElementsByTagName('translation');
+	var elems = rootElement.getElementsByTagName('translation');
 	if(elems == null) return "translation element is missing!";
 	if(elems.length != 1) return "More than one 'translation' elements found. Expected only one!";
 	
-	this.initials['translation'] = this.parseTranslate(elems[0]);    
+	this.initials['translation'] = this.parseTranslation(elems[0]);    
 	
 	if(this.initials.translation["x"] == undefined) return "Invalid translation x!";
 	if(this.initials.translation["y"] == undefined) return "Invalid translation y!";
@@ -238,7 +232,7 @@ MySceneGraph.prototype.onXMLReady=function() {
 	if(isNaN(this.initials.translation["z"])) return "Invalid translation z!";
 
 	//Rotation
-	var elems =  rootElement.getElementsByTagName('rotation');
+	var elems = rootElement.getElementsByTagName('rotation');
 	if(elems == null) return "rotation element is missing!";
 	if(elems.length != 3) return "Wrong number of 'rotation' elements found. Expected exactly 3!";
 	
@@ -251,7 +245,7 @@ MySceneGraph.prototype.onXMLReady=function() {
 	if(isNaN(this.initials['rotate1'].angle)) return "Invalid rotation value!";
 
 	//Scale
-	var elems =  rootElement.getElementsByTagName('scale');
+	var elems = rootElement.getElementsByTagName('scale');
 	if(elems == null) return "scale element is missing!";
 	if(elems.length != 1) return "More than one 'scale' elements found. Expected only one!";
 
@@ -262,13 +256,13 @@ MySceneGraph.prototype.onXMLReady=function() {
 	if(isNaN(this.initials['scale'].sz)) return "Invalid scale value!";
 	
 	//Reference
-	var elems =  rootElement.getElementsByTagName('reference');
+	var elems = rootElement.getElementsByTagName('reference');
 	if(elems == null) return "reference element is missing!";
 	if(elems.length != 1) return "More than one 'reference' elements found. Expected only one!";
 
 	var reference = elems[0];
 
-	this.initials.reference=this.reader.getFloat(reference,'length',true);
+	this.initials.reference = this.reader.getFloat(reference,'length',true);
 
 	if(isNaN(this.initials.reference)) return "ERROR! Value of reference invalid! Expected float, found a element different than a number!";
 	
@@ -279,9 +273,9 @@ MySceneGraph.prototype.onXMLReady=function() {
  * Method that parses elements of ANIMATIONS tag and stores information in a data structure
  */ 
 
- MySceneGraph.prototype.parseAnimations= function(rootElement) {
+MySceneGraph.prototype.parseAnimations= function(rootElement) {
 
- 	console.log("\nANIMATIONS:");
+	console.log("\nANIMATIONS:");
 
  	var elems = rootElement.getElementsByTagName('ANIMATIONS');
 
@@ -299,13 +293,13 @@ MySceneGraph.prototype.onXMLReady=function() {
  	}
 
  	console.log(this.animations);
- };
+};
 
 /*
  * Method that parses each animation
  */
 
- MySceneGraph.prototype.parseAnimation = function(element) {
+MySceneGraph.prototype.parseAnimation = function(element) {
 
  	var animation = {};
 
@@ -320,7 +314,7 @@ MySceneGraph.prototype.onXMLReady=function() {
  		animation['rotang'] = this.reader.getFloat(element, 'rotang', true);
 
  		var coords = this.reader.getString(element,"center",true);
- 		var center= coords.trim().split(/\s+/);
+ 		var center = coords.trim().split(/\s+/);
  		var centerPoints = [];
 
  		centerPoints.push(vec3.fromValues(center[0], center[1], center[2]));
@@ -341,19 +335,18 @@ MySceneGraph.prototype.onXMLReady=function() {
 
  			ctrPoints.push(vec3.fromValues(x,y,z));
  		}
-
  		animation['control_points'] = ctrPoints;
  	} else
- 	return "Invalid type of animation!";
+ 		return "Invalid type of animation!";
 
  	return animation;
- };
+};
 
 /*
  * Method that parses elements of ILLUMINATION tag and stores information in a data structure
  */
 
- MySceneGraph.prototype.parseIllumination = function(rootElement) {
+MySceneGraph.prototype.parseIllumination = function(rootElement) {
 
  	console.log("\nILLUMINATION:");
 
@@ -361,16 +354,20 @@ MySceneGraph.prototype.onXMLReady=function() {
 
  	var illuminations = rootElement.getElementsByTagName('ILLUMINATION');
 
- 	if(illuminations == null) return "Illumination element is missing!";
- 	if(illuminations.length != 1) return "More than one 'illumination' elements found. Expected only one!";
+ 	if(illuminations == null)
+ 		return "Illumination element is missing!";
+ 	if(illuminations.length != 1)
+ 		return "More than one 'illumination' elements found. Expected only one!";
 
  	var illuminationElems = illuminations[0];
 
 	//ambient
 	var ambients = illuminationElems.getElementsByTagName("ambient");
 	
-	if(ambients == null) return "Ambient values missing!";
-	if(ambients.length != 1) return "More than one 'ambient' elements found. Expected only one!";
+	if(ambients == null)
+		return "Ambient values missing!";
+	if(ambients.length != 1)
+		return "More than one 'ambient' elements found. Expected only one!";
 
 	var ambient = ambients[0];
 	
@@ -383,8 +380,10 @@ MySceneGraph.prototype.onXMLReady=function() {
 	//background
 	var backgrounds = illuminationElems.getElementsByTagName("background");
 	
-	if(backgrounds == null) return "Backgrounds values missing!";
-	if(backgrounds.length != 1) return "More than one 'backgrounds' element found. Expected only one!";
+	if(backgrounds == null)
+		return "Backgrounds values missing!";
+	if(backgrounds.length != 1)
+		return "More than one 'backgrounds' element found. Expected only one!";
 
 	var background = backgrounds[0];
 	
@@ -395,29 +394,34 @@ MySceneGraph.prototype.onXMLReady=function() {
 	this.illu.background["a"] = this.reader.getFloat(background, "a", true);
 
 	console.log(this.illu);
-}
+};
 
 /*
  * Method that parses elements of LIGHTS tag and stores information in a data structure
  */
  
- MySceneGraph.prototype.parseLights = function(rootElement) {
+MySceneGraph.prototype.parseLights = function(rootElement) {
 
  	console.log("\nLIGHTS:");
 
  	this.lights = {};
 
  	var lights = rootElement.getElementsByTagName("LIGHTS");
- 	if(lights == null) return "light values missing";
- 	if(lights.length != 1) return "0 or more lights were found";
+
+ 	if(lights == null)
+ 		return "light values missing";
+ 	if(lights.length != 1)
+ 		return "0 or more lights were found";
 
  	var first_lights = lights[0];
 
 	//LIGHT
 	var light = first_lights.getElementsByTagName("LIGHT");
-	if(light == null) return "light values missing";
-	if(light.length < 1) return "0 light elements were found";
 
+	if(light == null)
+		return "light values missing";
+	if(light.length < 1)
+		return "0 light elements were found";
 	
 	for(var i=0; i<light.length; i++) {
 		var currLight = {};
@@ -470,6 +474,7 @@ MySceneGraph.prototype.onXMLReady=function() {
 
 		this.lights[currLight["id"]]=currLight;
 	}
+
 	console.log(this.lights);	
 };
 
@@ -477,72 +482,78 @@ MySceneGraph.prototype.onXMLReady=function() {
  * Method that parses elements of TEXTURES tag and stores information in a data structure
  */
  
- MySceneGraph.prototype.parseTextures = function(rootElement) {
+MySceneGraph.prototype.parseTextures = function(rootElement) {
 
  	console.log("\nTEXTURES:");
 
  	this.textures = {};
 
  	var textures = rootElement.getElementsByTagName("TEXTURES");
- 	if(textures == null) return "Textures element missing!";
- 	if(textures.length != 1) return "More than one 'TEXTURES' element found. Expected only one!";
+ 	if(textures == null)
+ 		return "Textures element missing!";
+ 	if(textures.length != 1)
+ 		return "More than one 'TEXTURES' element found. Expected only one!";
 
  	var first_textures = textures[0];
 
-
 	//Texture
 	var texture = first_textures.getElementsByTagName("TEXTURE");
-	if(texture == null) return "light values missing";
-	if(texture.length < 1) return "0 light elements were found";
+	if(texture == null)
+		return "light values missing";
+	if(texture.length < 1)
+		return "0 light elements were found";
 
-	for(var i=0; i<texture.length; i++) {
+	for(var i = 0; i<texture.length; i++) {
 		var currText = {};
 		var iterText = texture[i];
 
-	//stores ids
-	currText["id"] = this.reader.getString(iterText,"id",true);
+		//stores ids
+		currText["id"] = this.reader.getString(iterText,"id",true);
 
-	//path
-	var path = iterText.getElementsByTagName("file");
-	var file = path[0];
-	currText["file"] = this.reader.getString(file,"path",true);
+		//path
+		var path = iterText.getElementsByTagName("file");
+		var file = path[0];
+		currText["file"] = this.reader.getString(file,"path",true);
 
-	//amplif_factor
-	var amplif_factor = iterText.getElementsByTagName("amplif_factor");
-	var factor = amplif_factor[0];
+		//amplif_factor
+		var amplif_factor = iterText.getElementsByTagName("amplif_factor");
+		var factor = amplif_factor[0];
 
-	currText["amplif_factor"]={};
-	currText["amplif_factor"]['s']=this.reader.getFloat(factor,'s',true);
-	currText["amplif_factor"]['t']=this.reader.getFloat(factor,'t',true);
-	
-	this.textures[currText["id"]]=currText;
-}
+		currText["amplif_factor"] = {};
+		currText["amplif_factor"]['s']=this.reader.getFloat(factor,'s',true);
+		currText["amplif_factor"]['t']=this.reader.getFloat(factor,'t',true);
 
-console.log(this.textures);
+		this.textures[currText["id"]]=currText;
+	}
 
+	console.log(this.textures);
 };
 
 /*
  * Method that parses elements of MATERIALS tag and stores information in a data structure
  */
  
- MySceneGraph.prototype.parseMaterials = function(rootElement) {
+MySceneGraph.prototype.parseMaterials = function(rootElement) {
 
  	console.log("\nMATERIALS:");
 
  	this.materials = {};	
 
  	var materials = rootElement.getElementsByTagName("MATERIALS");
- 	if(materials == null) return "Materials element missing!";
- 	if(materials.length != 1) return "More than one 'MATERIALS' element found. Expected only one!";
+ 	if(materials == null)
+ 		return "Materials element missing!";
+ 	if(materials.length != 1)
+ 		return "More than one 'MATERIALS' element found. Expected only one!";
 
  	var first_materials = materials[0];
 
 	//Material
 	
 	var material = first_materials.getElementsByTagName("MATERIAL");
-	if(material == null) return "Material element missing!";
-	if(material.length < 1) return "Zero 'Material' elements were found. Expected at least one!";
+	if(material == null)
+		return "Material element missing!";
+	if(material.length < 1)
+		return "Zero 'Material' elements were found. Expected at least one!";
 
 	for(var i=0; i<material.length; i++) {
 		var currMaterial = {};
@@ -557,15 +568,15 @@ console.log(this.textures);
 		var valor = shininess[0];
 		currMaterial["shininess"] = this.reader.getString(valor,"value",true);
 
-		 //Specular
-		 var speculars = iterMaterial.getElementsByTagName("specular");
-		 var specular = speculars[0];
+		//Specular
+		var speculars = iterMaterial.getElementsByTagName("specular");
+		var specular = speculars[0];
 
-		 currMaterial["specular"]={};
-		 currMaterial["specular"]["r"] = this.reader.getFloat(specular, "r", true);
-		 currMaterial["specular"]["g"] = this.reader.getFloat(specular, "g", true);
-		 currMaterial["specular"]["b"] = this.reader.getFloat(specular, "b", true);
-		 currMaterial["specular"]["a"] = this.reader.getFloat(specular, "a", true);
+		currMaterial["specular"]={};
+		currMaterial["specular"]["r"] = this.reader.getFloat(specular, "r", true);
+		currMaterial["specular"]["g"] = this.reader.getFloat(specular, "g", true);
+		currMaterial["specular"]["b"] = this.reader.getFloat(specular, "b", true);
+		currMaterial["specular"]["a"] = this.reader.getFloat(specular, "a", true);
 
 		//diffuse
 		var diffuses = iterMaterial.getElementsByTagName("diffuse");
@@ -606,7 +617,7 @@ console.log(this.textures);
  * Method that parses elements of LEAVES tag and stores information in a data structure
  */
  
- MySceneGraph.prototype.parseLeaves = function(rootElement) {
+MySceneGraph.prototype.parseLeaves = function(rootElement) {
 
  	console.log("\nLEAVES:");
 
@@ -624,14 +635,13 @@ console.log(this.textures);
  	}
 
  	console.log(this.leaves);	
- };
+};
 
 /*
  * Method that parses each leaf
  */
 
- MySceneGraph.prototype.parseLeaf = function(element) {
-
+MySceneGraph.prototype.parseLeaf = function(element) {
  	var leaf = {};
  	var tempArgs;
 
@@ -659,20 +669,24 @@ console.log(this.textures);
 
     	leaf['control_points'] = ctrPoints;
     } 
-    else if ( leaf['type'] == "plane" ) { // Parse plane leaf
+    // Parse plane leaf
+    else if ( leaf['type'] == "plane" ) {
     	leaf['parts'] = this.reader.getFloat(element, 'parts', true);
     }
-    else if( leaf['type'] == "terrain" ) { // Parse terrain leaf
+    // Parse terrain leaf
+    else if( leaf['type'] == "terrain" ) {
     	leaf["texture"] = this.reader.getString(element, 'texture', true);
     	leaf["heightmap"] = this.reader.getString(element, 'heightmap', true);
-	} else { // Parse all other leaves that have args as attribute
+	}
+	// Parse all other leaves that have args as attribute
+	else {
 		tempArgs = this.reader.getString(element, 'args', true);
 		leaf['args'] = tempArgs.split(' ');
 
 		for( var i = 0; i < leaf['args'].length; i++ ) {
 			leaf['args'][i] = parseFloat(leaf['args'][i]);
 		}
-	}  
+	}
 	
 	return leaf;
 };
@@ -681,7 +695,7 @@ console.log(this.textures);
  * Method that parses elements of NODES tag and stores information in a data structure
  */
  
- MySceneGraph.prototype.parseNodes= function(rootElement) {
+MySceneGraph.prototype.parseNodes= function(rootElement) {
 
  	var elems = rootElement.getElementsByTagName('NODES')[0];
  	if (elems == null)
@@ -702,14 +716,13 @@ console.log(this.textures);
  	}
 
  	console.log(this.nodes);
-
- };
+};
 
 /*
  * Method that parses each node
  */
 
- MySceneGraph.prototype.parseNode = function(element) {
+MySceneGraph.prototype.parseNode = function(element) {
 
  	var node = {};	
 
@@ -740,11 +753,11 @@ console.log(this.textures);
  	for(var i = j+2; i < element.children.length; i++) {
 
  		if(element.children[i].tagName === 'TRANSLATION') {
- 			var translation = this.parseTranslate(element.children[i]);
+ 			var translation = this.parseTranslation(element.children[i]);
  			mat4.translate(node["matrix"],node["matrix"],[translation["x"], translation["y"], translation["z"]]);
  		}
  		else if(element.children[i].tagName === 'ROTATION') {
- 			var rotation = this.parseRotation(element.children[i]);			
+ 			var rotation = this.parseRotation(element.children[i]);
  			var axis;
 
  			if(rotation["axis"] == 'x')
@@ -755,12 +768,12 @@ console.log(this.textures);
  				axis = [0,0,1];
 
  			mat4.rotate(node["matrix"],node["matrix"],rotation["angle"]*Math.PI/180.0, axis);
- 		}	
+ 		}
  		else if(element.children[i].tagName === 'SCALE'){
  			var scale = this.parseScale(element.children[i])
  			var scalem= [scale["sx"],scale["sy"],scale["sz"]];
  			mat4.scale(node["matrix"],node["matrix"],scalem);
- 		} 
+ 		}
  		else
  			break;
  	}
@@ -769,21 +782,22 @@ console.log(this.textures);
  	node['descendants'] = this.parseDescendants(element.children[i]);
 
  	return node;
- };
+};
 
 /*
  * Descendants Parser of node
  */ 
  
- MySceneGraph.prototype.parseDescendants = function(element) {
-
+MySceneGraph.prototype.parseDescendants = function(element) {
  	var descendants = [];
- 	for (var i = 0; i < element.children.length; i++) {
- 		descendants.push(this.reader.getString(element.children[i], 'id', true));
- 	}
 
+ 	for (var i = 0; i < element.children.length; i++)
+ 		descendants.push(this.reader.getString(element.children[i], 'id', true));
+		//TODO: if descendants[i] = "tabuleiro"...
+	
+	console.log(descendants);
  	return descendants;
- };
+};
 
 /*
  * Callback to be executed on any read error

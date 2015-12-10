@@ -5,7 +5,7 @@ function XMLscene() {
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
-id_pick = 0;
+id_pick = 1;
 
 XMLscene.prototype.init = function (application) {
 
@@ -18,13 +18,13 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
 
-	this.axis=new CGFaxis(this);
+	this.axis = new CGFaxis(this);
 	this.loadedOk = false;
 	this.interface = null;
 	
 	this.setUpdatePeriod(50);
 
-	// set Picking to true
+	// Set Picking to true
 	this.setPickEnabled(true);
 
 	this.nodes = [];
@@ -34,22 +34,6 @@ XMLscene.prototype.setInterface = function (interface) {
 	this.interface = interface;
 }
 
-// Initialization of the Camera
-XMLscene.prototype.init_Cameras = function () {
-	var near =this.graph.initials.frustum["near"];
-	var far = this.graph.initials.frustum["far"];
-	if(near == 0)
-		near = 0.1;
-	var camera_x =this.graph.initials.camera["x"];
-	var camera_y = this.graph.initials.camera["y"];
-	var camera_z = this.graph.initials.camera["z"];
-	console.log(camera_x);
-	console.log(camera_y);
-	console.log(camera_z);
-	this.camera = new CGFcamera(0.4, near, far, vec3.fromValues(camera_x, camera_y, camera_z), vec3.fromValues(0, 0, 0));
-	this.interface.setActiveCamera(this.camera);
-};
-
 XMLscene.prototype.setDefaultAppearance = function () {
 	this.setAmbient(0.4, 0.4, 0.4, 1.0);
 	this.setDiffuse(0.3, 0.3, 0.3, 1.0);
@@ -57,7 +41,28 @@ XMLscene.prototype.setDefaultAppearance = function () {
 	this.setShininess(10.0);
 };
 
-// Initialization of the Initial values
+/*
+ *  Initialization of the Camera
+ */
+XMLscene.prototype.init_Cameras = function () {
+	var near =this.graph.initials.frustum["near"];
+	var far = this.graph.initials.frustum["far"];
+
+	// Se o atributo near for colocado a 0, uma vez que não pode ser 0, fica 0.1
+	if(near == 0)
+		near = 0.1;
+
+	var camera_x =this.graph.initials.camera["x"];
+	var camera_y = this.graph.initials.camera["y"];
+	var camera_z = this.graph.initials.camera["z"];
+
+	this.camera = new CGFcamera(0.4, near, far, vec3.fromValues(camera_x, camera_y, camera_z), vec3.fromValues(0, 0, 0));
+	this.interface.setActiveCamera(this.camera);
+};
+
+/*
+ *  Initialization of the Initial values
+ */
 XMLscene.prototype.init_Initials = function () {
     //-> reference, build new axis
     this.initials = this.graph.initials;
@@ -66,63 +71,56 @@ XMLscene.prototype.init_Initials = function () {
 	this.initialMatrix = mat4.create();
 	
 	mat4.identity(this.initialMatrix);
-	mat4.translate(
-		this.initialMatrix,
-		this.initialMatrix,
-		[
-		this.initials.translation.x,
-		this.initials.translation.y,
-		this.initials.translation.z
-		]
-		);
+	mat4.translate(this.initialMatrix, this.initialMatrix, [this.initials.translation.x, this.initials.translation.y, this.initials.translation.z]);
 
-	mat4.rotate(
-		this.initialMatrix,
-		this.initialMatrix,
-		this.initials.rotate1.angle * Math.PI / 180,
-		[
-		this.initials.rotate1.axis == "x" ? 1 : 0,
-		this.initials.rotate1.axis == "y" ? 1 : 0,
-		this.initials.rotate1.axis == "z" ? 1 : 0
-		]
-		);
+	mat4.rotate(this.initialMatrix, this.initialMatrix, this.initials.rotate1.angle * Math.PI / 180, 
+				[
+					this.initials.rotate1.axis == "x" ? 1 : 0,
+					this.initials.rotate1.axis == "y" ? 1 : 0,
+					this.initials.rotate1.axis == "z" ? 1 : 0
+				]
+	);
 
-	mat4.rotate(
-		this.initialMatrix,
-		this.initialMatrix,
-		this.initials.rotate2.angle * Math.PI / 180,
-		[
-		this.initials.rotate2.axis == "x" ? 1 : 0,
-		this.initials.rotate2.axis == "y" ? 1 : 0,
-		this.initials.rotate2.axis == "z" ? 1 : 0
-		]
-		);
+	mat4.rotate(this.initialMatrix,	this.initialMatrix,	this.initials.rotate2.angle * Math.PI / 180,
+				[
+					this.initials.rotate2.axis == "x" ? 1 : 0,
+					this.initials.rotate2.axis == "y" ? 1 : 0,
+					this.initials.rotate2.axis == "z" ? 1 : 0
+				]
+	);
 
-	mat4.rotate(
-		this.initialMatrix,
-		this.initialMatrix,
-		this.initials.rotate3.angle * Math.PI / 180,
-		[
-		this.initials.rotate3.axis == "x" ? 1 : 0,
-		this.initials.rotate3.axis == "y" ? 1 : 0,
-		this.initials.rotate3.axis == "z" ? 1 : 0
-		]
-		);
+	mat4.rotate(this.initialMatrix,	this.initialMatrix,	this.initials.rotate3.angle * Math.PI / 180,
+				[
+					this.initials.rotate3.axis == "x" ? 1 : 0,
+					this.initials.rotate3.axis == "y" ? 1 : 0,
+					this.initials.rotate3.axis == "z" ? 1 : 0
+				]
+	);
 
-	mat4.scale(
-		this.initialMatrix,
-		this.initialMatrix,
-		[
-		this.initials.scale.sx,
-		this.initials.scale.sy,
-		this.initials.scale.sz
-		]
-		);
+	mat4.scale(this.initialMatrix, this.initialMatrix,[this.initials.scale.sx, this.initials.scale.sy, this.initials.scale.sz]);
+
 };
 
-// Initialization of Illumination
-XMLscene.prototype.init_Illumination = function () {
+/*
+ *  Initialization of Animations
+ */
+XMLscene.prototype.init_Animations = function() {
+	this.animationsobjects = [];
 
+	for( var i in this.graph.animations ) {	
+		var anim = this.graph.animations[i];
+
+		if( anim["type"] == "linear" )
+			this.animationsobjects[i] = new LinearAnimation(this, anim['span'], anim['control_points']);
+		else if( anim["type"] == "circular" )
+			this.animationsobjects[i] = new CircularAnimation(this, anim['span'], anim['center'], anim['startang'], anim['rotang'], anim['radius']);
+	}
+}
+
+/*
+ *  Initialization of Illumination
+ */
+XMLscene.prototype.init_Illumination = function () {
 	//-> ambient
 	var amb_r = this.graph.illu.ambient["r"];
 	var amb_g = this.graph.illu.ambient["g"];
@@ -132,10 +130,11 @@ XMLscene.prototype.init_Illumination = function () {
 
 	//-> background color
 	this.gl.clearColor(this.graph.illu.background["r"],this.graph.illu.background["g"],this.graph.illu.background["b"],this.graph.illu.background["a"]);
-
 };
 
-// Initialization of Lights
+/*
+ *  Initialization of Lights
+ */
 XMLscene.prototype.init_Lights = function () {
 	this.lights_enable = [];
 
@@ -180,12 +179,14 @@ XMLscene.prototype.init_Lights = function () {
 		this.lights[i].setVisible(true);
 		this.lights[i].update();
 		this.lights_enable[current_id] = this.graph.lights[current_id].enable;
-
 	}
+
 	this.interface.create_interface();
 };
 
-// Initialization of Textures
+/*
+ *  Initialization of Textures
+ */
 XMLscene.prototype.init_Textures = function () {
 	var num_textures_id = 0;
 	this.textures = [];
@@ -203,10 +204,12 @@ XMLscene.prototype.init_Textures = function () {
 
 };
 
-// Initialization of Materials
+/*
+ *  Initialization of Materials
+ */
 XMLscene.prototype.init_Materials = function () {
+	this.materials = [];
 
-	this.materials=[];
 	for (var i in this.graph.materials) {
 		var currAppearance = new CGFappearance(this);
 
@@ -222,79 +225,84 @@ XMLscene.prototype.init_Materials = function () {
 		currAppearance.setDiffuse(diff["r"], diff["g"], diff["b"], diff["a"]);
 		currAppearance.setAmbient(amb["r"], amb["g"], amb["b"], amb["a"]);
 		currAppearance.setEmission(emi["r"], emi["g"], emi["b"], emi["a"]);
-		currAppearance.id=id;
+		currAppearance.id = id;
 
-		this.materials[i]=currAppearance;
+		this.materials[i] = currAppearance;
 	}
 };
 
-// Initialization of Leaves
+/*
+ *  Initialization of Leaves
+ */
 XMLscene.prototype.init_Leaves = function () {
-
 	this.leaves = [];
 
-	for( var i in this.graph.leaves){
+	for( var i in this.graph.leaves ) {
 		var graph_leaf = this.graph.leaves[i];
+		var argums = graph_leaf.args;
 
-		if(graph_leaf.type == 'cylinder')
-			this.leaves[i] = new MyCylinder(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
-		else if(graph_leaf.type == 'rectangle')
-			this.leaves[i] = new MyRectangle(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3]);
-		else if(graph_leaf.type == 'triangle')
-			this.leaves[i] = new MyTriangle(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4], graph_leaf.args[5], graph_leaf.args[6], graph_leaf.args[7], graph_leaf.args[8]);
-		else if(graph_leaf.type == 'sphere')
-			this.leaves[i] = new MySphere(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
-		else if(graph_leaf.type == 'diamond')
-			this.leaves[i] = new MyDiamond(this, graph_leaf.args[0], graph_leaf.args[1]);
-		else if(graph_leaf.type == 'sims')
-			this.leaves[i] = new MySims(this, graph_leaf.args[0]);
-		else if(graph_leaf.type == 'diamond_cone')
-			this.leaves[i] = new MyDiamond_cone(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
-		else if(graph_leaf.type == 'cone')
-			this.leaves[i] = new MyCone(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
-		else if(graph_leaf.type == 'piramide')
-			this.leaves[i] = new MyPiramide(this, graph_leaf.args[0]);
-		else if(graph_leaf.type == 'ring')
-			this.leaves[i] = new MyRing(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2], graph_leaf.args[3], graph_leaf.args[4]);
-		else if(graph_leaf.type == 'annulus')
-			this.leaves[i] = new MyAnnulus(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
-		else if(graph_leaf.type == 'ellipse')
-			this.leaves[i] = new MyEllipse(this, graph_leaf.args[0], graph_leaf.args[1], graph_leaf.args[2]);
-		else if(graph_leaf.type == 'patch')
-			this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
-		else if(graph_leaf.type == 'plane')
-			this.leaves[i] = new MyPlane(this, graph_leaf.parts);
-		else if(graph_leaf.type == 'terrain')
-			this.leaves[i] = new MyTerrain(this, graph_leaf.texture, graph_leaf.heightmap);
+		switch(graph_leaf.type) {
+			case "cylinder":
+				this.leaves[i] = new MyCylinder(this, argums[0], argums[1], argums[2], argums[3], argums[4]);
+				break;
+			case "rectangle":
+				this.leaves[i] = new MyRectangle(this, argums[0], argums[1], argums[2], argums[3]);
+				break;
+			case "triangle":
+				this.leaves[i] = new MyTriangle(this, argums[0], argums[1], argums[2], argums[3], argums[4], argums[5], argums[6], argums[7], argums[8]);
+				break;
+			case "sphere":
+				this.leaves[i] = new MySphere(this, argums[0], argums[1], argums[2]);
+				break;
+			case "diamond":
+				this.leaves[i] = new MyDiamond(this, argums[0], argums[1]);
+				break;
+			case "sims":
+				this.leaves[i] = new MySims(this, argums[0]);
+				break;
+			case "diamond_cone":
+				this.leaves[i] = new MyDiamond_cone(this, argums[0], argums[1], argums[2], argums[3], argums[4]);
+				break;
+			case "cone":
+				this.leaves[i] = new MyCone(this, argums[0], argums[1], argums[2], argums[3], argums[4]);
+				break;
+			case "piramide":
+				this.leaves[i] = new MyPiramide(this, argums[0]);
+				break;
+			case "ring":
+				this.leaves[i] = new MyRing(this, argums[0], argums[1], argums[2], argums[3], argums[4]);
+				break;
+			case "annulus":
+				this.leaves[i] = new MyAnnulus(this, argums[0], graph_leaf.args[1], graph_leaf.args[2]);
+				break;
+			case "ellipse":
+				this.leaves[i] = new MyEllipse(this, argums[0], argums[1], argums[2]);
+				break;
+			case "patch":
+				this.leaves[i] = new MyPatch(this, graph_leaf.order, graph_leaf.partsU, graph_leaf.partsV, graph_leaf.control_points);
+				break;
+			case "plane":
+				this.leaves[i] = new MyPlane(this, graph_leaf.parts);
+				break;
+			case "terrain":
+				this.leaves[i] = new MyTerrain(this, graph_leaf.texture, graph_leaf.heightmap);
+				break;
+		}
 	}
-
 };
 
-// Initialization of Animations
-XMLscene.prototype.init_Animations = function() {
-	
-	this.animationsobjects = [];
-
-	for(var i in this.graph.animations) {	
-		var anim = this.graph.animations[i];
-
-		if( anim["type"] == "linear" )
-			this.animationsobjects[i] = new LinearAnimation(this, anim['span'], anim['control_points']);
-		else if( anim["type"] == "circular" )
-			this.animationsobjects[i] = new CircularAnimation(this, anim['span'], anim['center'], anim['startang'], anim['rotang'], anim['radius']);
-	}
-}
-
-// Initialization of Nodes
+/*
+ *  Initialization of Nodes
+ */
 XMLscene.prototype.init_Nodes = function() {
-	var main_id = this.graph.root_id;
-	this.primitivas=[];
-	this.nodes=this.graph.nodes;
-	
+	this.primitivas = [];
 
-    var root_node = this.graph.nodes[main_id]; //node.js
+	this.nodes = this.graph.nodes;
 
-    root_node["matrix"]=this.initialMatrix;
+    var root_node = this.graph.nodes[this.graph.root_id]; //node.js
+
+    root_node["matrix"] = this.initialMatrix;
+
     this.pushMatrix();
     this.itDescend(root_node, root_node["texture"], root_node["material"], root_node["matrix"]);
     this.popMatrix();
@@ -317,24 +325,20 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
    	var nextMatrix = mat4.create();
    	mat4.multiply(nextMatrix, curr_Matrix, node.matrix);
 
-
-   	if(typeof node.animations != "undefined"){
-   		for(var l  in node.animations){
-
+   	if( typeof node.animations != "undefined") {
+   		for(var l in node.animations) {
    			node.animations[l]= this.animationsobjects[node.animations[l]].clone();
    		}
-
-
    	}
 
-   	for (var i = 0; i < node.descendants.length; i++) {
+   	for( var i = 0; i < node.descendants.length; i++ ) {
    		var num_nodes = 0;
    		var index_no = 0;
    		var nextNode_id = node.descendants[i];
    		var nextNode;
 
    		for ( var no in this.graph.nodes ) {
-   			if( no == nextNode_id ){
+   			if( no == nextNode_id ) {
    				nextNode = this.graph.nodes[no];
    				break;
    			}
@@ -378,13 +382,13 @@ XMLscene.prototype.itDescend = function(node, currTexture_ID, currMaterial_ID, c
 
    };
 
-   function Primitive(id) {
-   	this.id = id;
-   	this.texture = null;
-   	this.material = null;
-   	this.matrix = null;
-   	this.leaf = null;
-   }
+function Primitive(id) {
+	this.id = id;
+	this.texture = null;
+	this.material = null;
+	this.matrix = null;
+	this.leaf = null;
+}
 
 // Esta função é chamada na Interface.js
 XMLscene.prototype.Toggle_Light = function(id, turned_on) {
@@ -426,11 +430,10 @@ XMLscene.prototype.drawNodes = function (node) {
 	
 	this.multMatrix(node.matrix);
 
-	if(node.material != "null")
+	if(node.material != "null") {
 		this.materials[node.material].setTexture(this.textures[node.texture]);
-
-	if(node.material != "null")
 		this.materials[node.material].apply();
+	}		
 
 	for(var t in node.descendants) {
 		this.pushMatrix();
@@ -442,8 +445,8 @@ XMLscene.prototype.drawNodes = function (node) {
 					break;
 				}				
 			}			
-		}				
-
+		}
+		
 		if(node.descendants[t] == "patch") {
 			this.leaves[node.descendants[t]].display();
 		}
@@ -492,7 +495,7 @@ XMLscene.prototype.display = function () {
 		}
 
 		this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
-		id_pick = 0;
+		id_pick = 1;
 	};
 
 };

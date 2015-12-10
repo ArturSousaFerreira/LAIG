@@ -49,9 +49,6 @@ CircularAnimation.prototype.calculateMatrix = function(t) {
 	
 	this.current_time = Math.min(t - this.startTime, this.span);
 
-	console.log(this.current_time);
-	console.log(this.span);
-
 	if( this.current_time == this.span ) {
 		this.finish = true;
 		this.start = false;

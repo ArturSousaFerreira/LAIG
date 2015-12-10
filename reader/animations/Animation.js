@@ -4,8 +4,7 @@ function Animation(span, type) {
 
     this.startTime = -1;
 	
-	this.matrix = mat4.create();
-	
+	this.matrix = mat4.create();	
 }
 
 Animation.prototype.constructor = Animation;
