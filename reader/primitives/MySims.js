@@ -1,7 +1,8 @@
-function MySims(scene, slices) {
+function MySims(scene, slices, height) {
  	CGFobject.call(this, scene);
 	
 	this.slices = slices;
+	this.height = height;
 
  	this.initBuffers();
  };
@@ -16,8 +17,8 @@ function MySims(scene, slices) {
  	this.normals = [];
  	this.texCoords = [];
  	
-    this.vertices.push(0,-1,0);
-    this.vertices.push(0,1,0);    
+    this.vertices.push(0,-this.height/2,0);
+    this.vertices.push(0,this.height/2,0);    
     this.normals.push(0,0,1);
     this.normals.push(0,0,1);
     this.texCoords.push(0,0);

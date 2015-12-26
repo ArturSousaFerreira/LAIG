@@ -1,5 +1,5 @@
-function MyRectangle(scene,x1,y1,x2,y2){
-    CGFobject.call(this,scene);
+function MyRectangle(scene, x1, y1, x2, y2){
+    CGFobject.call(this, scene);
 
     this.x1 = x1;
     this.y1 = y1;
@@ -7,11 +7,11 @@ function MyRectangle(scene,x1,y1,x2,y2){
     this.x2 = x2;
     this.y2 = y2;
 
+
     this.initBuffers();
 }
 
 MyRectangle.prototype = Object.create(CGFobject.prototype);
-
 MyRectangle.prototype.constructor = MyRectangle;
 
 MyRectangle.prototype.initBuffers = function() {
@@ -42,6 +42,6 @@ MyRectangle.prototype.initBuffers = function() {
 		0, 1
 	];
 
-	this.primitiveType=this.scene.gl.TRIANGLES;
+	this.primitiveType = this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
 }

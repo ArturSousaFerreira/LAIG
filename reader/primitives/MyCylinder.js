@@ -1,5 +1,5 @@
 function MyCylinder(scene, height, bRadius, tRadius, stacks, slices) {
- 	CGFobject.call(this,scene);
+ 	CGFobject.call(this, scene);
 	
 	this.slices = slices;
 	this.stacks = stacks;

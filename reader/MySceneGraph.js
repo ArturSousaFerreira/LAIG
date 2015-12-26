@@ -3,7 +3,7 @@ function MySceneGraph(filename, scene) {
 	
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
-	scene.graph=this;
+	scene.graph = this;
 
 	// File reading 
 	this.reader = new CGFXMLreader();
@@ -13,15 +13,15 @@ function MySceneGraph(filename, scene) {
 	 * After the file is read, the reader calls onXMLReady on this object.
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
-	 
-	this.reader.open('scenes/'+filename, this);  
+	
+	this.reader.open('scenes/'+filename, this);
 }
 
 /*
  * Callback to be executed after successful reading
  */
  
-MySceneGraph.prototype.onXMLReady=function() {
+MySceneGraph.prototype.onXMLReady = function() {
 
  	console.log("\nXML Loaded!");
 
@@ -108,7 +108,7 @@ MySceneGraph.prototype.parseTranslation = function(element) {
  * Method that parses rotation 
  */
  
- MySceneGraph.prototype.parseRotation = function(element) {
+MySceneGraph.prototype.parseRotation = function(element) {
  	var arr = [];
 
  	arr['axis'] = this.reader.getString(element, 'axis', true);
@@ -133,7 +133,7 @@ MySceneGraph.prototype.parseTranslation = function(element) {
  * Method that parses scale
  */
  
- MySceneGraph.prototype.parseScale = function(element) {
+MySceneGraph.prototype.parseScale = function(element) {
 
  	var arr = [];
 
@@ -158,7 +158,7 @@ MySceneGraph.prototype.parseTranslation = function(element) {
  * Method that parses frustum element in INITIALS tag
  */
  
- MySceneGraph.prototype.parseFrustum = function(element) {
+MySceneGraph.prototype.parseFrustum = function(element) {
 
  	var arr = [];
 
@@ -179,7 +179,7 @@ MySceneGraph.prototype.parseTranslation = function(element) {
  * Method that parses elements of INITIALS tag and stores information in a data structure
  */
  
- MySceneGraph.prototype.parseInitials= function(rootElement) {
+MySceneGraph.prototype.parseInitials= function(rootElement) {
 
  	console.log("\nINITIALS:");
 
@@ -628,13 +628,13 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
 
  	this.leaves = {};
 
- 	for (var i=0; i < leaves_elements.children.length; i++) {
+ 	for (var i = 0; i < leaves_elements.children.length; i++) {
  		var leaf = leaves_elements.children[i];
 
  		this.leaves[leaf.id] = this.parseLeaf(leaf);
- 	}
+ 	} 	
 
- 	console.log(this.leaves);	
+ 	console.log(this.leaves);
 };
 
 /*
@@ -795,7 +795,6 @@ MySceneGraph.prototype.parseDescendants = function(element) {
  		descendants.push(this.reader.getString(element.children[i], 'id', true));
 		//TODO: if descendants[i] = "tabuleiro"...
 	
-	console.log(descendants);
  	return descendants;
 };
 

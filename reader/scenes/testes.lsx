@@ -50,7 +50,7 @@
 
 	<TEXTURES>
         <TEXTURE id="floor_pattern">
-            <file path="textures/floor.jpg" />
+            <file path="textures/floor_dirt.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="chair_pattern">
@@ -72,6 +72,7 @@
 
 
 	<LEAVES>
+		<LEAF id="cube" type="cube" args="1" />
 		<LEAF id="sims" type="sims" args="8 2 10" />
         <LEAF id="ring" type="ring" args="0.5 1 1 50 16" />
         <LEAF id="ellipse" type="ellipse" args="4 2 100" />
@@ -111,10 +112,9 @@
 
 		<NODE id="teste">
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />	
-			<SCALE sx="1" sy="0.35" sz="1" />
+			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="terrain" />
+				<DESCENDANT id="cube" />
 			</DESCENDANTS>
 		</NODE>
 

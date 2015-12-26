@@ -1,8 +1,8 @@
 <SCENE>
 
 	<INITIALS>
-		<frustum near="0" far="500" />
-		<camera x="0" y="20" z="20" />
+		<frustum near="1.5" far="500" />
+		<camera x="20" y="20" z="20" />
 		<translation x="0" y="0" z="0" />
 		<rotation axis="x" angle="0" />
 		<rotation axis="y" angle="0" />
@@ -45,7 +45,7 @@
             <specular r="1.0" g="0.92" b="0" a="1.0" />
             <diffuse r="0.3" g="0.25" b="0" a="1.0" />
             <ambient r="0.1" g="0.08" b="0" a="1.0" />
-        </LIGHT>        
+        </LIGHT>
     </LIGHTS>
 
 
@@ -94,10 +94,6 @@
             <file path="textures/steel.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
-        <TEXTURE id="tabuleiro">
-            <file path="textures/tabuleiro_pattern.jpg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
     </TEXTURES>
 
 
@@ -114,7 +110,33 @@
 
 	<LEAVES>
 		<LEAF id="rectangle" type="rectangle" args="0 0 1 1" />
-		<LEAF id="peca" type="cylinder" args="0.25 0.4 0.4 100 100" />
+		<LEAF id="triangle1" type="triangle" args="-0.2 0 0 -1.3 0 0 0 0 3" />
+        <LEAF id="triangle2" type="triangle" args="0 -0.5 0 -0.2 0 0 0 0 3" />
+        <LEAF id="triangle3" type="triangle" args="0.2 0 0 0 -0.5 0 0 0 3" />
+        <LEAF id="triangle4" type="triangle" args="1.3 0 0 0.2 0 0 0 0 3" />
+		<LEAF id="lamp_default_top" type="cylinder" args="0.7 0.6 0.4 20 20" />
+		<LEAF id="lamp_default_middle" type="cylinder" args="3 0.025 0.025 20 20" />
+		<LEAF id="lamp_default_bottom" type="cylinder" args="0.05 0.25 0.25 20 20" />
+		<LEAF id="flag_pole_leaf" type="cylinder" args="5 0.025 0.025 20 20" />
+		<LEAF id="patch" type="patch" order="3" partsU="20" partsV="20">           
+			<CONTROLPOINT x="-9" y="-6" z="0" w="1" />
+			<CONTROLPOINT x="-9" y="-2" z="0" w="1" />
+			<CONTROLPOINT x="-9" y="2" z="0" w="1" />
+			<CONTROLPOINT x="-9" y="6" z="0" w="1" />
+			<CONTROLPOINT x="-3" y="-6" z="4" w="1" />
+			<CONTROLPOINT x="-3" y="-2" z="4" w="1" />
+			<CONTROLPOINT x="-3" y="2" z="4" w="1" />
+			<CONTROLPOINT x="-3" y="6" z="4" w="1" />
+			<CONTROLPOINT x="3" y="-6" z="-4" w="1" />
+			<CONTROLPOINT x="3" y="-2" z="-4" w="1" />
+			<CONTROLPOINT x="3" y="2" z="-4" w="1" />
+			<CONTROLPOINT x="3" y="6" z="-4" w="1" />
+			<CONTROLPOINT x="9" y="-6" z="0" w="1" />
+			<CONTROLPOINT x="9" y="-2" z="0" w="1" />
+			<CONTROLPOINT x="9" y="2" z="0" w="1" />
+			<CONTROLPOINT x="9" y="6" z="0" w="1" />
+		</LEAF>
+		<LEAF id="grass_leaf" type="terrain" texture="textures/grass.jpg" heightmap="textures/grass_heightmap.jpg" />
 	</LEAVES>
 
 
@@ -125,78 +147,80 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="tabuleiro" />
+				<DESCENDANT id="environment" />
 			</DESCENDANTS>
 		</NODE>
-
-		<NODE id="tabuleiro">
+		
+		<NODE id="environment">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="0" z="0" />
 			<DESCENDANTS>
-				<DESCENDANT id="base" />
-				<DESCENDANT id="pecas" />
+				<DESCENDANT id="walls" />
+				<DESCENDANT id="floor" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="base">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="casa_branca" />
-				<DESCENDANT id="casa_preta" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="casa_branca">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
-			<SCALE sx="1" sy="0.1" sz="1" />
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="casa_preta">
+		<NODE id="walls">
 			<MATERIAL id="default" />
 			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="1" y="0" z="0" />
-			<SCALE sx="1" sy="0.1" sz="1" />			
 			<DESCENDANTS>
-				<DESCENDANT id="cube" />
+				<DESCENDANT id="wall_front" />
+				<DESCENDANT id="wall_side" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="pecas">
-			<MATERIAL id="default" />
+		<NODE id="wall_side">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />	
+			<ROTATION axis="y" angle="-90"/>
+			<SCALE sx="10" sy="6" sz="0"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_front">
+			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0.5" y="0.1" z="0.5" />
-			<ROTATION axis="x" angle="-90" />
+			<TRANSLATION x="10" y="0" z="0" />
+			<ROTATION axis="y" angle="180"/>
+			<SCALE sx="10" sy="6" sz="0"/>
 			<DESCENDANTS>
-				<DESCENDANT id="peca_branca" />
-				<DESCENDANT id="peca_preta" />
+				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="peca_branca">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
+		<NODE id="floor">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="peca" />
+				<DESCENDANT id="actual_floor" />
+				<DESCENDANT id="grass" />											
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="peca_preta">
+		<NODE id="actual_floor">
 			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
-			<TRANSLATION x="1" y="0" z="0" />
+			<TEXTURE id="floor_pattern" />
+			<ROTATION axis="x" angle="90"/>
+			<SCALE sx="10" sy="10" sz="0"/>
 			<DESCENDANTS>
-				<DESCENDANT id="peca" />
+				<DESCENDANT id="rectangle" />												
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="grass">
+			<MATERIAL id="default" />
+			<TEXTURE id="grass" />
+			<TRANSLATION x="5" y="0.0001" z="5" />
+			<SCALE sx="10" sy="0.35" sz="10"/>
+			<DESCENDANTS>
+				<DESCENDANT id="grass_leaf" />												
 			</DESCENDANTS>
 		</NODE>
 
 		<NODE id="cube">
-			<MATERIAL id="default" />
+			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 	           	<DESCENDANT id="face_top" />
@@ -209,7 +233,7 @@
 		</NODE>
 
   		<NODE id="face_top">
-      		<MATERIAL id="default" />
+      		<MATERIAL id="null" />
       		<TEXTURE id="null" />
       		<TRANSLATION x="0" y="1" z="0" />
       		<ROTATION axis="x" angle="90"/>

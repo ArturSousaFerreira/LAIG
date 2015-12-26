@@ -1,13 +1,24 @@
 <SCENE>
 
 	<LEAVES>
-		<LEAF id="rectangle" type="rectangle" args="0 0 1 1" />
-		<LEAF id="peca" type="cylinder" args="0.25 0.4 0.4 100 100" />
+		//<LEAF id="rectangle" type="rectangle" args="0 0 1 1" />
+		//<LEAF id="peca" type="cylinder" args="0.25 0.4 0.4 100 100" />
+		<LEAF id="sims" type="sims" args="4 2" />
 	</LEAVES>
 
 
 	<NODES>
+		<ROOT id="boardset" />
 
+		<NODE id="boardset">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="0" z="0" />
+			<DESCENDANTS>
+				<DESCENDANT id="tabuleiro" />
+			</DESCENDANTS>
+		</NODE>
+		
 		<NODE id="tabuleiro">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />

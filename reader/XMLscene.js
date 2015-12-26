@@ -30,9 +30,14 @@ XMLscene.prototype.init = function (application) {
 	this.nodes = [];
 };
 
+
+XMLscene.prototype.init_Board = function () {
+	this.tabuleiro = new Board(this);
+};
+
 XMLscene.prototype.setInterface = function (interface) {
 	this.interface = interface;
-}
+};
 
 XMLscene.prototype.setDefaultAppearance = function () {
 	this.setAmbient(0.4, 0.4, 0.4, 1.0);
@@ -44,15 +49,15 @@ XMLscene.prototype.setDefaultAppearance = function () {
 /*
  *  Initialization of the Camera
  */
-XMLscene.prototype.init_Cameras = function () {
-	var near =this.graph.initials.frustum["near"];
+XMLscene.prototype.init_Camera = function () {
+	var near = this.graph.initials.frustum["near"];
 	var far = this.graph.initials.frustum["far"];
 
 	// Se o atributo near for colocado a 0, uma vez que não pode ser 0, fica 0.1
 	if(near == 0)
 		near = 0.1;
 
-	var camera_x =this.graph.initials.camera["x"];
+	var camera_x = this.graph.initials.camera["x"];
 	var camera_y = this.graph.initials.camera["y"];
 	var camera_z = this.graph.initials.camera["z"];
 
@@ -258,7 +263,7 @@ XMLscene.prototype.init_Leaves = function () {
 				this.leaves[i] = new MyDiamond(this, argums[0], argums[1]);
 				break;
 			case "sims":
-				this.leaves[i] = new MySims(this, argums[0]);
+				this.leaves[i] = new MySims(this, argums[0],  argums[1]);
 				break;
 			case "diamond_cone":
 				this.leaves[i] = new MyDiamond_cone(this, argums[0], argums[1], argums[2], argums[3], argums[4]);
@@ -409,15 +414,17 @@ XMLscene.prototype.Toggle_Light = function(id, turned_on) {
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () {
+	this.init_Camera();
 	this.init_Initials();
+	this.init_Animations();
 	this.init_Illumination();
 	this.init_Lights();
-	this.init_Cameras();
 	this.init_Textures();
 	this.init_Materials();
-	this.init_Leaves();
-	this.init_Animations();
+	
+	this.init_Leaves();	
 	this.init_Nodes();
+	this.init_Board();
 
 	this.setUpdatePeriod(20);
 	
@@ -490,9 +497,10 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	
 	if (this.graph.loadedOk) {
-		for(var i in this.lights) {
+		for(var i in this.lights)
 			this.lights[i].update();
-		}
+
+		this.tabuleiro.display();			
 
 		this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
 		id_pick = 1;
