@@ -44,6 +44,8 @@ serialInclude([
     'tabuleiro/Board.js',
     'tabuleiro/Piece.js',
     'tabuleiro/Tile.js',
+    'tabuleiro/Jogo.js',
+    'tabuleiro/Jogador.js',
 main=function()
 {
 	// Standard application, scene and interface setup

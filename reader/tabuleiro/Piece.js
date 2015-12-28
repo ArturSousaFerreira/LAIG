@@ -1,6 +1,7 @@
-function Piece(scene, tile, texture) {
+function Piece(scene, color, tile, texture) {
 	this.scene = scene;
 	this.tile = tile;
+	this.color = color;
 
     this.geom = new PiecePrimitive(this.scene, 1.5, 0.4, 0.4, 100, 100, texture);
 }
@@ -15,6 +16,7 @@ Piece.prototype.display = function() {
 	this.scene.popMatrix();
 }
 
+Piece.prototype.setTile = function(newTile) {
+    this.tile = newTile;
+}
 
-
-//TODO: setTile, quando a peça muda de casa

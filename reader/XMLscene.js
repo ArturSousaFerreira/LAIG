@@ -31,8 +31,8 @@ XMLscene.prototype.init = function (application) {
 };
 
 
-XMLscene.prototype.init_Board = function () {
-	this.tabuleiro = new Board(this);
+XMLscene.prototype.init_Jogo = function () {
+	this.game = new Jogo(this);
 };
 
 XMLscene.prototype.setInterface = function (interface) {
@@ -424,7 +424,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 	
 	this.init_Leaves();	
 	this.init_Nodes();
-	this.init_Board();
+	this.init_Jogo();
 
 	this.setUpdatePeriod(20);
 	
@@ -502,7 +502,7 @@ XMLscene.prototype.display = function () {
 
 		this.pushMatrix();
 			this.translate(-4.5, 0.1, -4.5);
-			this.tabuleiro.display();
+			this.game.display();
 		this.popMatrix();
 
 		this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
@@ -532,31 +532,31 @@ XMLscene.prototype.logPicking = function () {
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
 			for (var i=0; i< this.pickResults.length; i++) {
-				var obj = this.pickResults[i][0];
-				if (obj) {
-					var customId = this.pickResults[i][1];				
-					console.log("Picked object: " + obj + ", with pick id " + customId);
-					if(customId != 0) {
-						for(g in this.tabuleiro.tiles) {
-							if( this.tabuleiro.tiles[g].selected == true ) {
-								this.tabuleiro.tiles[g].selected = false;
-								this.tabuleiro.tiles[g].geom.appearance.setTexture(this.tabuleiro.tiles[g].init_texture);
+				this.obj = this.pickResults[i][0];
+				if (this.obj) {
+					this.customId = this.pickResults[i][1];				
+					console.log("Picked object: " + this.obj + ", with pick id " + this.customId);
+					if(this.customId != 0) {
+						for(g in this.game.tabuleiro.tiles) {
+							if( this.game.tabuleiro.tiles[g].selected == true ) {
+								this.game.tabuleiro.tiles[g].selected = false;
+								this.game.tabuleiro.tiles[g].geom.appearance.setTexture(this.game.tabuleiro.tiles[g].init_texture);
 							}
 						}
-
 						if(this.pickResults[i][0].type == "Tile") {
-
-							console.log(this.pickResults[i][0]);
-							this.pickResults[i][0].selected = true;
-
-							this.pickResults[i][0].geom.appearance.setTexture(this.textures["flag"]);
+							for(l in this.game.tabuleiro.pieces) {
+								if(this.game.tabuleiro.pieces[l].tile.id == this.pickResults[i][0].id){
+									if(this.game.tabuleiro.pieces[l].color == this.game.getPlayertoPlay().color) {
+										this.pickResults[i][0].selected = true;
+										this.pickResults[i][0].geom.appearance.setTexture(this.textures["flag"]);
+									}
+								}
+							}						
 						}
-
-					}	
-					
+					}					
 				}
 			}
-			this.pickResults.splice(0,this.pickResults.length);
+			//this.pickResults.splice(0,this.pickResults.length);
 		}		
 	}
 }
