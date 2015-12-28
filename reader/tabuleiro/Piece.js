@@ -1,15 +1,20 @@
-function Piece(scene, tile) {
-    this.geom = new MyCylinder(this.scene, 1, this.texture);
+function Piece(scene, tile, texture) {
+	this.scene = scene;
+	this.tile = tile;
+
+    this.geom = new PiecePrimitive(this.scene, 1.5, 0.4, 0.4, 100, 100, texture);
 }
 
 Piece.prototype.constructor = Piece;
 
-Piece.prototype.init = function() {
-	this.geom = new CylinderPrimitive(this.scene, 3, 0.8, 0.8, 100, 100, this.texture);
+Piece.prototype.display = function() {
+    this.scene.pushMatrix();
+    this.scene.registerForPick(this.tile.id, this.tile);
+		this.scene.translate(this.tile.x, 1, this.tile.z);
+		this.geom.display();
+	this.scene.popMatrix();
 }
 
-Piece.prototype.display = function() {
-    this.geom.display();
-}
+
 
 //TODO: setTile, quando a peça muda de casa

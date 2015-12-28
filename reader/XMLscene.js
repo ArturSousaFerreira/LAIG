@@ -459,7 +459,7 @@ XMLscene.prototype.drawNodes = function (node) {
 		}
 
 		if(typeof this.graph.nodes[node.descendants[t]] == "undefined") {
-			this.registerForPick(id_pick++,this.leaves[node.descendants[t]]);
+			//this.registerForPick(id_pick++,this.leaves[node.descendants[t]]);
 			this.leaves[node.descendants[t]].display();
 		} else
 			this.drawNodes(this.nodes[node.descendants[t]]);
@@ -500,7 +500,10 @@ XMLscene.prototype.display = function () {
 		for(var i in this.lights)
 			this.lights[i].update();
 
-		this.tabuleiro.display();			
+		this.pushMatrix();
+			this.translate(-4.5, 0.1, -4.5);
+			this.tabuleiro.display();
+		this.popMatrix();
 
 		this.drawNodes(this.graph.nodes[this.graph.nodes.root]);
 		id_pick = 1;
@@ -525,6 +528,7 @@ XMLscene.prototype.update = function(currTime) {
 
 
 XMLscene.prototype.logPicking = function () {
+
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
 			for (var i=0; i< this.pickResults.length; i++) {
@@ -532,6 +536,24 @@ XMLscene.prototype.logPicking = function () {
 				if (obj) {
 					var customId = this.pickResults[i][1];				
 					console.log("Picked object: " + obj + ", with pick id " + customId);
+					if(customId != 0) {
+						for(g in this.tabuleiro.tiles) {
+							if( this.tabuleiro.tiles[g].selected == true ) {
+								this.tabuleiro.tiles[g].selected = false;
+								this.tabuleiro.tiles[g].geom.appearance.setTexture(this.tabuleiro.tiles[g].init_texture);
+							}
+						}
+
+						if(this.pickResults[i][0].type == "Tile") {
+
+							console.log(this.pickResults[i][0]);
+							this.pickResults[i][0].selected = true;
+
+							this.pickResults[i][0].geom.appearance.setTexture(this.textures["flag"]);
+						}
+
+					}	
+					
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);

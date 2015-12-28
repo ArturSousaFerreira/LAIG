@@ -2,7 +2,7 @@
 
 	<INITIALS>
 		<frustum near="1.5" far="500" />
-		<camera x="20" y="20" z="20" />
+		<camera x="0" y="30" z="30" />
 		<translation x="0" y="0" z="0" />
 		<rotation axis="x" angle="0" />
 		<rotation axis="y" angle="0" />
@@ -34,10 +34,10 @@
 	<LIGHTS>
         <LIGHT id="light_default">
             <enable value="1" />
-            <position x="5" y="60" z="5" w="1" />
-            <ambient r="0.5" g="0.5" b="0.5" a="1" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
-            <specular r="0.5" g="0.5" b="0.5" a="1" />
+            <position x="0" y="60" z="0" w="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
         </LIGHT>
 		<LIGHT id="light_lamp">
             <enable value="1" />
@@ -70,16 +70,12 @@
             <file path="textures/brown.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
-        <TEXTURE id="painting1">
-            <file path="textures/ogrito.jpg" />
+        <TEXTURE id="snow_mountain">
+            <file path="textures/snow_mountain.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
-        <TEXTURE id="painting2">
-            <file path="textures/mona_lisa.jpg" />
-            <amplif_factor s="1" t="1" />
-        </TEXTURE>
-        <TEXTURE id="painting3">
-            <file path="textures/salvadordali.jpg" />
+        <TEXTURE id="snow_floor">
+            <file path="textures/snow_floor.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="paper">
@@ -103,6 +99,13 @@
             <specular r="1.0" g="1.0" b="1.0" a="0.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <emission r="0" g="0" b="0" a="0" />
+        </MATERIAL>
+        <MATERIAL id="highlight">
+            <shininess value="100" />
+            <specular r="0.0" g="0.0" b="1.0" a="0.0" />
+            <diffuse r="0.0" g="0.0" b="1.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="1.0" a="1.0" />
             <emission r="0" g="0" b="0" a="0" />
         </MATERIAL>
     </MATERIALS>
@@ -136,7 +139,7 @@
 			<CONTROLPOINT x="9" y="2" z="0" w="1" />
 			<CONTROLPOINT x="9" y="6" z="0" w="1" />
 		</LEAF>
-		<LEAF id="grass_leaf" type="terrain" texture="textures/grass.jpg" heightmap="textures/grass_heightmap.jpg" />
+		<LEAF id="snow_floor_terrain" type="terrain" texture="textures/snow_floor.jpg" heightmap="textures/grass_heightmap.jpg" />
 	</LEAVES>
 
 
@@ -162,18 +165,21 @@
 
 		<NODE id="walls">
 			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
-			<DESCENDANTS>
+			<TEXTURE id="snow_mountain" />
+			<DESCENDANTS>			
+				<DESCENDANT id="wall_right" />
 				<DESCENDANT id="wall_front" />
-				<DESCENDANT id="wall_side" />
+				<DESCENDANT id="wall_left" />
+				<DESCENDANT id="wall_back" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="wall_side">
+		<NODE id="wall_left">
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />	
+			<TEXTURE id="null" />
+			<TRANSLATION x="-10" y="0" z="-10" />	
 			<ROTATION axis="y" angle="-90"/>
-			<SCALE sx="10" sy="6" sz="0"/>
+			<SCALE sx="20" sy="12.5" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -182,9 +188,30 @@
 		<NODE id="wall_front">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="10" y="0" z="0" />
+			<TRANSLATION x="10" y="0" z="-10" />
 			<ROTATION axis="y" angle="180"/>
-			<SCALE sx="10" sy="6" sz="0"/>
+			<SCALE sx="20" sy="12.5" sz="0"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_right">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="10" y="0" z="10" />	
+			<ROTATION axis="y" angle="90"/>
+			<SCALE sx="20" sy="12.5" sz="0"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_back">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="-10" y="0" z="10" />
+			<SCALE sx="20" sy="12.5" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -195,27 +222,28 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="actual_floor" />
-				<DESCENDANT id="grass" />											
+				<DESCENDANT id="snow" />											
 			</DESCENDANTS>
 		</NODE>
 
 		<NODE id="actual_floor">
 			<MATERIAL id="default" />
-			<TEXTURE id="floor_pattern" />
+			<TEXTURE id="snow_floor" />
+			<TRANSLATION x="-10" y="0" z="-10" />
 			<ROTATION axis="x" angle="90"/>
-			<SCALE sx="10" sy="10" sz="0"/>
+			<SCALE sx="20" sy="20" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />												
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="grass">
+		<NODE id="snow">
 			<MATERIAL id="default" />
-			<TEXTURE id="grass" />
-			<TRANSLATION x="5" y="0.0001" z="5" />
-			<SCALE sx="10" sy="0.35" sz="10"/>
+			<TEXTURE id="snow_floor" />
+			<TRANSLATION x="0" y="0.0000" z="0" />
+			<SCALE sx="20" sy="0.35" sz="20"/>
 			<DESCENDANTS>
-				<DESCENDANT id="grass_leaf" />												
+				<DESCENDANT id="snow_floor_terrain" />												
 			</DESCENDANTS>
 		</NODE>
 

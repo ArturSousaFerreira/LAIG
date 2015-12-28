@@ -1,4 +1,4 @@
-function CubePrimitive(scene, edge, texture) {
+function TilePrimitive(scene, edge, texture) {
  	CGFobject.call(this, scene);
 
  	this.scene = scene;
@@ -19,10 +19,10 @@ function CubePrimitive(scene, edge, texture) {
  	this.initBuffers();
 };
 
-CubePrimitive.prototype = Object.create(CGFobject.prototype);
-CubePrimitive.prototype.constructor = CubePrimitive;
+TilePrimitive.prototype = Object.create(CGFobject.prototype);
+TilePrimitive.prototype.constructor = TilePrimitive;
 
-CubePrimitive.prototype.display = function() {
+TilePrimitive.prototype.display = function() {
  	
 	this.scene.pushMatrix();
 		this.appearance.apply();
