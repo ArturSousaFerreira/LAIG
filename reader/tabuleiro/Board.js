@@ -34,6 +34,7 @@ Board.prototype.init = function() {
 		z_pos += 2;
 	}
 
+
 	// Inicialização das peças do tabuleiro
 	//Peças Brancas
 	this.pieces[0] = new Piece(this.scene, "white", this.tiles[1], this.scene.textures["lamp_top_pattern"]);
@@ -63,6 +64,14 @@ Board.prototype.init = function() {
 	this.pieces[22] = new Piece(this.scene, "black", this.tiles[44], this.scene.textures["chair_pattern"]);
 	this.pieces[23] = new Piece(this.scene, "black", this.tiles[46], this.scene.textures["chair_pattern"]);
 
+
+	
+	for(y in this.tiles) {
+		for(t in this.pieces){
+			if(this.pieces[t].tile.id == this.tiles[y].id)
+				this.tiles[y].occupied = true;	
+		}
+	}
 }
 
 Board.prototype.display = function() {
@@ -80,9 +89,11 @@ Board.prototype.display = function() {
 	// Display de todas as peças do tabuleiro
 
 	for(l in this.pieces) {
-		this.scene.pushMatrix();
-			this.pieces[l].display();
-		this.scene.popMatrix();
+		if(this.pieces[l] != null) {
+			this.scene.pushMatrix();
+				this.pieces[l].display();
+			this.scene.popMatrix();
+		}
 	}
 	this.scene.popMatrix();
 }

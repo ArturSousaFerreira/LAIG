@@ -537,6 +537,7 @@ XMLscene.prototype.logPicking = function () {
 					this.customId = this.pickResults[i][1];				
 					console.log("Picked object: " + this.obj + ", with pick id " + this.customId);
 					if(this.customId != 0) {
+						console.log(this.pickResults[i][0]);
 						for(g in this.game.tabuleiro.tiles) {
 							if( this.game.tabuleiro.tiles[g].selected == true ) {
 								this.game.tabuleiro.tiles[g].selected = false;
@@ -545,10 +546,13 @@ XMLscene.prototype.logPicking = function () {
 						}
 						if(this.pickResults[i][0].type == "Tile") {
 							for(l in this.game.tabuleiro.pieces) {
-								if(this.game.tabuleiro.pieces[l].tile.id == this.pickResults[i][0].id){
-									if(this.game.tabuleiro.pieces[l].color == this.game.getPlayertoPlay().color) {
-										this.pickResults[i][0].selected = true;
-										this.pickResults[i][0].geom.appearance.setTexture(this.textures["flag"]);
+								if(this.game.tabuleiro.pieces[l] != null) {
+									if(this.game.tabuleiro.pieces[l].tile.id == this.pickResults[i][0].id){
+										if(this.game.tabuleiro.pieces[l].color == this.game.getPlayertoPlay().color) {
+											this.pickResults[i][0].selected = true;
+
+											this.pickResults[i][0].geom.appearance.setTexture(this.textures["flag"]);
+										}
 									}
 								}
 							}						

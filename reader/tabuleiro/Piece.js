@@ -19,4 +19,3 @@ Piece.prototype.display = function() {
 Piece.prototype.setTile = function(newTile) {
     this.tile = newTile;
 }
-
