@@ -87,13 +87,28 @@ Board.prototype.display = function() {
 	}
 
 	// Display de todas as peças do tabuleiro
+		for(l in this.pieces) {
+		if(this.pieces[l] != null)
+		if(this.pieces[l].animation == undefined) {
 
-	for(l in this.pieces) {
-		if(this.pieces[l] != null) {
 			this.scene.pushMatrix();
 				this.pieces[l].display();
 			this.scene.popMatrix();
 		}
 	}
+
+	for(l in this.pieces) {
+		if(this.pieces[l] != null) {
+			if(this.pieces[l].animation != undefined) {
+				//if(this.pieces[l].animation.finish == false)
+					this.scene.multMatrix(this.pieces[l].animation.matrix);
+
+				this.scene.pushMatrix();
+					this.pieces[l].display();
+				this.scene.popMatrix();
+			}
+		}
+	}
+
 	this.scene.popMatrix();
 }

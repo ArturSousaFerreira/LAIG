@@ -434,7 +434,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 XMLscene.prototype.drawNodes = function (node) {
 	
 	this.pushMatrix();
-	
+	//console.log(node.matrix);
 	this.multMatrix(node.matrix);
 
 	if(node.material != "null") {
@@ -513,17 +513,28 @@ XMLscene.prototype.display = function () {
 
 XMLscene.prototype.update = function(currTime) {
 	
-	for (var n in this.graph.nodes){
+	for (var n in this.graph.nodes) {
 		for(var k in this.graph.nodes[n].animations) {
 			if (this.lastUpdate != 0)
 				this.graph.nodes[n].timer += (currTime - this.lastUpdate) / 1000;
 
-			if(this.graph.nodes[n].animations[k].finish == false){
+			if(this.graph.nodes[n].animations[k].finish == false) {
 				this.graph.nodes[n].animations[k].calculateMatrix(currTime / 1000);
 				break;
 			}
 		}		
-	}	
+	}
+
+	if(this.game != undefined)
+	for (n in this.game.tabuleiro.pieces) {		
+		if(this.game.tabuleiro.pieces[n] != null)
+			if(this.game.tabuleiro.pieces[n].animation != undefined)	
+				if(this.game.tabuleiro.pieces[n].animation.finish == false) {
+					console.log("calcular matrix");
+					this.game.tabuleiro.pieces[n].animation.calculateMatrix(currTime / 1000);
+					break;
+				}	
+	}
 }
 
 

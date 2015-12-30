@@ -51,6 +51,22 @@ Jogo.prototype.ChangePlayertoPlay = function() {
 	}		
 }
 
+Jogo.prototype.turnIntoDama = function() {
+	for(i in this.tabuleiro.pieces) {
+		if(this.tabuleiro.pieces[i] != null) {
+			if(this.tabuleiro.pieces[i].color == "white") {
+				if(this.tabuleiro.pieces[i].tile.z >= 8) {
+					this.tabuleiro.pieces[i].dama = true;
+				}
+			}
+			else if(this.tabuleiro.pieces[i].color == "black") {
+				if(this.tabuleiro.pieces[i].tile.z <= 1) {
+					this.tabuleiro.pieces[i].dama = true;
+				}
+			}
+		}
+	}
+}
 
 Jogo.prototype.checkGameOver = function() {
 	if(this.blackpieces == 0)
@@ -71,6 +87,8 @@ Jogo.prototype.deletePiece = function(pieceDelete) {
 Jogo.prototype.play = function() {	
 	this.checkGameOver();
 	this.getPlayertoPlay().jogada();
+	//this.fix_id_tile();
+	this.turnIntoDama();
 	this.ChangePlayertoPlay();
 }
 
