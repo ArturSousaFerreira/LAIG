@@ -20,14 +20,21 @@
 		<h1>checkers.</h1>
 	</div>
 	<div>
-		<button class="button_class" type="button" onClick="mudaCena()">Play</button></a>
-		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		<button class="button_class" type="button" onClick="mudaCena()">Play</button><br>
+		<button class="button_class" type="button" onClick="mudaModo()">Modo</button><br>
+        <button class="button_class" type="button" onClick="mudaDificuldade()">Dificuldade</button>
 	</div>
 </body>
 
 <script>
 	function mudaCena() {
 		location.replace("scene.html");
+	}
+	function mudaModo() {
+		location.replace("modo.html");
+	}
+	function mudaDificuldade() {
+		location.replace("dificuldade.html");
 	}
 </script>
 

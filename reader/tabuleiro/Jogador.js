@@ -38,7 +38,7 @@ Jogador.prototype.jogada = function() {
 				}
 				
 				//this.selected_piece.animation = new PieceAnimation(this.scene, 1, this.selected_piece, this.scene.pickResults[0][0]);
-				console.log(this.selected_piece.animation);
+				//console.log(this.selected_piece.animation);
 								
 				
 				this.selected_piece.tile.setOccupied(false);

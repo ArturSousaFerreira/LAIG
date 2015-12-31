@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <title>checkers.</title>
+    <!-- meta tags -->
+    <meta name="author" content="Rui Gonçalves/Artur Ferreira">
+    <meta name="description" content="Checkers game made using WebGL">
+    <meta name="keywords" content="Checkers, WebGL, JavaScript">
+    <meta http-equiv="content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- css file -->
+    <link href="index.css" rel="stylesheet" type="text/css">
+    <!-- html page icon -->
+    <link rel="shortcut icon" href="textures/page_icon.png">
+</head>
+
+<body>
+    <div id="game_name">
+        <h1>checkers.</h1>
+    </div>
+    <div>
+        <button class="button_class" type="button" onClick="mudaIndex()">Fácil</button><br>
+        <button class="button_class" type="button" onClick="mudaIndex()">Médio</button><br>
+        <button class="button_class" type="button" onClick="mudaIndex()">Dificil</button>
+    </div>
+</body>
+
+<script>
+    function mudaIndex() {
+        location.replace("index.html");
+    }
+</script>
+
+</html>
