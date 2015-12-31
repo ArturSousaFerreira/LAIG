@@ -4,6 +4,12 @@ function Board(scene) {
 	this.tiles = [];
 	this.pieces = [];
 
+	this.supportTop = new PiecePrimitive(this.scene, 5, Math.sqrt(2)/2, 0, 100, 4, this.scene.textures["steel"]);
+	this.supportBottom = new PiecePrimitive(this.scene, 5, Math.sqrt(2)/2, 0, 100, 4, this.scene.textures["steel"]);
+
+	this.buttonTop = new ButtonPrimitive(scene, 1, this.scene.textures["clickme"], this.scene.textures["paper"]);
+	this.buttonBottom = new TilePrimitive(scene, 1, this.scene.textures["steel"]);
+
     this.init();
 }
 
@@ -78,23 +84,58 @@ Board.prototype.display = function() {
 	
 	this.scene.pushMatrix();
 	this.scene.scale(1,0.2,1);
+
+	//Display da parte de cima do botão
+	this.scene.pushMatrix();
+		this.scene.translate(14.5, 3.5, 4.5);
+		this.scene.rotate(Math.PI, 1, 0, 0);
+		this.scene.scale(4, 1, 2);
+		this.buttonTop.display();
+	this.scene.popMatrix();
+
+	//Display da parte de baixo do botão
+	this.scene.pushMatrix();
+		this.scene.translate(14.5, 1.5, 4.5);
+		this.scene.rotate(Math.PI/2, 0, 1, 0);
+		this.scene.scale(3, 3, 5);
+		this.buttonBottom.display();
+	this.scene.popMatrix();
+
+	//Display do suporte de cima do tabuleiro
+	this.scene.pushMatrix();
+	this.scene.registerForPick(101, this);
+		this.scene.translate(4.5, 27, 4.5);
+		this.scene.rotate(Math.PI/4, 0, 1, 0);
+		this.scene.rotate(Math.PI, 1, 0, 0);
+		this.scene.scale(9, 5, 9);
+		this.supportTop.display();
+	this.scene.popMatrix();
+
+	//Display do suporte de baixo do tabuleiro
+	this.scene.pushMatrix();
+		this.scene.translate(4.5, 2, 4.5);
+		this.scene.rotate(Math.PI/4, 0, 1, 0);
+		this.scene.scale(5, 5, 5);
+		this.supportTop.display();
+	this.scene.popMatrix();
 	
 	// Display de todas as casas do tabuleiro
 	for(k in this.tiles) {
 		this.scene.pushMatrix();
+			this.scene.translate(0, 30, 0);
 			this.tiles[k].display();
 		this.scene.popMatrix();
 	}
 
 	// Display de todas as peças do tabuleiro
-		for(l in this.pieces) {
+	for(l in this.pieces) {
 		if(this.pieces[l] != null)
-		if(this.pieces[l].animation == undefined) {
-
-			this.scene.pushMatrix();
-				this.pieces[l].display();
-			this.scene.popMatrix();
-		}
+			if(this.pieces[l].animation == undefined) {
+				this.scene.pushMatrix();
+					this.scene.translate(0, 30, 0);
+					this.pieces[l].display();
+				this.scene.popMatrix();
+			}
 	}
 
 	for(l in this.pieces) {
@@ -104,6 +145,7 @@ Board.prototype.display = function() {
 					this.scene.multMatrix(this.pieces[l].animation.matrix);
 
 				this.scene.pushMatrix();
+					this.scene.translate(0, 30, 0);
 					this.pieces[l].display();
 				this.scene.popMatrix();
 			}

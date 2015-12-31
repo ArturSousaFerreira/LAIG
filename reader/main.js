@@ -41,6 +41,7 @@ serialInclude([
     'primitives/MyTriangle.js',
     'tabuleiro/TilePrimitive.js',
     'tabuleiro/PiecePrimitive.js',
+    'tabuleiro/ButtonPrimitive.js',
     'tabuleiro/Board.js',
     'tabuleiro/Piece.js',
     'tabuleiro/Tile.js',
@@ -52,10 +53,12 @@ main=function()
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
     var myScene = new XMLscene();
+
     var myInterface = new Interface();
     myInterface.setScene(myScene);
 
     app.init();
+	
 
     app.setScene(myScene);
     app.setInterface(myInterface);
@@ -65,10 +68,15 @@ main=function()
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 	
 	var filename = getUrlVars()['file'] || "envolvente.lsx";
+	var filename2 = getUrlVars()['file'] || "la_cena.lsx";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
+	var myGraph2 = new MySceneGraph(filename, myScene, "Grafo1");
+	
+	var myGraph = new MySceneGraph(filename2, myScene, "Grafo2");
+	
+
 	
 	// start
     app.run();

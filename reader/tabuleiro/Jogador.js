@@ -37,14 +37,13 @@ Jogador.prototype.jogada = function() {
 						return;
 				}
 				
-				
-				this.selected_piece.animation = new PieceAnimation(this.scene, 1, this.selected_piece, this.scene.pickResults[0][0]);
+				//this.selected_piece.animation = new PieceAnimation(this.scene, 1, this.selected_piece, this.scene.pickResults[0][0]);
 				console.log(this.selected_piece.animation);
+								
 				
-				
-					this.selected_piece.tile.setOccupied(false);
-					//this.selected_piece.setTile(this.scene.pickResults[0][0]);
-					this.selected_piece.tile.setOccupied(true);
+				this.selected_piece.tile.setOccupied(false);
+				this.selected_piece.setTile(this.scene.pickResults[0][0]);
+				this.selected_piece.tile.setOccupied(true);
 				
 			
 				if(this.comeu == true) {
@@ -416,20 +415,299 @@ Jogador.prototype.checkJogadaDama = function(peca, casa) {
 	if(casa.occupied == true)
 		return false;
 
-	if( peca.tile.x == casa.x || peca.tile.z == casa.z ) {
+	if(peca.tile.x == casa.x || peca.tile.z == casa.z) {
 		return false;
 	}
 
-	if( peca.color == "white" ) {
+	/*if( peca.color == "white" ) {
 		if( peca.tile.z >= casa.z )
 			return false;
 	} else 
 		if( peca.tile.z <= casa.z )
-			return false;
+			return false;*/
 
 	if( Math.abs(peca.tile.x-casa.x) > 2 )
 		return false;
 	
 	if( Math.abs(peca.tile.z-casa.z) > 2 )
 		return false;
+
+	if( Math.abs(peca.tile.x-casa.x) == 2 && Math.abs(peca.tile.z-casa.z) == 2 )
+		if( peca.color == "white" ) {
+			//caso em que uma dama branca tenta comer uma peça preta à frente à direita
+			if( peca.tile.x < casa.x && peca.tile.z < casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)-10];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "white")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "black") {
+					this.scene.game.blackpieces--;
+				} else
+					this.scene.game.whitepieces--;
+				
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+			//caso em que uma dama branca tenta comer uma peça preta atrás à direita
+			else if( peca.tile.x < casa.x && peca.tile.z > casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)+6];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "white")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "white") {
+					this.scene.game.whitepieces--;
+				} else
+					this.scene.game.blackpieces--;
+
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+			//caso em que uma dama branca tenta comer uma peça preta à frente à esquerda
+			else if( peca.tile.x > casa.x && peca.tile.z < casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)-8];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "white")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "white") {
+					this.scene.game.whitepieces--;
+				} else
+					this.scene.game.blackpieces--;
+
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+			//caso em que uma dama branca tenta comer uma peça preta atrás à esquerda
+			else if( peca.tile.x > casa.x && peca.tile.z > casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)+8];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "white")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "black") {
+					this.scene.game.blackpieces--;
+				} else
+					this.scene.game.whitepieces--;
+				
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+		}
+
+		else if( peca.color == "black" ) {
+			//caso em que uma dama preta tenta comer uma peça branca à frente à direita
+			if( peca.tile.x < casa.x && peca.tile.z < casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)-10];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "black")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "black") {
+					this.scene.game.blackpieces--;
+				} else
+					this.scene.game.whitepieces--;
+				
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+			//caso em que uma dama branca tenta comer uma peça preta atrás à direita
+			else if( peca.tile.x < casa.x && peca.tile.z > casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)+6];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "black")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "white") {
+					this.scene.game.whitepieces--;
+				} else
+					this.scene.game.blackpieces--;
+
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+			//caso em que uma dama branca tenta comer uma peça preta à frente à esquerda
+			else if( peca.tile.x > casa.x && peca.tile.z < casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)-8];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "black")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "white") {
+					this.scene.game.whitepieces--;
+				} else
+					this.scene.game.blackpieces--;
+
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+			//caso em que uma dama branca tenta comer uma peça preta atrás à esquerda
+			else if( peca.tile.x > casa.x && peca.tile.z > casa.z) {
+				//vai buscar a casa entre as posiçoes inicial e final selecionadas
+				var casa_intermedia = this.scene.game.tabuleiro.tiles[(casa.z*8)-(8-casa.x)+8];
+				//vai buscar a peça entre as posiçoes inicial e final selecionadas, se existir
+				for(i in this.scene.game.tabuleiro.pieces) {
+					if(this.scene.game.tabuleiro.pieces[i] != null) {
+						if(this.scene.game.tabuleiro.pieces[i].tile.id == casa_intermedia.id) {
+							var peca_intermedia = this.scene.game.tabuleiro.pieces[i];
+							break;
+						}
+					}
+				}
+
+				if(casa_intermedia.occupied == false)
+					return false;
+				else {
+					if(peca_intermedia.color == "black")
+						return false;
+				}
+
+				for(o in this.scene.game.tabuleiro.tiles) {
+					if(this.scene.game.tabuleiro.tiles[o].id == peca_intermedia.tile.id)
+						this.scene.game.tabuleiro.tiles[o].occupied = false;				
+				}
+
+				if(peca_intermedia.color == "black") {
+					this.scene.game.blackpieces--;
+				} else
+					this.scene.game.whitepieces--;
+				
+				this.comeu = true;
+				this.scene.game.deletePiece(peca_intermedia);
+			}
+		}
 }

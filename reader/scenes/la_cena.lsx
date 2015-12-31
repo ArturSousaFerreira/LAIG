@@ -2,7 +2,7 @@
 
 	<INITIALS>
 		<frustum near="1.5" far="500" />
-		<camera x="20" y="20" z="20" />
+		<camera x="0" y="35" z="25" />
 		<translation x="0" y="0" z="0" />
 		<rotation axis="x" angle="0" />
 		<rotation axis="y" angle="0" />
@@ -34,14 +34,14 @@
 	<LIGHTS>
         <LIGHT id="light_default">
             <enable value="1" />
-            <position x="5" y="60" z="5" w="1" />
-            <ambient r="0.5" g="0.5" b="0.5" a="1" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
-            <specular r="0.5" g="0.5" b="0.5" a="1" />
+            <position x="0" y="60" z="0" w="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
         </LIGHT>
 		<LIGHT id="light_lamp">
             <enable value="1" />
-            <position x="0.7" y="3.4" z="0.7" w="1" />
+            <position x="-9" y="13.8" z="0" w="1" />
             <specular r="1.0" g="0.92" b="0" a="1.0" />
             <diffuse r="0.3" g="0.25" b="0" a="1.0" />
             <ambient r="0.1" g="0.08" b="0" a="1.0" />
@@ -52,6 +52,14 @@
 	<TEXTURES>
 		<TEXTURE id="wall_pattern">
             <file path="textures/wall_paper.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+		<TEXTURE id="countryside_pattern1">
+            <file path="textures/countryside_wall1.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="countryside_pattern2">
+            <file path="textures/countryside_wall2.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
         <TEXTURE id="floor_pattern">
@@ -92,6 +100,10 @@
         </TEXTURE>
         <TEXTURE id="steel">
             <file path="textures/steel.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="clickme">
+            <file path="textures/clickme.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
     </TEXTURES>
@@ -149,10 +161,7 @@
 			<DESCENDANTS>
 				<DESCENDANT id="environment" />
 				<DESCENDANT id="flag" />
-				<DESCENDANT id="paper_plane" />
 				<DESCENDANT id="lamp" />
-				<DESCENDANT id="chair" />
-				<DESCENDANT id="paintings" />
 			</DESCENDANTS>
 		</NODE>
 		
@@ -166,30 +175,54 @@
 		</NODE>
 
 		<NODE id="walls">
-			<MATERIAL id="default" />
-			<TEXTURE id="wall_pattern" />
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
 			<DESCENDANTS>
+				<DESCENDANT id="wall_right" />
 				<DESCENDANT id="wall_front" />
-				<DESCENDANT id="wall_side" />
+				<DESCENDANT id="wall_left" />
+				<DESCENDANT id="wall_back" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="wall_side">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />	
+		<NODE id="wall_left">
+			<MATERIAL id="default" />
+			<TEXTURE id="countryside_pattern1" />
+			<TRANSLATION x="-20" y="0" z="-20" />	
 			<ROTATION axis="y" angle="-90"/>
-			<SCALE sx="10" sy="6" sz="0"/>
+			<SCALE sx="40" sy="25" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
 		</NODE>
 
 		<NODE id="wall_front">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="10" y="0" z="0" />
+			<MATERIAL id="default" />
+			<TEXTURE id="countryside_pattern2" />
+			<TRANSLATION x="20" y="0" z="-20" />
 			<ROTATION axis="y" angle="180"/>
-			<SCALE sx="10" sy="6" sz="0"/>
+			<SCALE sx="40" sy="25" sz="0"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_right">
+			<MATERIAL id="default" />
+			<TEXTURE id="countryside_pattern1" />
+			<TRANSLATION x="20" y="0" z="20" />	
+			<ROTATION axis="y" angle="90"/>
+			<SCALE sx="40" sy="25" sz="0"/>
+			<DESCENDANTS>
+				<DESCENDANT id="rectangle" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="wall_back">
+			<MATERIAL id="default" />
+			<TEXTURE id="countryside_pattern2" />
+			<TRANSLATION x="-20" y="0" z="20" />
+			<SCALE sx="40" sy="25" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -207,8 +240,9 @@
 		<NODE id="actual_floor">
 			<MATERIAL id="default" />
 			<TEXTURE id="floor_pattern" />
+			<TRANSLATION x="-20" y="0" z="-20" />
 			<ROTATION axis="x" angle="90"/>
-			<SCALE sx="10" sy="10" sz="0"/>
+			<SCALE sx="40" sy="40" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />												
 			</DESCENDANTS>
@@ -217,8 +251,8 @@
 		<NODE id="grass">
 			<MATERIAL id="default" />
 			<TEXTURE id="grass" />
-			<TRANSLATION x="5" y="0.0001" z="5" />
-			<SCALE sx="10" sy="0.35" sz="10"/>
+			<TRANSLATION x="0" y="0" z="0" />
+			<SCALE sx="40" sy="0.35" sz="40"/>
 			<DESCENDANTS>
 				<DESCENDANT id="grass_leaf" />												
 			</DESCENDANTS>
@@ -227,7 +261,8 @@
 		<NODE id="flag">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="8.1" y="0" z="0.5" />
+			<TRANSLATION x="10" y="0" z="-12" />
+			<SCALE sx="3" sy="3" sz="3"/>
 			<DESCENDANTS>
 				<DESCENDANT id="flag_pole" />
 				<DESCENDANT id="actual_flag" />
@@ -254,58 +289,11 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="paper_plane">
-			<MATERIAL id="default" />
-			<TEXTURE id="paper" />
-			<ANIMATIONREF id="paperPlane_animation" />
-			<ANIMATIONREF id="circular" />
-			<TRANSLATION x="2" y="3" z="8" />
-			<ROTATION axis="y" angle="180"/>
-			<SCALE sx="0.4" sy="0.4" sz="0.4"/>
-			<DESCENDANTS>
-				<DESCENDANT id="wing1" />
-				<DESCENDANT id="wing2" />
-				<DESCENDANT id="wing_bottom1" />
-				<DESCENDANT id="wing_bottom2" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="wing1">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />		
-			<DESCENDANTS>
-				<DESCENDANT id="triangle1" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="wing2">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />		
-			<DESCENDANTS>
-				<DESCENDANT id="triangle4" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="wing_bottom1">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />		
-			<DESCENDANTS>
-				<DESCENDANT id="triangle2" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="wing_bottom2">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />		
-			<DESCENDANTS>
-				<DESCENDANT id="triangle3" />
-			</DESCENDANTS>
-		</NODE>
-
 		<NODE id="lamp">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0.7" y="0" z="0.7" />
+			<TRANSLATION x="-9" y="0" z="0" />
+			<SCALE sx="4" sy="4" sz="4"/>	
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_support" />
 				<DESCENDANT id="lamp_top" />			
@@ -348,84 +336,6 @@
 			<ROTATION axis="x" angle="90"/>
 			<DESCENDANTS>
 				<DESCENDANT id="lamp_default_bottom" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair">
-			<MATERIAL id="default" />
-			<TEXTURE id="chair_pattern" />
-			<TRANSLATION x="4.5" y="0" z="4.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="chair_seat" />
-				<DESCENDANT id="chair_back" />
-				<DESCENDANT id="chair_legs" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_seat">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="0.8" z="0" />
-			<SCALE sx="1" sy="0.05" sz="1"/>
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_back">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="0.85" z="0.90" />
-			<SCALE sx="1" sy="1.25" sz="0.1"/>
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_legs">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<SCALE sx="0.1" sy="0.8" sz="0.1"/>
-			<DESCENDANTS>
-				<DESCENDANT id="chair_leg_1" />
-				<DESCENDANT id="chair_leg_2" />
-				<DESCENDANT id="chair_leg_3" />
-				<DESCENDANT id="chair_leg_4" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_leg_1">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_leg_2">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="9" y="0" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_leg_3">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="0" z="9" />
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="chair_leg_4">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="9" y="0" z="9" />
-			<DESCENDANTS>
-				<DESCENDANT id="cube" />
 			</DESCENDANTS>
 		</NODE>
 

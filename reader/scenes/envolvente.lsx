@@ -2,7 +2,7 @@
 
 	<INITIALS>
 		<frustum near="1.5" far="500" />
-		<camera x="0" y="30" z="30" />
+		<camera x="0" y="35" z="25" />
 		<translation x="0" y="0" z="0" />
 		<rotation axis="x" angle="0" />
 		<rotation axis="y" angle="0" />
@@ -38,13 +38,6 @@
             <ambient r="1" g="1" b="1" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
-        </LIGHT>
-		<LIGHT id="light_lamp">
-            <enable value="1" />
-            <position x="0.7" y="3.4" z="0.7" w="1" />
-            <specular r="1.0" g="0.92" b="0" a="1.0" />
-            <diffuse r="0.3" g="0.25" b="0" a="1.0" />
-            <ambient r="0.1" g="0.08" b="0" a="1.0" />
         </LIGHT>
     </LIGHTS>
 
@@ -88,6 +81,10 @@
         </TEXTURE>
         <TEXTURE id="steel">
             <file path="textures/steel.jpg" />
+            <amplif_factor s="1" t="1" />
+        </TEXTURE>
+        <TEXTURE id="clickme">
+            <file path="textures/clickme.jpg" />
             <amplif_factor s="1" t="1" />
         </TEXTURE>
     </TEXTURES>
@@ -177,9 +174,9 @@
 		<NODE id="wall_left">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="-10" y="0" z="-10" />	
+			<TRANSLATION x="-20" y="0" z="-20" />	
 			<ROTATION axis="y" angle="-90"/>
-			<SCALE sx="20" sy="12.5" sz="0"/>
+			<SCALE sx="40" sy="25" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -188,9 +185,9 @@
 		<NODE id="wall_front">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="10" y="0" z="-10" />
+			<TRANSLATION x="20" y="0" z="-20" />
 			<ROTATION axis="y" angle="180"/>
-			<SCALE sx="20" sy="12.5" sz="0"/>
+			<SCALE sx="40" sy="25" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -199,9 +196,9 @@
 		<NODE id="wall_right">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="10" y="0" z="10" />	
+			<TRANSLATION x="20" y="0" z="20" />	
 			<ROTATION axis="y" angle="90"/>
-			<SCALE sx="20" sy="12.5" sz="0"/>
+			<SCALE sx="40" sy="25" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -210,8 +207,8 @@
 		<NODE id="wall_back">
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="-10" y="0" z="10" />
-			<SCALE sx="20" sy="12.5" sz="0"/>
+			<TRANSLATION x="-20" y="0" z="20" />
+			<SCALE sx="40" sy="25" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />
 			</DESCENDANTS>
@@ -222,16 +219,16 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="actual_floor" />
-				<DESCENDANT id="snow" />											
+				<DESCENDANT id="snow" />
 			</DESCENDANTS>
 		</NODE>
 
 		<NODE id="actual_floor">
 			<MATERIAL id="default" />
 			<TEXTURE id="snow_floor" />
-			<TRANSLATION x="-10" y="0" z="-10" />
+			<TRANSLATION x="-20" y="0" z="-20" />
 			<ROTATION axis="x" angle="90"/>
-			<SCALE sx="20" sy="20" sz="0"/>
+			<SCALE sx="40" sy="40" sz="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="rectangle" />												
 			</DESCENDANTS>
@@ -240,8 +237,8 @@
 		<NODE id="snow">
 			<MATERIAL id="default" />
 			<TEXTURE id="snow_floor" />
-			<TRANSLATION x="0" y="0.0000" z="0" />
-			<SCALE sx="20" sy="0.35" sz="20"/>
+			<TRANSLATION x="0" y="0" z="0" />
+			<SCALE sx="40" sy="0.35" sz="40"/>
 			<DESCENDANTS>
 				<DESCENDANT id="snow_floor_terrain" />												
 			</DESCENDANTS>

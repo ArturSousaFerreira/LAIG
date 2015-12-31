@@ -34,4 +34,9 @@ Interface.prototype.create_interface = function() {
             inter.scene.Toggle_Light(this.property, value);
         });
     }
+
+	//Interface LSX
+
+
+
 };
