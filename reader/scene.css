@@ -1,0 +1,44 @@
+.mainNav {
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+    background-color: white;
+    transition: all .45s;
+    text-transform: uppercase;
+    font-weight: bold;
+    position:fixed;
+ left:0;
+ bottom:0;
+ height:60px;
+ width:100%;
+}
+
+a{
+    color: #0033CC;
+    text-decoration: none
+}
+
+.navbarGoing-right{
+ list-style-type: none;
+    padding:0;
+    margin: 1rem 0 0;
+    text-align: right;
+}
+
+.navbarGoing{
+margin-top:1rem;
+margin-left:1rem;
+color: #D00000;	 
+float:left;
+}
+
+.navbarGoing-right > li{
+	display: inline;
+	margin-right:1rem;
+}
+
+.mainNav > a:hover{
+	color: #F00000;
+}
+
+.navbarGoing-right > li > a:hover{
+	color: #0066FF;
+}

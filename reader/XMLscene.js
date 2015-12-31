@@ -26,10 +26,14 @@ XMLscene.prototype.init = function (application) {
 
 	// Set Picking to true
 	this.setPickEnabled(true);
+	
 
 	if( this.graphDefault == undefined) {
 		this.graphDefault = "Grafo2";
 	} 
+
+	this.init_Jogo();
+
 
 	this.graphs = [];
 	this.nodes = [];
@@ -431,7 +435,7 @@ XMLscene.prototype.onGraphLoaded = function (graphName) {
 	
 	this.init_Leaves(graphName);	
 	this.init_Nodes(graphName);
-	this.init_Jogo();
+	
 
 	
 	this.loadedOk = true;
@@ -558,20 +562,15 @@ XMLscene.prototype.logPicking = function () {
 					console.log("Picked object: " + this.obj + ", with pick id " + this.customId);
 					if(this.customId != 0) {
 						if(this.customId == 100) {
-
 							this.pickResults[i][1] = null;
 							this.loadedOk = false;
-							console.log(this.graphDefault);
+
 							if(this.graphDefault == "Grafo1") {
-								this.graphDefault = "Grafo2";
-								
-								//location.reload();
-								
+								this.graphDefault = "Grafo2";								
 								this.onGraphLoaded("Grafo2");
 							}
 							else if(this.graphDefault == "Grafo2") {
-								this.graphDefault="Grafo1";
-
+								this.graphDefault = "Grafo1";
 								this.onGraphLoaded("Grafo1");
 							}
 						}

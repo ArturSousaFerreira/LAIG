@@ -70,10 +70,10 @@ Jogo.prototype.turnIntoDama = function() {
 
 Jogo.prototype.checkGameOver = function() {
 	if(this.blackpieces == 0)
-		//location.replace("gameoverBrancas.html");
+		location.href = "gameoverBrancas.html";
 		console.log("brancas ganham");
 	if(this.whitepieces == 0)
-		location.replace("gameoverPretas.html");
+		location.href = "gameoverPretas.html";
 }
 
 Jogo.prototype.deletePiece = function(pieceDelete) {
